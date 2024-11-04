@@ -51,5 +51,6 @@ jobs:
           "text": "Job failed: ${{ github.workflow }}\n
                    Author: ${{ github.actor }}\n
                    Action: ${{ github.event_name }}\n
+                   Ref: ${{ github.ref }}\n
                    Message: Lint or OpenAPI validation failed."
         }' $SLACK_WEBHOOK_URL
