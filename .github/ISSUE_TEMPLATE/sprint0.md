@@ -1,7 +1,7 @@
 ---
 name:  sprint0
 about: Any task that is not directly from the product backlog. It doesn't have to be technical
-title: 'Testing and Validating the endpoints'
+title: 'Squad-ID: Sprint0 /path/'
 labels: Sprint-0
 ---
 
@@ -10,7 +10,7 @@ labels: Sprint-0
 
 #### Testing
 
-- [ ] Create and issue on github using the template **sprint0** 
+- [ ] Create an issue on github using the template **sprint0** 
    
 - [ ] In the **summary** attribute of your endpoints  author: @your name
     
