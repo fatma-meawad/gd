@@ -45,7 +45,6 @@
     "pino": "^6.11.3",
     "pino-http": "^10.3.0",
     "pino-pretty": "^4.8.0",
-    "speccy": "^0.1.2",
     "swagger-parser": "^10.0.3",
     "swagger-ui-express": "^4.6.0",
     "yamljs": "^0.3.0"

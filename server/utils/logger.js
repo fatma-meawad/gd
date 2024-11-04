@@ -4,7 +4,7 @@ const clogger = pino();
 
 const logger = pinoHttp({
   customLogLevel: function (req, res, err) {
-    return 'silent';
+    return "silent";
   },
 });
 
