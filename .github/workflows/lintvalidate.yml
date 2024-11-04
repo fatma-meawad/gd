@@ -1,0 +1,55 @@
+name: Lint and Format Check
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  lint-format-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'  # Ensure this matches the required Node.js version
+
+    - name: Install, Lint, and Format
+      working-directory: ./server
+      run: |
+        npm install
+        npm run lint
+        npm run format -- --check
+
+    - name: Install OpenAPI Generator CLI and Validate Schemas
+      working-directory: ./server
+      run: |
+        npm install @openapitools/openapi-generator-cli -g
+        for file in ./components/admins/config/s1-openapi.yaml ./components/categories/config/s2-openapi.yaml ./components/chat-logs/config/s3-openapi.yaml ./components/products/config/s5-openapi.yaml ./components/accounts/config/s4-openapi.yaml; do
+          if [[ -f $file ]]; then
+            full_path=$(realpath $file)
+            echo "Validating $file at $full_path..."
+            openapi-generator-cli validate -i $full_path
+          fi
+        done
+        
+  notify_slack:
+    runs-on: ubuntu-latest
+    needs: lint-format-validate
+    if: failure()
+    steps:
+    - name: Send Slack notification
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data '{
+          "text": "Job failed: ${{ github.workflow }}\n
+                   Author: ${{ github.actor }}\n
+                   Action: ${{ github.event_name }}\n
+                   Message: Lint or OpenAPI validation failed."
+        }' $SLACK_WEBHOOK_URL
