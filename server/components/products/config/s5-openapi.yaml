@@ -1,0 +1,432 @@
+openapi: 3.0.0
+info:
+  title: Product API
+  version: 1.0.0
+servers:
+  - url: "/api/s5"
+    description: local and codespaces
+paths:
+  /products:
+    get:
+      summary: Get all products
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  short_description:
+                    type: string
+        "401":
+          description: Unauthorized
+    post:
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                category_id:
+                  type: string
+                category_name:
+                  type: string
+                short_description:
+                  type: string
+                detailed_description:
+                  type: string
+                product_photos:
+                  type: array
+                  items:
+                    type: string
+                product_url:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  category_id:
+                    type: string
+                  category_name:
+                    type: string
+                  short_description:
+                    type: string
+                  detailed_description:
+                    type: string
+                  product_photos:
+                    type: array
+                    items:
+                      type: string
+                  product_url:
+                    type: string
+        "400":
+          description: Please fill in all the required fields
+        "401":
+          description: Unauthorized
+        "500":
+          description: Unable to save product
+
+  /products/{product_id}/tags:
+    post:
+      summary: Add tags to a product
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+        "401":
+          description: Unauthorized
+        "404":
+          description: Tag not found
+
+  /products/{product_id}/price:
+    post:
+      summary: Update product price
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newPrice:
+                  type: number
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                  newprice:
+                    type: number
+        "401":
+          description: Unauthorized
+
+  /products/{product_id}/inventory:
+    post:
+      summary: Update product inventory
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stock_quantity:
+                  type: integer
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                  stock_quantity:
+                    type: integer
+        "401":
+          description: Unauthorized
+
+  /products/bulk-edit:
+    post:
+      summary: Bulk edit products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      price:
+                        type: number
+                      category:
+                        type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  updated_products_count:
+                    type: integer
+        "401":
+          description: Unauthorized
+
+  /products/{id}/expiration-date:
+    put:
+      summary: Update product expiration date
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expiration_date:
+                  type: string
+                  format: date
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  expiration_date_updated:
+                    type: boolean
+        "401":
+          description: Unauthorized
+
+  /products/{id}/discount:
+    put:
+      summary: Apply a discount to a product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                discount_value:
+                  type: number
+                discount_type:
+                  type: string
+                  enum: [percentage, fixed]
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  new_discount_applied:
+                    type: boolean
+        "401":
+          description: Unauthorized
+
+  /products/{product_id}/photos:
+    post:
+      summary: Add photos to a product
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                photos:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+        "401":
+          description: Unauthorized
+    get:
+      summary: Get photos of a product
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not found
+  /tags:
+    get:
+      summary: Retrieve tags for a specific product
+      parameters:
+        - name: product_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The ID of the product to retrieve tags for
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  tags:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+
+        "401":
+          description: Unauthorized
+
+        "404":
+          description: Product not found
+
+    post:
+      summary: Create a new tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the new tag
+              required:
+                - name
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  id:
+                    type: string
+                    description: The ID of the newly created tag
+
+        "401":
+          description: Unauthorized

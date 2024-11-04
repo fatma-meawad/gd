@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "example": "error"
+    },
+    "statusCode": {
+      "type": "integer",
+      "example": 400
+    },
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "example": "Invalid input"
+      }
+    },
+    "location": {
+      "type": "string",
+      "example": "request body"
+    },
+    "stack": {
+      "type": "string",
+      "example": "Error stack trace"
+    }
+  },
+  "required": ["status", "statusCode", "messages"]
+}

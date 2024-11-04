@@ -1,0 +1,252 @@
+openapi: 3.0.0
+info:
+  title: Categories and Subcategories API
+  version: 1.0.0
+servers:
+  - url: "/api/s2"
+    description: local and codespaces
+paths:
+  /subcategories:
+    get:
+      summary: Retrieves a list of all subcategories
+      responses:
+        "200":
+          description: Success
+        "401":
+          description: Unauthorized
+    post:
+      summary: Creates a new subcategory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                photo_url:
+                  type: string
+                description:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+  /subcategories/{category_id}:
+    get:
+      summary: Retrieves a subcategory by category ID
+      parameters:
+        - name: category_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "400":
+          description: Invalid ID
+        "401":
+          description: Unauthorized
+  /subcategories/{id}:
+    put:
+      summary: Updates a subcategory by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                title:
+                  type: string
+                photo_url:
+                  type: string
+                description:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+    delete:
+      summary: Deletes a subcategory by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "401":
+          description: Unauthorized
+  /categories:
+    get:
+      summary: Retrieves a list of all categories
+      responses:
+        "200":
+          description: Success
+        "401":
+          description: Unauthorized
+    post:
+      summary: Creates a new category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                photo_url:
+                  type: string
+                description:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+  /categories/{id}:
+    put:
+      summary: Updates a category by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                title:
+                  type: string
+                photo_url:
+                  type: string
+                description:
+                  type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+    delete:
+      summary: Deletes a category by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized
+        "402":
+          description: Cannot delete element with internal categories or elements
+  /categories/products:
+    get:
+      summary: Retrieves products based on category and business account
+      parameters:
+        - name: categoryId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: businessAccountId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Filtered products
+        "400":
+          description: Invalid input
+  /categories/lookups:
+    get:
+      summary: Retrieves lookups for categories with product and account associations
+      responses:
+        "200":
+          description: Lookups for categories with info for number of products and number of accounts associated
+        "400":
+          description: Failed to retrieve resource

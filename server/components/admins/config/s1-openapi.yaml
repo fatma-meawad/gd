@@ -1,0 +1,345 @@
+openapi: 3.0.0
+info:
+  title: Admin Management API
+  version: 1.0.0
+  description: Admin Management API
+servers:
+  - url: "/api/s1"
+    description: local and codespaces
+paths:
+  /admins/login:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                required:
+                - admin_id
+                type: object
+                properties:
+                  admin_id:
+                    type: string
+        "401":
+          description: Invalid credentials. Please try again.
+        "423":
+          description: >-
+            Your account has been blocked due to multiple failed login attempts. Please reset your
+            password
+  /admins/{id}/deactivate:
+    put:
+      summary: Deactivate an admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                admin_id:
+                  type: string
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deactivation successful
+        "400":
+          description: You cannot deactivate your own account.
+        "403":
+          description: You don't have permission to perform this action.
+        "500":
+          description: Unable to deactivate the account. Please try again later.
+  /admins/{id}/profile:
+    put:
+      summary: Update admin profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                full_name:
+                  type: string
+                bio:
+                  type: string
+                profile_photo:
+                  type: string
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Profile updated successfully
+        "400":
+          description: Invalid input data
+        "401":
+          description: Unauthorized action
+  /admins:
+    get:
+      summary: Get a list of admins
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "401":
+          description: You are not authorized to view this resource
+  /admins/status-notifications:
+    post:
+      summary: Send status notifications to admins
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                affected_admin_id:
+                  type: string
+                changed_by_admin_id:
+                  type: string
+      responses:
+        "200":
+          description: Notification sent successfully to all active admins
+        "400":
+          description: Invalid action type
+        "401":
+          description: You are not authorized to perform this action
+        "422":
+          description: Email delivery failed
+  /admins/password-reset:
+    get:
+      summary: Validate password reset token
+      responses:
+        "200":
+          description: Valid token.
+        "400":
+          description: Invalid or expired token.
+        "500":
+          description: Unable to verify token. Please try again later.
+    put:
+      summary: Reset password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_password:
+                  type: string
+      responses:
+        "200":
+          description: Password reset successful.
+        "400":
+          description: Password does not meet complexity requirements or Invalid or expired token.
+        "500":
+          description: Unable to reset password. Please try again later.
+    post:
+      summary: Request password reset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        "200":
+          description: Check your email for a password reset link.
+        "400":
+          description: Email address not found.
+        "500":
+          description: Unable to process request. Please try again later.
+  /admin/logs:
+    get:
+      summary: Get admin logs
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        "401":
+          description: You are not authorized to view this resource
+        "500":
+          description: Unable to retrieve logs. Please try again later.
+  /admin/export:
+    get:
+      summary: Export admin data
+      parameters:
+        - name: format
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [csv]
+      responses:
+        "200":
+          description: Export generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  download_url:
+                    type: string
+        "400":
+          description: Invalid export configuration
+        "500":
+          description: Unable to generate export. Please try again later.
+  /admin/import:
+    put:
+      summary: Import admin data
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: Import successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      successful:
+                        type: integer
+                      failed:
+                        type: integer
+        "400":
+          description: Invalid file format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        row:
+                          type: integer
+                        message:
+                          type: string
+        "413":
+          description: File size exceeds limit
+        "500":
+          description: Import processing failed
+  /admins/register:
+    post:
+      summary: Register a new admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+              type: object
+              properties:
+                full_name:
+                  type: string
+                email:
+                  type: string
+                phone:
+                  type: string
+                password:
+                  type: string
+                address:
+                  type: string
+                activation_code:
+                  type: string
+                profile_photo:
+                  type: string
+                bio:
+                  type: string
+      responses:
+        "201":
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  new_id:
+                    type: string
+        "400":
+          description: >-
+            Invalid or expired registration code or Password does not meet complexity
+            requirements
+        "500":
+          description: Unable to register. Please try again later.

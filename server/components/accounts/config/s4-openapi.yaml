@@ -1,0 +1,333 @@
+openapi: 3.0.0
+info:
+  title: Business and Seller API
+  version: 1.0.0
+  description: API for managing businesses and sellers
+
+servers:
+  - url: "/api/s4"
+    description: local and codespaces
+
+paths:
+  /business/:
+    post:
+      summary: Create a new business
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                image: { type: string }
+                phone: { type: string }
+                address: { type: string }
+                web_address: { type: string }
+                description: { type: string }
+                main_owner_name: { type: string }
+                main_owner_email: { type: string, format: email }
+                main_owner_phone: { type: string }
+              required:
+                [
+                  title,
+                  image,
+                  phone,
+                  address,
+                  web_address,
+                  main_owner_name,
+                  main_owner_email,
+                  main_owner_phone,
+                ]
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  new_id: { type: string }
+        "400":
+          description: Invalid data
+        "500":
+          description: Internal Server Error
+    get:
+      summary: Get list of businesses
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  business_accounts_list:
+                    type: array
+                    items:
+                      type: object
+                  pagination_info:
+                    type: object
+        "500":
+          description: Internal Server Error
+
+  /business/{id}:
+    put:
+      summary: Update a business
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                image: { type: string }
+                phone: { type: string }
+                address: { type: string }
+                web_address: { type: string }
+                description: { type: string }
+                main_owner_name: { type: string }
+                main_owner_email: { type: string, format: email }
+                main_owner_phone: { type: string }
+              required:
+                [
+                  title,
+                  image,
+                  phone,
+                  address,
+                  web_address,
+                  main_owner_name,
+                  main_owner_email,
+                  main_owner_phone,
+                ]
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updated_id: { type: string }
+        "400":
+          description: Invalid data
+        "500":
+          description: Internal Server Error
+
+  /business/{business_id}/location_id:
+    get:
+      summary: Get business location details
+      parameters:
+        - name: business_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  show_map: { type: string }
+        "500":
+          description: Internal Server Error
+
+  /business/{business_id}/sellers/:
+    post:
+      summary: Add a seller to a business
+      parameters:
+        - name: business_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                profile_photo: { type: string }
+                address: { type: string }
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  new_seller_id: { type: string }
+        "400":
+          description: Invalid Data
+        "500":
+          description: Internal Server Error
+
+  /business/{business_id}/{seller_id}/sellers:
+    post:
+      summary: Create an account for a seller with QR code
+      parameters:
+        - name: business_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: seller_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Account created with QR code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  new_seller_id: { type: string }
+        "400":
+          description: Invalid Data
+        "500":
+          description: Internal Server Error
+
+  /sellers:
+    get:
+      summary: Get list of sellers
+      parameters:
+        - name: businessId
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: searchSellerName
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sellers_list:
+                    type: array
+                    items:
+                      type: object
+        "400":
+          description: No results found
+        "401":
+          description: Unauthorized
+        "403":
+          description: Permission denied
+        "404":
+          description: Business ID does not exist
+        "500":
+          description: Internal Server Error
+
+  /sellers/{seller_id}/access-history:
+    get:
+      summary: Get access history of a seller
+      parameters:
+        - name: seller_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: No access history found for this seller
+        "500":
+          description: Internal Server Error
+
+  /business/{business_id}/sellers/export:
+    get:
+      summary: Export sellers for a business
+      parameters:
+        - name: business_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: No sellers found for this business
+        "500":
+          description: Internal Server Error
+
+  /business/{business_id}/sellers/import:
+    post:
+      summary: Import sellers for a business
+      parameters:
+        - name: business_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: CSV file not in correct format
+        "401":
+          description: Invalid entries in the CSV file
+        "402":
+          description: Partial import stopped at a row
+        "403":
+          description: Account not in database, create it before import
+        "500":
+          description: Internal Server Error
+
+  /sellers/inactive-notifications:
+    post:
+      summary: Send notifications to inactive sellers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inactivity_period: { type: integer }
+      responses:
+        "200":
+          description: Notifications sent to inactive sellers
+        "400":
+          description: Invalid inactivity period
+        "500":
+          description: Failed to send notifications

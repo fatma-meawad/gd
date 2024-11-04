@@ -1,0 +1,26 @@
+name: Slack Notification on Issue or PR
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+jobs:
+  notify_slack:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Slack Notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        text: |
+          New ${{ github.event_name == 'issues' && 'Issue' || 'Pull Request' }} opened in ${{ github.repository }}:
+          ${{ github.event.issue.html_url || github.event.pull_request.html_url }}
+        author_name: ${{ github.actor }}
+        mention: here
+        if_mention: failure,cancelled
+        job_name: notify_slack
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

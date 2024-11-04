@@ -1,0 +1,6 @@
+{
+    "colorize": true,
+    "translateTime": "HH:MM",
+    "ignore": "pid,hostname,req,res",
+    "messageFormat": "{msg}"
+  }

@@ -1,0 +1,285 @@
+openapi: 3.0.0
+info:
+  title: Messaging API
+  version: 1.0.0
+servers:
+  - url: "/api/s3"
+    description: local and codespaces
+paths:
+  /messages/send:
+    post:
+      summary: Send a message
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sender_id:
+                  type: string
+                thread_id:
+                  type: string
+                content:
+                  type: string
+                time:
+                  type: string
+      responses:
+        "200":
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                  content:
+                    type: string
+        "400":
+          description: Input can't be empty
+        "500":
+          description: Error sending message, please try again later
+
+  /messages/{thread_id}:
+    get:
+      summary: Get messages by thread ID
+      parameters:
+        - name: thread_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  messages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        sender:
+                          type: string
+                        recipient:
+                          type: string
+                        content:
+                          type: string
+                        time:
+                          type: string
+        "404":
+          description: No message history found
+        "500":
+          description: Unable to load messages, please try again later
+
+    delete:
+      summary: Delete a message
+      parameters:
+        - name: thread_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Message deleted and email sent
+        "404":
+          description: Message not found
+        "500":
+          description: Email failure, try again later
+
+    patch:
+      summary: Mark message as important
+      parameters:
+        - name: thread_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_important:
+                  type: boolean
+      responses:
+        "200":
+          description: Message marked as important
+        "404":
+          description: Message not found
+        "500":
+          description: Error updating message, please try again later
+
+  /admins/{id}/status:
+    post:
+      summary: Update admin availability status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                availability_status:
+                  type: string
+      responses:
+        "200":
+          description: Status updated successfully
+        "404":
+          description: Admin not found
+        "500":
+          description: Error updating status, please try again later
+
+  /messages/history/{admin_id}:
+    get:
+      summary: Get full message history for an admin
+      parameters:
+        - name: admin_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: No message history found for this admin
+        "500":
+          description: Unable to load message history, please try again later
+
+  /messages/reply/{thread_id}:
+    post:
+      summary: Reply to a message in a thread
+      parameters:
+        - name: thread_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sender_id:
+                  type: string
+                content:
+                  type: string
+                reply_to_message_id:
+                  type: string
+      responses:
+        "200":
+          description: Reply sent successfully
+        "404":
+          description: Thread or message not found
+        "500":
+          description: Server Error
+
+  /adminlogs:
+    get:
+      summary: Retrieve admin logs
+      parameters:
+        - name: admin_id
+          in: query
+          schema:
+            type: string
+        - name: keyword
+          in: query
+          schema:
+            type: string
+        - name: date_range
+          in: query
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+        - name: order
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    log_id:
+                      type: string
+                    details:
+                      type: string
+              examples:
+                array of logs:
+                  value:
+                    - log_id: some text
+                      details: some text
+                    - log_id: some text
+                      details: some text
+        "400":
+          description: Invalid query parameters
+        "404":
+          description: No logs found
+        "500":
+          description: Server error
+
+    post:
+      summary: Log an admin action
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                admin_id:
+                  type: string
+                action_type:
+                  type: string
+                message_id:
+                  type: string
+                action_time:
+                  type: string
+                details:
+                  type: string
+      responses:
+        "200":
+          description: Log created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: string
+                  success:
+                    type: boolean
+        "400":
+          description: Missing required fields admin_id or action_type
+        "500":
+          description: Unable to log admin action due to server error
