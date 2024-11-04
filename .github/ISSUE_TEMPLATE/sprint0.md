@@ -48,14 +48,14 @@ labels: Sprint-0
 
 ### Aligning
 
-[ ] Move your issue to aligning. 
+- [ ] Move your issue to aligning. 
 
-[ ] In each squad, test two end points with examples. Leave the examples for them in your comments.
+- [ ] In each squad, test two end points with examples. Leave the examples for them in your comments.
 
-[ ] add yourself as a tester in their summary (highlight to them if their endpoints are not needed or redudant)
+- [ ] add yourself as a tester in their summary (highlight to them if their endpoints are not needed or redudant)
 
 
-[ ] Choose one enhanced endpoint for other squads and review it. add yourself as a reviewer
+- [ ] Choose one enhanced endpoint for other squads and review it. add yourself as a reviewer
   
 [ ] Clean up the common interface files related to your work.
 
