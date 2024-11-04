@@ -1,6 +1,7 @@
 const schema = require("../schema.json");
 
-module.exports.postBusinessDb = async (options) => {
+module.exports.postBusinessDb = async () => {
+   const pool = await. pool.query
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
   1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
   2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
@@ -8,7 +9,7 @@ module.exports.postBusinessDb = async (options) => {
 */
   return {
     messages: ["postBusinessDb not implemented yet"],
-    locations: ["business.database.js"],
+    locations: ["business.database.js"]
   };
 };
 
