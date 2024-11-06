@@ -29,6 +29,12 @@ paths:
                     type: string
         "401":
           description: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     post:
       summary: Create a new product
       requestBody:
@@ -436,3 +442,23 @@ paths:
 
         "401":
           description: Unauthorized
+components:
+  schemas:
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "Error messages"
+          example: ["invalid", "not vailable"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
