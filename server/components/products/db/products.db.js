@@ -1,4 +1,5 @@
 const schema = require("../schema.json");
+const mockProducts = require("./mock/products.json");
 
 module.exports.getProductsDb = async () => {
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
@@ -7,7 +8,7 @@ module.exports.getProductsDb = async () => {
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
 */
   return {
-    products: [],
+    products: mockProducts,
   };
 };
 
