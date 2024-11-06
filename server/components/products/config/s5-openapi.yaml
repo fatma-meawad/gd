@@ -9,6 +9,7 @@ paths:
   /products:
     get:
       summary: "Get all products (author: Marika)"
+      description: As an Admin, I would like to view a list of products so that I can see the product catalog in an easy way.
       responses:
         "200":
           description: Success
@@ -90,6 +91,7 @@ paths:
   /products/{product_id}/tags:
     post:
       summary: "Add tags to a product (author: Marika)"
+      description: As admin, I would like to mark products as favorites, best sellers, or newly-arrived, so that I can highlight specific products based on seller requests.
       parameters:
         - in: path
           name: product_id
@@ -127,6 +129,7 @@ paths:
   /products/{product_id}/price:
     post:
       summary: "Update product price (author: Marika)"
+      description: As admin, I would like to associate the price of an item to a date in which it was set, so that I can track the history of the product price.
       parameters:
         - in: path
           name: product_id
@@ -365,6 +368,7 @@ paths:
   /tags:
     get:
       summary: "Retrieve tags for a specific product (author: Marika)"
+      description: As admin, I would like to mark products as favorites, best sellers, or newly-arrived, so that I can highlight specific products based on seller requests.
       parameters:
         - name: product_id
           in: query
@@ -401,6 +405,7 @@ paths:
 
     post:
       summary: "Create a new tag (author: Marika)"
+      description: As admin, I would like to mark products as favorites, best sellers, or newly-arrived, so that I can highlight specific products based on seller requests.
       requestBody:
         required: true
         content:
