@@ -27,6 +27,21 @@ paths:
                     type: string
                   short_description:
                     type: string
+              examples:
+                products:
+                  value:
+                    success: true
+                    products:
+                      - id: "1"
+                        name: "Product 1"
+                        short_description: "Short description of product 1"
+                      - id: "2"
+                        name: "Product 2"
+                        short_description: "Short description of product 2"
+                empty:
+                  value:
+                    success: true
+                    products: []
         "401":
           description: Unauthorized
         default:
