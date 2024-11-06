@@ -8,7 +8,7 @@ servers:
 paths:
   /products:
     get:
-      summary: Get all products
+      summary: "Get all products (author: Marika)"
       responses:
         "200":
           description: Success
@@ -89,7 +89,7 @@ paths:
 
   /products/{product_id}/tags:
     post:
-      summary: Add tags to a product
+      summary: "Add tags to a product (author: Marika)"
       parameters:
         - in: path
           name: product_id
@@ -126,7 +126,7 @@ paths:
 
   /products/{product_id}/price:
     post:
-      summary: Update product price
+      summary: "Update product price (author: Marika)"
       parameters:
         - in: path
           name: product_id
@@ -364,7 +364,7 @@ paths:
           description: Not found
   /tags:
     get:
-      summary: Retrieve tags for a specific product
+      summary: "Retrieve tags for a specific product (author: Marika)"
       parameters:
         - name: product_id
           in: query
@@ -400,7 +400,7 @@ paths:
           description: Product not found
 
     post:
-      summary: Create a new tag
+      summary: "Create a new tag (author: Marika)"
       requestBody:
         required: true
         content:
