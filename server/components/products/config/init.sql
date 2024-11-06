@@ -7,6 +7,10 @@ CREATE DATABASE Products;
 
 CREATE TABLE Product (
     id SERIAL PRIMARY KEY
+    -- added by marika
+    name VARCHAR(255) NOT NULL
+    short_description TEXT NOT NULL
+    -- end of added by marika
 
 );
 
