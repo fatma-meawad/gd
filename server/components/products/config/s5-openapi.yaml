@@ -10,6 +10,7 @@ paths:
     get:
       summary: "Get all products (author: @Marika)"
       description: As an Admin, I would like to view a list of products so that I can see the product catalog in an easy way.
+      tags: [products]
       responses:
         "200":
           description: Success
