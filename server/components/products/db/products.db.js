@@ -7,8 +7,7 @@ module.exports.getProductsDb = async () => {
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
 */
   return {
-    messages: ["getProductsDb not implemented yet"],
-    locations: ["products.database.js"],
+    products: [],
   };
 };
 
