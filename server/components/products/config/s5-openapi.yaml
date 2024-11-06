@@ -199,7 +199,7 @@ paths:
 
   /products/bulk-edit:
     post:
-      summary: Bulk edit products
+      summary: "Bulk edit products (tester: @Marika)"
       requestBody:
         required: true
         content:
@@ -273,7 +273,7 @@ paths:
 
   /products/{id}/discount:
     put:
-      summary: Apply a discount to a product
+      summary: "Apply a discount to a product (tester: @Marika)"
       parameters:
         - in: path
           name: id
