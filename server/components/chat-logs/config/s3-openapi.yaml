@@ -8,7 +8,8 @@ servers:
 paths:
   /messages:
     post:
-      summary: Send a message
+      summary: "Send a message (author: @Iryna)"
+      description: As an admin, I want to send messages to other admins in the system so that I can communicate.
       requestBody:
         required: true
         content:
@@ -45,7 +46,8 @@ paths:
 
   /messages/{thread_id}:
     get:
-      summary: Get messages by thread ID
+      summary: "Get messages by thread ID (author: @Iryna)"
+      description: As an admin, I want to retrieve all messages within a specific thread so that I can view the conversation history with other admins in the system.
       parameters:
         - name: thread_id
           in: path
