@@ -6,7 +6,7 @@ servers:
   - url: "/api/s3"
     description: local and codespaces
 paths:
-  /messages/send:
+  /messages:
     post:
       summary: Send a message
       requestBody:

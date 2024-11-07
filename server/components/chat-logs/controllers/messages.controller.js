@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const messages = require("../services/messages.services");
 const AppError = require("../../../utils/error");
 
-exports.postMessagesSend = asyncHandler(async (req, res) => {
+exports.postMessages = asyncHandler(async (req, res) => {
   const options = {
     body: req.body,
   };
@@ -17,10 +17,10 @@ exports.postMessagesSend = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await messages.postMessagesSend(...Object.values(options));
+  let result = await messages.postMessages(...Object.values(options));
 
   // Temporary response
-  result.messages.push("postMessagesSend controller not implemented yet");
+  result.messages.push("postMessages controller not implemented yet");
   result.locations.push("messages.controller.js");
   res.status(200).send(result);
 });
