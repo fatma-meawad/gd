@@ -162,7 +162,7 @@ paths:
 
   /products/{product_id}/inventory:
     post:
-      summary: Update product inventory
+      summary: "Update product inventory (Tester: @Alona)"
       parameters:
         - in: path
           name: product_id
@@ -197,7 +197,7 @@ paths:
 
   /products/bulk-edit:
     post:
-      summary: Bulk edit products
+      summary: "Bulk edit products (Tester: @Alona)"
       requestBody:
         required: true
         content:
@@ -271,7 +271,7 @@ paths:
 
   /products/{id}/discount:
     put:
-      summary: Apply a discount to a product
+      summary: "Apply a discount to a product (Tester: @Alona)"
       parameters:
         - in: path
           name: id
