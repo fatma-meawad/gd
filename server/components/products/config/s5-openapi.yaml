@@ -106,8 +106,12 @@ paths:
           description: Please fill in all the required fields
         "401":
           description: Unauthorized
-        "500":
-          description: Unable to save product
+        default:
+         description: Unexpected error
+         content:
+             application/json:
+                 schema:
+                  $ref: "#/components/schemas/ErrorObject"
 
   /products/{product_id}/tags:
     post:
@@ -363,6 +367,12 @@ paths:
                     type: string
         "401":
           description: Unauthorized
+        default:
+         description: Unexpected error
+         content:
+             application/json:
+                 schema:
+                  $ref: "#/components/schemas/ErrorObject"
     get:
       tags:
         - products
@@ -389,6 +399,14 @@ paths:
           description: Unauthorized
         "404":
           description: Not found
+        default:
+         description: Unexpected error
+         content:
+             application/json:
+                 schema:
+                  $ref: "#/components/schemas/ErrorObject"
+
+
   /tags:
     get:
       summary: Retrieve tags for a specific product
@@ -457,3 +475,23 @@ paths:
 
         "401":
           description: Unauthorized
+components:
+     schemas:
+         ErrorObject:
+             type: object
+             properties:
+                 status:
+                     type: string
+                     description: "error"
+                 errors:
+                     type: array
+                     items:
+                         type: string
+                     description: "Error messages"
+                     example: ["invalid", "not available"]
+                 locations:
+                     type: array
+                     items:
+                         type: string
+                     description: "Optional: Additional information about the location of each message"
+                     example: ["db.js", "service.js"]
