@@ -47,21 +47,26 @@ paths:
                   type: string
                   minLength: 3
                   maxLength: 100
+                  example: Wireless RGB Keyboard
                 category_id:
                   type: integer
                   nullable: true
+                  example: 54
                 category_name:
                   type: string
                   minLength: 3
                   maxLength: 100
+                  example: Keyboards
                 short_description:
                   type: string
                   minLength: 20
                   maxLength: 1000
+                  example: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience.
                 detailed_description:
                   type: string
                   maxLength: 10000
                   nullable: true
+                  example: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace.
                 product_photos:
                   type: array
                   nullable: true
