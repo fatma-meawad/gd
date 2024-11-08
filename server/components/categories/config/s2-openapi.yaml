@@ -128,6 +128,7 @@ paths:
     get:
       summary: Retrieves a list of all categories
         author: @Wong Chung Man
+      description: As an admin, I would like to retrieve categories, so that I can understand the general overall activity of each registered business.
       responses:
         "200":
           description: Success
@@ -136,6 +137,7 @@ paths:
     post:
       summary: Creates a new category
         author: @Wong Chung Man
+      description: As an admin, I would like to create categories, so that I can understand the general overall activity of each registered business.
       requestBody:
         required: true
         content:
@@ -167,6 +169,7 @@ paths:
     put:
       summary: Updates a category by ID
         author: @Wong Chung Man
+      description: As an admin, I would like to update categories, so that I can understand the general overall activity of each registered business.
       parameters:
         - name: id
           in: path
@@ -205,6 +208,7 @@ paths:
     delete:
       summary: Deletes a category by ID
         author: @Wong Chung Man
+      description: As an admin, I would like to delete categories, so that I can understand the general overall activity of each registered business.
       parameters:
         - name: id
           in: path
