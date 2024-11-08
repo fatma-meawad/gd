@@ -9,6 +9,17 @@ servers:
 paths:
   /admins/login:
     post:
+      summary: "Login admin with attempt tracking - author: @alberto"
+      description: |
+        **Story:** As a registered administrator, I want to log into the system securely, with the system tracking login attempts to prevent unauthorized access.
+        
+        **Happy Paths:**
+        - Given valid credentials, when the admin logs in, they are granted access to the system, and the login attempt is recorded.
+
+        **Alternative Paths:**
+        - If the admin enters incorrect credentials, the system records the attempt and displays an error message: "Invalid credentials. Please try again."
+        - If the admin fails to log in 3 times consecutively, the system blocks the account temporarily and they receive a message: "Your account has been blocked due to multiple failed login attempts. Please reset your password."
+        - If the login attempt is successful after one or two attempts, the system resets the attempt counter back to zero.
       requestBody:
         required: true
         content:
@@ -40,7 +51,20 @@ paths:
             password
   /admins/{id}/deactivate:
     put:
-      summary: Deactivate an admin
+      summary: "Deactivate an admin - author: @alberto"
+      description: |
+        **Story:** As an administrator with appropriate permissions, I want to soft delete an admin account so that it's no longer active but the data is preserved for potential future recovery.
+        
+        **Happy Paths:**
+        - Given a logged-in admin with appropriate permissions, when the admin selects to deactivate another admin account, the system marks the account as inactive (soft delete) without deleting it from the database.
+        - The system logs this action with the encrypted details of both the acting admin and the deactivated admin.
+        - The system sends an email notification to all active admins, informing them of the account deactivation.
+        - The system records the time and details of the deactivation log.
+
+        **Alternative Paths:**
+        - If the admin doesn't have appropriate permissions, the system shows an error message: "You don't have permission to perform this action."
+        - If there's an issue with the deactivation process, the system displays an error: "Unable to deactivate the account. Please try again later."
+        - If the admin attempts to deactivate their own account, the system displays a warning: "You cannot deactivate your own account."
       requestBody:
         required: true
         content:
@@ -301,7 +325,20 @@ paths:
           description: Import processing failed
   /admins/register:
     post:
-      summary: Register a new admin
+      summary: "Register a new admin - author: @alberto"
+      description: |
+        **Story:** As an administrator, I want to register using a verified code provided by the Galleria owners so that I can manage the gallery.
+        
+        **Happy Paths:**
+        - Given a valid code, the system allows the admin to enter their full name, email, phone, password, and optional photo and bio.
+        - The system enforces strong password requirements (e.g., minimum length, complexity).
+        - The registration date is automatically recorded, and all other administrators are notified of the new registration.
+
+        **Alternative Paths:**
+        - If an invalid or expired code is entered, the system displays an error message: "Invalid or expired registration code."
+        - If the registration code has already been used, the system informs the admin that the code is no longer valid.
+        - If there's an issue while creating the account (e.g., server error), the system shows an error message: "Unable to register. Please try again later."
+        - If the password doesn't meet the complexity requirements, the system provides specific feedback on what needs to be improved.
       requestBody:
         required: true
         content:
