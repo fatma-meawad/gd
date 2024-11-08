@@ -36,23 +36,42 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - category_name
+                - name
+                - short_description
               properties:
                 name:
                   type: string
+                  minLength: 3
+                  maxLength: 100
                 category_id:
-                  type: string
+                  type: integer
+                  nullable: true
                 category_name:
                   type: string
+                  minLength: 3
+                  maxLength: 100
                 short_description:
                   type: string
+                  minLength: 20
+                  maxLength: 1000
                 detailed_description:
                   type: string
+                  maxLength: 10000
+                  nullable: true
                 product_photos:
                   type: array
+                  nullable: true
                   items:
                     type: string
+                    format: uri
+                    example: https://www.youtube.com/photo.jpg
                 product_url:
                   type: string
+                  nullable: true
+                  format: uri
+                  example: https://youtu.be/0LE0trd740Q
       responses:
         "200":
           description: Success
