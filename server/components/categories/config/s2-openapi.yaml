@@ -127,6 +127,7 @@ paths:
   /categories:
     get:
       summary: Retrieves a list of all categories
+        author: @Wong Chung Man
       responses:
         "200":
           description: Success
@@ -134,6 +135,7 @@ paths:
           description: Unauthorized
     post:
       summary: Creates a new category
+        author: @Wong Chung Man
       requestBody:
         required: true
         content:
@@ -164,6 +166,7 @@ paths:
   /categories/{id}:
     put:
       summary: Updates a category by ID
+        author: @Wong Chung Man
       parameters:
         - name: id
           in: path
@@ -201,6 +204,7 @@ paths:
           description: Unauthorized
     delete:
       summary: Deletes a category by ID
+        author: @Wong Chung Man
       parameters:
         - name: id
           in: path
