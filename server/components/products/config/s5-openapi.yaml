@@ -28,6 +28,8 @@ paths:
         "401":
           description: Unauthorized
     post:
+      tags:
+        - products
       summary: "Create a new product (author: @Alona)"
       description: As an admin, I would like to add a new product, so that I could manage a product catalogue.
       requestBody:
@@ -326,6 +328,8 @@ paths:
 
   /products/{product_id}/photos:
     post:
+      tags:
+        - products
       summary: "Add photos to a product (author: @Alona)"
       description: As an admin, I would like to optionally add a gallery of up to 5 photos, which are up to 1 MB each, to a product for quick visual recognition.
       parameters:
@@ -360,7 +364,9 @@ paths:
         "401":
           description: Unauthorized
     get:
-      summary: Get photos of a product
+      tags:
+        - products
+      summary: "Get photos of a product (author: @Alona)"
       parameters:
         - in: path
           name: product_id
