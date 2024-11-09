@@ -88,7 +88,7 @@ paths:
                     sender_id: "1"
                     recipient_id: "2"
                     content: "Hello!"
-                    time: "2024-11-08T19:18:53Z"      
+                    time: "2024-11-08T19:18:53Z"
         "400":
           description: Input can't be empty
         default:

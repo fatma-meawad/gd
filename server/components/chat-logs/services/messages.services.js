@@ -2,11 +2,21 @@ const messages = require("../db/messages.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
-module.exports.postMessages = async (sender_id, recipient_id, content, time) => {
+module.exports.postMessages = async (
+  sender_id,
+  recipient_id,
+  content,
+  time
+) => {
   // Implement your business logic here...
 
   try {
-    let result = await messages.postMessagesDb(sender_id, recipient_id, content, time);
+    let result = await messages.postMessagesDb(
+      sender_id,
+      recipient_id,
+      content,
+      time
+    );
     return result;
   } catch (error) {
     throw new AppError(error);
