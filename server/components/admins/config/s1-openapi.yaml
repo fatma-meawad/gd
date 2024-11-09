@@ -169,7 +169,7 @@ paths:
           description: Email delivery failed
   /admins/password-reset:
     get:
-      summary: Validate password reset token
+      summary: "Validate password reset token - tester @alberto"
       responses:
         "200":
           description: Valid token.
@@ -178,7 +178,7 @@ paths:
         "500":
           description: Unable to verify token. Please try again later.
     put:
-      summary: Reset password
+      summary: "Reset password - tester @alberto"
       requestBody:
         required: true
         content:
@@ -215,7 +215,7 @@ paths:
           description: Unable to process request. Please try again later.
   /admin/logs:
     get:
-      summary: "Get admin logs - tester @alberto"
+      summary: Get admin logs
       parameters:
         - name: page
           in: query
