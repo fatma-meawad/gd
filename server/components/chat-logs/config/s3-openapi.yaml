@@ -5,6 +5,28 @@ info:
 servers:
   - url: "/api/s3"
     description: local and codespaces
+
+components:
+  schemas:
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
+
 paths:
   /messages:
     post:
@@ -20,12 +42,24 @@ paths:
               properties:
                 sender_id:
                   type: integer
-                thread_id:
+                recipient_id:
                   type: integer
                 content:
                   type: string
                 time:
                   type: string
+              required:
+                - sender_id
+                - recipient_id
+                - content
+                - time
+            examples:
+              validMessage:
+                value:
+                  sender_id: 1
+                  recipient_id: 2
+                  content: "Hello!"
+                  time: "2024-11-08T19:18:53Z"
       responses:
         "200":
           description: Message sent successfully
@@ -40,12 +74,29 @@ paths:
                     type: integer
                   sender:
                     type: integer
+                  recipient_id:
+                    type: integer
                   content:
                     type: string
+                  time:
+                    type: string
+              examples:
+                successfulResponse:
+                  value:
+                    success: true
+                    id: "1"
+                    sender_id: "1"
+                    recipient_id: "2"
+                    content: "Hello!"
+                    time: "2024-11-08T19:18:53Z"      
         "400":
           description: Input can't be empty
-        "500":
-          description: Error sending message, please try again later
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 
   /messages/{thread_id}:
     get:
@@ -82,25 +133,6 @@ paths:
                           type: string
                         time:
                           type: string
-              examples:
-                successfulResponse:
-                  value:
-                    success: true
-                    messages:
-                      - id: "1"
-                        sender: "1"
-                        recipient: "2"
-                        content: "Hello!"
-                        time: "2024-11-08T19:18:53Z"
-                      - id: "2"
-                        sender: "2"
-                        recipient: "1"
-                        content: "Hi!"
-                        time: "2024-11-08T20:15:23Z"
-                emptyResponse:
-                  value:
-                    success: true
-                    messages: []
         "404":
           description: No message history found
         "500":
