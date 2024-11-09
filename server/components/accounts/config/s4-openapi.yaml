@@ -53,7 +53,7 @@ paths:
         "500":
           description: Internal Server Error
     get:
-      summary: Get list of businesses
+      summary: Get list of businesses (author:@Jany-M)
       responses:
         "200":
           description: Success
@@ -205,7 +205,7 @@ paths:
 
   /sellers:
     get:
-      summary: Get list of sellers
+      summary: Get list of sellers (author:@Jany-M)
       parameters:
         - name: businessId
           in: query
