@@ -215,5 +215,6 @@ exports.postAdminsRegister = asyncHandler(async (req, res) => {
   // Temporary response
   result.messages.push("postAdminsRegister controller not implemented yet");
   result.locations.push("admins.controller.js");
-  res.status(200).send(result);
+  result.data = { new_id: "dummy-id-123" };
+  res.status(201).send(result);
 });
