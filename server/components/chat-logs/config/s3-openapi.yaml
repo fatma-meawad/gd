@@ -10,6 +10,7 @@ paths:
     post:
       summary: "Send a message (author: @Iryna)"
       description: As an admin, I want to send messages to other admins in the system so that I can communicate.
+      tags: [chat-logs]
       requestBody:
         required: true
         content:
