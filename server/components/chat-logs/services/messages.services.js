@@ -2,15 +2,11 @@ const messages = require("../db/messages.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
-module.exports.postMessages = async () => {
+module.exports.postMessages = async (sender_id, recipient_id, content, time) => {
   // Implement your business logic here...
 
   try {
-    let result = await messages.postMessagesDb();
-    //delete this when you actually implement something.
-    result.messages.push("postMessages services not implemented yet");
-    result.locations.push("messages.services.js");
-
+    let result = await messages.postMessagesDb(sender_id, recipient_id, content, time);
     return result;
   } catch (error) {
     throw new AppError(error);
