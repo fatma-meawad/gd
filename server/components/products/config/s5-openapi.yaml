@@ -101,7 +101,7 @@ paths:
                     type: string
                   detailed_description:
                     type: string
-                  product_photos:
+                  product_photos: #product photos may not be needed here, as there is a table for photos
                     type: array
                     items:
                       type: string
