@@ -133,8 +133,20 @@ paths:
       responses:
         "200":
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Success
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
         default:
          description: Unexpected error
          content:
@@ -175,8 +187,20 @@ paths:
                   description: This is something you can eat.
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Invalid input
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
         default:
          description: Unexpected error
          content:
@@ -227,8 +251,20 @@ paths:
                   description: This is soemthing electrical.
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Invalid input
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
         default:
          description: Unexpected error
          content:
@@ -260,10 +296,28 @@ paths:
                   id: 1
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Invalid input
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
         "402":
           description: Cannot delete element with internal categories or elements
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Cannot delete element with internal categories or elements
         default:
          description: Unexpected error
          content:
