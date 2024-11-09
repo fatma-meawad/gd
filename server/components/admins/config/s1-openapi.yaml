@@ -120,7 +120,7 @@ paths:
           description: Unauthorized action
   /admins:
     get:
-      summary: Get a list of admins
+      summary: "Get a list of admins - tester @alberto"
       parameters:
         - name: page
           in: query
@@ -215,7 +215,7 @@ paths:
           description: Unable to process request. Please try again later.
   /admin/logs:
     get:
-      summary: Get admin logs
+      summary: "Get admin logs - tester @alberto"
       parameters:
         - name: page
           in: query
@@ -254,7 +254,7 @@ paths:
           description: Unable to retrieve logs. Please try again later.
   /admin/export:
     get:
-      summary: Export admin data
+      summary: "Export admin data - tester @alberto"
       parameters:
         - name: format
           in: query
