@@ -122,7 +122,7 @@ paths:
           description: Email failure, try again later
 
     patch:
-      summary: Mark message as important
+      summary: Mark message as important (tester:@Iryna)
       parameters:
         - name: thread_id
           in: path
@@ -148,7 +148,7 @@ paths:
 
   /admins/{id}/status:
     post:
-      summary: Update admin availability status
+      summary: Update admin availability status (tester:@Iryna)
       parameters:
         - name: id
           in: path
@@ -174,7 +174,7 @@ paths:
 
   /messages/history/{admin_id}:
     get:
-      summary: Get full message history for an admin
+      summary: Get full message history for an admin (tester:@Iryna)
       parameters:
         - name: admin_id
           in: path
