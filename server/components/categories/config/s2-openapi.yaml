@@ -8,7 +8,7 @@ servers:
 paths:
   /subcategories:
     get:
-      summary: Retrieves a list of all subcategories
+      summary: "Retrieves a list of all subcategories (tester: @Wong Chung Man)"
       responses:
         "200":
           description: Success
@@ -229,7 +229,7 @@ paths:
           description: Cannot delete element with internal categories or elements
   /categories/products:
     get:
-      summary: Retrieves products based on category and business account
+      summary: "Retrieves products based on category and business account (tester: @Wong Chung Man)"
       parameters:
         - name: categoryId
           in: query
@@ -248,7 +248,7 @@ paths:
           description: Invalid input
   /categories/lookups:
     get:
-      summary: Retrieves lookups for categories with product and account associations
+      summary: "Retrieves lookups for categories with product and account associations (tester: @Wong Chung Man)"
       responses:
         "200":
           description: Lookups for categories with info for number of products and number of accounts associated
