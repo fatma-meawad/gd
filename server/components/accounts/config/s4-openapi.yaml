@@ -11,7 +11,7 @@ servers:
 paths:
   /business/:
     post:
-      summary: Create a new business
+      summary: Create a new business (tester:@Jany-M)
       requestBody:
         required: true
         content:
@@ -74,7 +74,7 @@ paths:
 
   /business/{id}:
     put:
-      summary: Update a business
+      summary: Update a business (tester:@Jany-M)
       parameters:
         - name: id
           in: path
@@ -145,7 +145,7 @@ paths:
 
   /business/{business_id}/sellers/:
     post:
-      summary: Add a seller to a business author @yourname
+      summary: Add a seller to a business (tester:@Jany-M)
       parameters:
         - name: business_id
           in: path
