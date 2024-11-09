@@ -148,11 +148,11 @@ paths:
                 example:
                   result: Unauthorized
         default:
-         description: Unexpected error
-         content:
-             application/json:
-                 schema:
-                     $ref: "#/components/schemas/ErrorObject"
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     post:
       summary: "Creates a new category (author: @Wong Chung Man)"
       description: As an admin, I would like to create categories, so that I can understand the general overall activity of each registered business.
@@ -202,11 +202,11 @@ paths:
                 example:
                   result: Unauthorized
         default:
-         description: Unexpected error
-         content:
-             application/json:
-                 schema:
-                     $ref: "#/components/schemas/ErrorObject"
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
   /categories/{id}:
     put:
       summary: "Updates a category by ID (author: @Wong Chung Man)"
@@ -266,11 +266,11 @@ paths:
                 example:
                   result: Unauthorized
         default:
-         description: Unexpected error
-         content:
-             application/json:
-                 schema:
-                     $ref: "#/components/schemas/ErrorObject"
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     delete:
       summary: "Deletes a category by ID (author: @Wong Chung Man)"
       description: As an admin, I would like to delete categories, so that I can understand the general overall activity of each registered business.
@@ -319,11 +319,11 @@ paths:
                 example:
                   result: Cannot delete element with internal categories or elements
         default:
-         description: Unexpected error
-         content:
-             application/json:
-                 schema:
-                     $ref: "#/components/schemas/ErrorObject"     
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
   /categories/products:
     get:
       summary: "Retrieves products based on category and business account (tester: @Wong Chung Man)"
@@ -352,22 +352,22 @@ paths:
         "400":
           description: Failed to retrieve resource
 components:
-     schemas:
-         ErrorObject:
-             type: object
-             properties:
-                 status:
-                     type: string
-                     description: "error"
-                 errors:
-                     type: array
-                     items:
-                         type: string
-                     description: "Error messages"
-                     example: ["invalid", "not available"]
-                 locations:
-                     type: array
-                     items:
-                         type: string
-                     description: "Optional: Additional information about the location of each message"
-                     example: ["db.js", "service.js"]
+  schemas:
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
