@@ -14,7 +14,7 @@ paths:
       summary: "Login admin with attempt tracking - author: @alberto"
       description: |
         **Story:** As a registered administrator, I want to log into the system securely, with the system tracking login attempts to prevent unauthorized access.
-        
+
         **Happy Paths:**
         - Given valid credentials, when the admin logs in, they are granted access to the system, and the login attempt is recorded.
 
@@ -56,7 +56,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorObject'
+                $ref: "#/components/schemas/ErrorObject"
   /admins/{id}/deactivate:
     put:
       tags:
@@ -64,7 +64,7 @@ paths:
       summary: "Deactivate an admin - author: @alberto"
       description: |
         **Story:** As an administrator with appropriate permissions, I want to soft delete an admin account so that it's no longer active but the data is preserved for potential future recovery.
-        
+
         **Happy Paths:**
         - Given a logged-in admin with appropriate permissions, when the admin selects to deactivate another admin account, the system marks the account as inactive (soft delete) without deleting it from the database.
         - The system logs this action with the encrypted details of both the acting admin and the deactivated admin.
@@ -102,7 +102,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorObject'
+                $ref: "#/components/schemas/ErrorObject"
   /admins/{id}/profile:
     put:
       summary: Update admin profile
@@ -344,7 +344,7 @@ paths:
       summary: "Register a new admin - author: @alberto"
       description: |
         **Story:** As an administrator, I want to register using a verified code provided by the Galleria owners so that I can manage the gallery.
-        
+
         **Happy Paths:**
         - Given a valid code, the system allows the admin to enter their full name, email, phone, password, and optional photo and bio.
         - The system enforces strong password requirements (e.g., minimum length, complexity).
@@ -360,7 +360,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AdminData'
+              $ref: "#/components/schemas/AdminData"
             examples:
               validRegistration:
                 summary: Valid registration request
@@ -409,7 +409,7 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/SuccessObject'
+                  - $ref: "#/components/schemas/SuccessObject"
                   - type: object
                     properties:
                       data:
@@ -421,9 +421,9 @@ paths:
               example:
                 data:
                   new_id: "admin-123"
-                messages: 
+                messages:
                   - "Registration successful"
-                locations: 
+                locations:
                   - "admins.controller.js"
                   - "admins.service.js"
                   - "admins.database.js"
@@ -432,13 +432,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorObject'
+                $ref: "#/components/schemas/ErrorObject"
               example:
                 status: "error"
-                errors: 
+                errors:
                   - "Invalid or expired registration code"
                   - "Password does not meet complexity requirements"
-                locations: 
+                locations:
                   - "admins.controller.js"
                   - "admins.service.js"
                   - "admins.database.js"
@@ -447,86 +447,85 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorObject'
+                $ref: "#/components/schemas/ErrorObject"
 components:
-    schemas:
-      AdminData:
-        type: object
-        properties:
-          full_name:
+  schemas:
+    AdminData:
+      type: object
+      properties:
+        full_name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: "Full name of the administrator"
+        email:
+          type: string
+          format: email
+          description: "Email address of the administrator"
+        phone:
+          type: string
+          pattern: '^\+?[1-9]\d{1,14}$'
+          description: "Phone number in international format"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          description: "Admin password - must be at least 8 characters with mix of letters, numbers and symbols"
+        address:
+          type: string
+          maxLength: 200
+          description: "Physical address"
+        activation_code:
+          type: string
+          pattern: "^[A-Z0-9]{8}$"
+          description: "8-character activation code provided by Galleria owners"
+        profile_photo:
+          type: string
+          format: uri
+          description: "URL to profile photo"
+        bio:
+          type: string
+          maxLength: 500
+          description: "Admin biography or description"
+      required:
+        - full_name
+        - email
+        - phone
+        - password
+        - activation_code
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
             type: string
-            minLength: 2
-            maxLength: 100
-            description: "Full name of the administrator"
-          email:
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
             type: string
-            format: email
-            description: "Email address of the administrator"
-          phone:
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
+    SuccessObject:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
             type: string
-            pattern: '^\+?[1-9]\d{1,14}$'
-            description: "Phone number in international format"
-          password:
+          description: "Optional tracking locations related to the data"
+          example: ["tracking location optional"]
+        messages:
+          type: array
+          items:
             type: string
-            format: password
-            minLength: 8
-            description: "Admin password - must be at least 8 characters with mix of letters, numbers and symbols"
-          address:
-            type: string
-            maxLength: 200
-            description: "Physical address"
-          activation_code:
-            type: string
-            pattern: '^[A-Z0-9]{8}$'
-            description: "8-character activation code provided by Galleria owners"
-          profile_photo:
-            type: string
-            format: uri
-            description: "URL to profile photo"
-          bio:
-            type: string
-            maxLength: 500
-            description: "Admin biography or description"
-        required:
-          - full_name
-          - email
-          - phone
-          - password
-          - activation_code
-      ErrorObject:
-          type: object
-          properties:
-              status:
-                  type: string
-                  description: "error"
-              errors:
-                  type: array
-                  items:
-                      type: string
-                  description: "Error messages"
-                  example: ["invalid", "not available"]
-              locations:
-                  type: array
-                  items:
-                      type: string
-                  description: "Optional: Additional information about the location of each message"
-                  example: ["db.js", "service.js"]
-      SuccessObject:
-          type: object
-          properties:
-            locations:
-              type: array
-              items:
-                type: string
-              description: "Optional tracking locations related to the data"
-              example: ["tracking location optional"]
-            messages:
-              type: array
-              items:
-                type: string
-              description: "Messages that provide additional information about the response"
-              example: ["tracking location optional"]
+          description: "Messages that provide additional information about the response"
+          example: ["tracking location optional"]
 tags:
-    -
-        name: admins
-        description: ''
+  - name: admins
+    description: ""

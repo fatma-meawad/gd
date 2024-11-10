@@ -210,7 +210,9 @@ exports.postAdminsRegister = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await admins.postAdminsRegister(...Object.values(registrationData));
+  let result = await admins.postAdminsRegister(
+    ...Object.values(registrationData)
+  );
 
   // Temporary response
   result.messages.push("postAdminsRegister controller not implemented yet");
