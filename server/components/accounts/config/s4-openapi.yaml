@@ -74,7 +74,7 @@ paths:
 
   /business/{id}:
     put:
-      summary: Update a business (tester:@Jany-M)
+      summary: Update a business
       parameters:
         - name: id
           in: path
@@ -178,7 +178,7 @@ paths:
 
   /business/{business_id}/{seller_id}/sellers:
     post:
-      summary: Create an account for a seller with QR code
+      summary: Create an account for a seller with QR code (tester:@Jany-M)
       parameters:
         - name: business_id
           in: path
