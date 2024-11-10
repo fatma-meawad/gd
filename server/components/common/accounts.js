@@ -1,4 +1,4 @@
-export function getBusiness() {
+export function getBusinesses() {
   // Implementation here
 }
 

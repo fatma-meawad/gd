@@ -9,7 +9,7 @@ servers:
     description: local and codespaces
 
 paths:
-  /business/:
+  /businesses/:
     post:
       summary: Create a new business (tester:@Jany-M)
       requestBody:
@@ -55,6 +55,7 @@ paths:
     get:
       summary: Get list of businesses (author:@Jany-M)
       description: As an admin, I want to view all existing businesses, so that I can easily see their data and manage them effectively.
+      tags: [accounts]
       parameters:
         - name: limit
           in: query
@@ -76,7 +77,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  business_list:
+                  businesses:
                     type: array
                     items:
                       type: object
@@ -101,36 +102,94 @@ paths:
                       limit: { type: integer }
                       offset: { type: integer }
                       total_items: { type: integer }
+              examples:
+                businesses-list:
+                  summary: A list of businesses
+                  value:
+                    businesses:
+                      - id: 1
+                        title: "Example Business"
+                        image: "http://example.com/image.png"
+                        phone: "+1234567890"
+                        address: "123 Example Street"
+                        web_address: "http://example.com"
+                        description: "An example business description"
+                        main_owner_name: "John Doe"
+                        main_owner_email: "john.doe@example.com"
+                        main_owner_phone: "+1234567890"
+                        created_at: 12345678
+                        updated_at: 12345678
+                        is_active: true
+                        deactivated_at: 12345678
+                    pagination_info:
+                      limit: 1
+                      offset: 0
+                      total_items: 1
         "400":
           description: Invalid request parameters
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
+              examples:
+                example-400:
+                  summary: Invalid request parameters
+                  value:
+                    error: "Invalid request parameters"
+                    details:
+                      - "Limit must be a positive integer"
+                      - "Offset must be a non-negative integer"
         "401":
           description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
+              examples:
+                example-401:
+                  summary: Unauthorized access
+                  value:
+                    error: "Unauthorized"
         "403":
           description: Permission denied
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
+              examples:
+                example-403:
+                  summary: Permission denied
+                  value:
+                    error: "Permission denied"
         "404":
           description: No businesses found
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
+              examples:
+                example-404:
+                  summary: No businesses found
+                  value:
+                    error: "No businesses found"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
+              examples:
+                example-500:
+                  summary: Internal server error
+                  value:
+                    messages:
+                      - "getBusinesses controller not implemented yet"
+                      - "getBusinesses services not implemented yet"
+                      - "getBusinesses database not implemented yet"
+                    locations:
+                      - "businesses.controller.js"
+                      - "businesses.services.js"
+                      - "businesses.database.js"
 
   /business/{id}:
     put:

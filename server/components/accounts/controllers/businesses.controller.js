@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const business = require("../services/business.services");
+const business = require("../services/businesses.services");
 const AppError = require("../../../utils/error");
 
 exports.postBusiness = asyncHandler(async (req, res) => {
@@ -21,29 +21,37 @@ exports.postBusiness = asyncHandler(async (req, res) => {
 
   // Temporary response
   result.messages.push("postBusiness controller not implemented yet");
-  result.locations.push("business.controller.js");
+  result.locations.push("businesses.controller.js");
   res.status(200).send(result);
 });
 
-exports.getBusiness = asyncHandler(async (req, res) => {
-  const options = {};
-
-  /**  request:
+/**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
       2- the openapi validator should match the types with the contract, so make sure they match
       3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
+*/
 
-  /**  response:
+/**  response:
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
-  */
-  let result = await business.getBusiness(...Object.values(options));
+*/
+exports.getBusinesses = asyncHandler(async (req, res) => {
+  const { limit, offset } = req.query;
 
-  // Temporary response
-  result.messages.push("getBusiness controller not implemented yet");
-  result.locations.push("business.controller.js");
-  res.status(200).send(result);
+  try {
+    const result = await businesses.getBusinesses({ limit, offset });
+
+    if (!result.businesses.length) {
+      return res.status(404).json({ error: "No businesses found" });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({
+      messages: ["getBusinesses controller not implemented yet"],
+      locations: ["businesses.controller.js"],
+    });
+  }
 });
 
 exports.putBusinessById = asyncHandler(async (req, res) => {
@@ -66,7 +74,7 @@ exports.putBusinessById = asyncHandler(async (req, res) => {
 
   // Temporary response
   result.messages.push("putBusinessById controller not implemented yet");
-  result.locations.push("business.controller.js");
+  result.locations.push("businesses.controller.js");
   res.status(200).send(result);
 });
 
@@ -93,7 +101,7 @@ exports.getBusinessByBusinessIdLocationId = asyncHandler(async (req, res) => {
   result.messages.push(
     "getBusinessByBusinessIdLocationId controller not implemented yet"
   );
-  result.locations.push("business.controller.js");
+  result.locations.push("businesses.controller.js");
   res.status(200).send(result);
 });
 
@@ -121,7 +129,7 @@ exports.postBusinessByBusinessIdSellers = asyncHandler(async (req, res) => {
   result.messages.push(
     "postBusinessByBusinessIdSellers controller not implemented yet"
   );
-  result.locations.push("business.controller.js");
+  result.locations.push("businesses.controller.js");
   res.status(200).send(result);
 });
 
@@ -150,7 +158,7 @@ exports.postBusinessByBusinessIdBySellerIdSellers = asyncHandler(
     result.messages.push(
       "postBusinessByBusinessIdBySellerIdSellers controller not implemented yet"
     );
-    result.locations.push("business.controller.js");
+    result.locations.push("businesses.controller.js");
     res.status(200).send(result);
   }
 );
@@ -179,7 +187,7 @@ exports.getBusinessByBusinessIdSellersExport = asyncHandler(
     result.messages.push(
       "getBusinessByBusinessIdSellersExport controller not implemented yet"
     );
-    result.locations.push("business.controller.js");
+    result.locations.push("businesses.controller.js");
     res.status(200).send(result);
   }
 );
@@ -209,7 +217,7 @@ exports.postBusinessByBusinessIdSellersImport = asyncHandler(
     result.messages.push(
       "postBusinessByBusinessIdSellersImport controller not implemented yet"
     );
-    result.locations.push("business.controller.js");
+    result.locations.push("businesses.controller.js");
     res.status(200).send(result);
   }
 );

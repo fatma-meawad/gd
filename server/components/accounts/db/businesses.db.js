@@ -8,19 +8,27 @@ module.exports.postBusinessDb = async () => {
 */
   return {
     messages: ["postBusinessDb not implemented yet"],
-    locations: ["business.database.js"]
+    locations: ["businesses.database.js"]
   };
 };
 
-module.exports.getBusinessDb = async (options) => {
-  /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
+/** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
   1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
   2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
 */
+module.exports.getBusinessesDb = async ({ limit, offset }) => {
+  // Implement your database query logic here
+  // Example: SELECT * FROM BusinessAccount LIMIT ? OFFSET ?
   return {
-    messages: ["getBusinessDb not implemented yet"],
-    locations: ["business.database.js"],
+    businesses: [
+      // Example data
+    ],
+    pagination_info: {
+      limit,
+      offset,
+      total_items: 1, // Example total
+    },
   };
 };
 
@@ -32,7 +40,7 @@ module.exports.putBusinessByIdDb = async (options) => {
 */
   return {
     messages: ["putBusinessByIdDb not implemented yet"],
-    locations: ["business.database.js"],
+    locations: ["businesses.database.js"],
   };
 };
 
@@ -44,7 +52,7 @@ module.exports.getBusinessByBusinessIdLocationIdDb = async (options) => {
 */
   return {
     messages: ["getBusinessByBusinessIdLocationIdDb not implemented yet"],
-    locations: ["business.database.js"],
+    locations: ["businesses.database.js"],
   };
 };
 
@@ -56,7 +64,7 @@ module.exports.postBusinessByBusinessIdSellersDb = async (options) => {
 */
   return {
     messages: ["postBusinessByBusinessIdSellersDb not implemented yet"],
-    locations: ["business.database.js"],
+    locations: ["businesses.database.js"],
   };
 };
 
@@ -72,7 +80,7 @@ module.exports.postBusinessByBusinessIdBySellerIdSellersDb = async (
     messages: [
       "postBusinessByBusinessIdBySellerIdSellersDb not implemented yet",
     ],
-    locations: ["business.database.js"],
+    locations: ["businesses.database.js"],
   };
 };
 
@@ -84,7 +92,7 @@ module.exports.getBusinessByBusinessIdSellersExportDb = async (options) => {
 */
   return {
     messages: ["getBusinessByBusinessIdSellersExportDb not implemented yet"],
-    locations: ["business.database.js"],
+    locations: ["businesses.database.js"],
   };
 };
 
@@ -96,6 +104,6 @@ module.exports.postBusinessByBusinessIdSellersImportDb = async (options) => {
 */
   return {
     messages: ["postBusinessByBusinessIdSellersImportDb not implemented yet"],
-    locations: ["business.database.js"],
+    locations: ["businesses.database.js"],
   };
 };
