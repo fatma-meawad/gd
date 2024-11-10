@@ -55,7 +55,19 @@ paths:
     get:
       summary: Get list of businesses (author:@Jany-M)
       description: As an admin, I want to view all existing businesses, so that I can easily see their data and manage them effectively.
-      tags: [accounts]
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Number of items per page
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Offset for pagination
       responses:
         "200":
           description: Success
@@ -64,20 +76,57 @@ paths:
               schema:
                 type: object
                 properties:
-                  business_accounts_list:
+                  business_list:
                     type: array
                     items:
                       type: object
+                      properties:
+                        id: { type: integer }
+                        title: { type: string }
+                        image: { type: string }
+                        phone: { type: string }
+                        address: { type: string }
+                        web_address: { type: string }
+                        description: { type: string }
+                        main_owner_name: { type: string }
+                        main_owner_email: { type: string, format: email }
+                        main_owner_phone: { type: string }
+                        created_at: { type: integer }
+                        updated_at: { type: integer }
+                        is_active: { type: boolean }
+                        deactivated_at: { type: integer }
                   pagination_info:
                     type: object
-        "500":
-          description: Internal Server Error
+                    properties:
+                      limit: { type: integer }
+                      offset: { type: integer }
+                      total_items: { type: integer }
+        "400":
+          description: Invalid request parameters
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
-        default:
-          description: Unexpected error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+        "403":
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+        "404":
+          description: No businesses found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+        "500":
+          description: Internal Server Error
           content:
             application/json:
               schema:
