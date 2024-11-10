@@ -37,7 +37,7 @@ exports.postBusiness = asyncHandler(async (req, res) => {
 */
 exports.getBusinesses = asyncHandler(async (req, res) => {
   const { limit = 50, offset = 0 } = req.query;
-  
+
   const parsedLimit = parseInt(limit);
   const parsedOffset = parseInt(offset);
 
@@ -45,7 +45,7 @@ exports.getBusinesses = asyncHandler(async (req, res) => {
     return res.status(400).json({
       status: "error",
       errors: ["Limit must be a positive integer"],
-      locations: ["businesses.controller.js"]
+      locations: ["businesses.controller.js"],
     });
   }
 
@@ -53,14 +53,14 @@ exports.getBusinesses = asyncHandler(async (req, res) => {
     return res.status(400).json({
       status: "error",
       errors: ["Offset must be a non-negative integer"],
-      locations: ["businesses.controller.js"]
+      locations: ["businesses.controller.js"],
     });
   }
 
   try {
-    const result = await businesses.getBusinesses({ 
-      limit: parsedLimit, 
-      offset: parsedOffset 
+    const result = await businesses.getBusinesses({
+      limit: parsedLimit,
+      offset: parsedOffset,
     });
 
     // Check for empty results and send a 404 response
@@ -68,7 +68,7 @@ exports.getBusinesses = asyncHandler(async (req, res) => {
       return res.status(404).json({
         status: "error",
         errors: ["No businesses found"],
-        locations: ["businesses.controller.js"]
+        locations: ["businesses.controller.js"],
       });
     }
 
@@ -77,7 +77,7 @@ exports.getBusinesses = asyncHandler(async (req, res) => {
     res.status(500).json({
       status: "error",
       errors: ["Internal server error"],
-      locations: ["businesses.controller.js"]
+      locations: ["businesses.controller.js"],
     });
   }
 });

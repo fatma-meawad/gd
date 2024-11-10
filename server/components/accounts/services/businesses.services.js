@@ -35,7 +35,7 @@ module.exports.postBusiness = async () => {
 module.exports.getBusinesses = async ({ limit, offset }) => {
   try {
     const result = await businesses.getBusinessesDb({ limit, offset });
-    
+
     // Return the result directly, even if it's empty
     return result;
   } catch (error) {
@@ -43,7 +43,7 @@ module.exports.getBusinesses = async ({ limit, offset }) => {
       status: "error",
       statusCode: 500,
       message: error.message || "Internal server error",
-      locations: ["businesses.services.js"]
+      locations: ["businesses.services.js"],
     });
   }
 };
@@ -86,7 +86,9 @@ module.exports.postBusinessByBusinessIdSellers = async (business_id) => {
   // Implement your business logic here...
 
   try {
-    let result = await businesses.postBusinessByBusinessIdSellersDb(business_id);
+    let result = await businesses.postBusinessByBusinessIdSellersDb(
+      business_id
+    );
     //delete this when you actually implement something.
     result.messages.push(
       "postBusinessByBusinessIdSellers services not implemented yet"
