@@ -1,4 +1,4 @@
-const business = require("../db/businesses.db");
+const businesses = require("../db/businesses.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
@@ -31,17 +31,20 @@ module.exports.postBusiness = async () => {
     throw new AppError(error);
   }
 };*/
+
 module.exports.getBusinesses = async ({ limit, offset }) => {
   try {
-    const result = await businesses.getBusinessesDb({ limit, offset });
-
-    if (!result.businesses.length) {
-      throw new AppError("No businesses found", 404);
-    }
-
+    const result = await businesses.getBusinessesDb({ limit, offset }); // use function getBusinessesDb_dummy to test my Pull Request or if you need GET /businesses to return dummy results for your own tests, while the db is not setup
+    
+    // Return the result directly, even if it's empty
     return result;
   } catch (error) {
-    throw new AppError(error);
+    throw new AppError({
+      status: "error",
+      statusCode: 500,
+      message: error.message || "Internal server error",
+      locations: ["businesses.services.js"]
+    });
   }
 };
 
