@@ -6,7 +6,7 @@ module.exports.postBusiness = async () => {
   // Implement your business logic here...
 
   try {
-    let result = await business.postBusinessDb();
+    let result = await businesses.postBusinessDb();
     //delete this when you actually implement something.
     result.messages.push("postBusiness services not implemented yet");
     result.locations.push("businesses.services.js");
@@ -21,7 +21,7 @@ module.exports.postBusiness = async () => {
   // Implement your business logic here...
 
   try {
-    let result = await business.getBusinessDb();
+    let result = await businesses.getBusinessDb();
     //delete this when you actually implement something.
     result.messages.push("getBusiness services not implemented yet");
     result.locations.push("businesses.services.js");
@@ -34,7 +34,7 @@ module.exports.postBusiness = async () => {
 
 module.exports.getBusinesses = async ({ limit, offset }) => {
   try {
-    const result = await businesses.getBusinessesDb({ limit, offset }); // use function getBusinessesDb_dummy to test my Pull Request or if you need GET /businesses to return dummy results for your own tests, while the db is not setup
+    const result = await businesses.getBusinessesDb({ limit, offset });
     
     // Return the result directly, even if it's empty
     return result;
@@ -52,7 +52,7 @@ module.exports.putBusinessById = async (id) => {
   // Implement your business logic here...
 
   try {
-    let result = await business.putBusinessByIdDb(id);
+    let result = await businesses.putBusinessByIdDb(id);
     //delete this when you actually implement something.
     result.messages.push("putBusinessById services not implemented yet");
     result.locations.push("businesses.services.js");
@@ -67,7 +67,7 @@ module.exports.getBusinessByBusinessIdLocationId = async (business_id) => {
   // Implement your business logic here...
 
   try {
-    let result = await business.getBusinessByBusinessIdLocationIdDb(
+    let result = await businesses.getBusinessByBusinessIdLocationIdDb(
       business_id
     );
     //delete this when you actually implement something.
@@ -86,7 +86,7 @@ module.exports.postBusinessByBusinessIdSellers = async (business_id) => {
   // Implement your business logic here...
 
   try {
-    let result = await business.postBusinessByBusinessIdSellersDb(business_id);
+    let result = await businesses.postBusinessByBusinessIdSellersDb(business_id);
     //delete this when you actually implement something.
     result.messages.push(
       "postBusinessByBusinessIdSellers services not implemented yet"
@@ -106,7 +106,7 @@ module.exports.postBusinessByBusinessIdBySellerIdSellers = async (
   // Implement your business logic here...
 
   try {
-    let result = await business.postBusinessByBusinessIdBySellerIdSellersDb(
+    let result = await businesses.postBusinessByBusinessIdBySellerIdSellersDb(
       business_id,
       seller_id
     );
@@ -126,7 +126,7 @@ module.exports.getBusinessByBusinessIdSellersExport = async (business_id) => {
   // Implement your business logic here...
 
   try {
-    let result = await business.getBusinessByBusinessIdSellersExportDb(
+    let result = await businesses.getBusinessByBusinessIdSellersExportDb(
       business_id
     );
     //delete this when you actually implement something.
@@ -145,7 +145,7 @@ module.exports.postBusinessByBusinessIdSellersImport = async (business_id) => {
   // Implement your business logic here...
 
   try {
-    let result = await business.postBusinessByBusinessIdSellersImportDb(
+    let result = await businesses.postBusinessByBusinessIdSellersImportDb(
       business_id
     );
     //delete this when you actually implement something.

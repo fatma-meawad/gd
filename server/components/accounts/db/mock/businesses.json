@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "title": "Example Business 1",
+        "image": "http://example.com/image1.png",
+        "phone": "+1234567890",
+        "address": "123 Example Street",
+        "web_address": "http://example1.com",
+        "description": "An example business description 1",
+        "main_owner_name": "John Doe",
+        "main_owner_email": "john.doe@example.com",
+        "main_owner_phone": "+1234567890",
+        "created_at": 12345678,
+        "updated_at": 12345678,
+        "is_active": true,
+        "deactivated_at": 0
+    },
+    {
+        "id": 2,
+        "title": "Example Business 2",
+        "image": "http://example.com/image2.png",
+        "phone": "+0987654321",
+        "address": "456 Another Street",
+        "web_address": "http://example2.com",
+        "description": "An example business description 2",
+        "main_owner_name": "Jane Smith",
+        "main_owner_email": "jane.smith@example.com",
+        "main_owner_phone": "+0987654321",
+        "created_at": 22345678,
+        "updated_at": 22345678,
+        "is_active": false,
+        "deactivated_at": 22345679
+    }
+]

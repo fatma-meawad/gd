@@ -17,7 +17,7 @@ exports.postBusiness = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await business.postBusiness(...Object.values(options));
+  let result = await businesses.postBusiness(...Object.values(options));
 
   // Temporary response
   result.messages.push("postBusiness controller not implemented yet");
@@ -98,7 +98,7 @@ exports.putBusinessById = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await business.putBusinessById(...Object.values(options));
+  let result = await businesses.putBusinessById(...Object.values(options));
 
   // Temporary response
   result.messages.push("putBusinessById controller not implemented yet");
@@ -121,7 +121,7 @@ exports.getBusinessByBusinessIdLocationId = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await business.getBusinessByBusinessIdLocationId(
+  let result = await businesses.getBusinessByBusinessIdLocationId(
     ...Object.values(options)
   );
 
@@ -149,7 +149,7 @@ exports.postBusinessByBusinessIdSellers = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await business.postBusinessByBusinessIdSellers(
+  let result = await businesses.postBusinessByBusinessIdSellers(
     ...Object.values(options)
   );
 
@@ -178,7 +178,7 @@ exports.postBusinessByBusinessIdBySellerIdSellers = asyncHandler(
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-    let result = await business.postBusinessByBusinessIdBySellerIdSellers(
+    let result = await businesses.postBusinessByBusinessIdBySellerIdSellers(
       ...Object.values(options)
     );
 
@@ -207,7 +207,7 @@ exports.getBusinessByBusinessIdSellersExport = asyncHandler(
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-    let result = await business.getBusinessByBusinessIdSellersExport(
+    let result = await businesses.getBusinessByBusinessIdSellersExport(
       ...Object.values(options)
     );
 
@@ -237,7 +237,7 @@ exports.postBusinessByBusinessIdSellersImport = asyncHandler(
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-    let result = await business.postBusinessByBusinessIdSellersImport(
+    let result = await businesses.postBusinessByBusinessIdSellersImport(
       ...Object.values(options)
     );
 

@@ -1,4 +1,5 @@
 const schema = require("../schema.json");
+const mockBusinesses = require("./mock/businesses.json");
 
 module.exports.postBusinessDb = async () => {
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
@@ -13,6 +14,14 @@ module.exports.postBusinessDb = async () => {
 };
 
 module.exports.getBusinessesDb = async ({ limit, offset }) => {
+
+  /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
+  1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
+  2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
+  3- you can access the schema.json (imported above) and use objects in it/modify or create them.
+  */
+
+  /* This throws an error during lint, error  'pool' is not defined, so we'll put it aside for now
   try {
     // Build the SQL query with pagination
     const query = `
@@ -57,60 +66,11 @@ module.exports.getBusinessesDb = async ({ limit, offset }) => {
   } catch (error) {
     throw new Error(`Database error in getBusinessesDb: ${error.message}`);
   }
-};
-
-/*  Dummy DB function for GET /businesses
-    I used it to test GET /businesses, pretending there was data in the DB
-    Referenced in server\components\accounts\services\businesses.services.js
-    @ Jany
-*/
-module.exports.getBusinessesDb_dummy = async ({ limit, offset }) => {
-  // Simulate a database query with dummy data
-  const dummyBusinesses = [
-    {
-      id: 1,
-      title: "Example Business 1",
-      image: "http://example.com/image1.png",
-      phone: "+1234567890",
-      address: "123 Example Street",
-      web_address: "http://example1.com",
-      description: "An example business description 1",
-      main_owner_name: "John Doe",
-      main_owner_email: "john.doe@example.com",
-      main_owner_phone: "+1234567890",
-      created_at: 12345678,
-      updated_at: 12345678,
-      is_active: true,
-      deactivated_at: 0,
-    },
-    {
-      id: 2,
-      title: "Example Business 2",
-      image: "http://example.com/image2.png",
-      phone: "+0987654321",
-      address: "456 Another Street",
-      web_address: "http://example2.com",
-      description: "An example business description 2",
-      main_owner_name: "Jane Smith",
-      main_owner_email: "jane.smith@example.com",
-      main_owner_phone: "+0987654321",
-      created_at: 22345678,
-      updated_at: 22345678,
-      is_active: false,
-      deactivated_at: 22345679,
-    },
-  ];
-
-  // Return empty results without throwing
-  const paginatedBusinesses = dummyBusinesses.slice(offset, offset + limit);
-
+  */
+ 
+  // We will use a mock data file for now, to simulate db data: server\components\accounts\db\mock\businesses.json
   return {
-    businesses: paginatedBusinesses,
-    pagination_info: {
-      limit,
-      offset,
-      total_items: dummyBusinesses.length,
-    },
+    businesses: mockBusinesses,
   };
 };
 
