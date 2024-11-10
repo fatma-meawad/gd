@@ -51,6 +51,12 @@ paths:
           description: >-
             Your account has been blocked due to multiple failed login attempts. Please reset your
             password
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
   /admins/{id}/deactivate:
     put:
       tags:
@@ -93,6 +99,12 @@ paths:
           description: You don't have permission to perform this action.
         "500":
           description: Unable to deactivate the account. Please try again later.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
   /admins/{id}/profile:
     put:
       summary: Update admin profile
@@ -386,6 +398,32 @@ paths:
             requirements
         "500":
           description: Unable to register. Please try again later.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+components:
+     schemas:
+         ErrorObject:
+             type: object
+             properties:
+                 status:
+                     type: string
+                     description: "error"
+                 errors:
+                     type: array
+                     items:
+                         type: string
+                     description: "Error messages"
+                     example: ["invalid", "not available"]
+                 locations:
+                     type: array
+                     items:
+                         type: string
+                     description: "Optional: Additional information about the location of each message"
+                     example: ["db.js", "service.js"]
 tags:
     -
         name: admins
