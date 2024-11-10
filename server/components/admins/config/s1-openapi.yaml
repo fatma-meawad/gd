@@ -369,30 +369,79 @@ paths:
                   email: "john.smith@example.com"
                   phone: "+1234567890"
                   password: "SecureP@ss123"
+                  activation_code: "ABCD1234"
                   address: "123 Admin Street, City"
-                  activation_code: "ADMIN123"
                   profile_photo: "https://example.com/photos/john.jpg"
                   bio: "Senior gallery administrator with 5 years experience"
-              invalidRegistration:
-                summary: Invalid registration with missing required fields
+              invalidEmail:
+                summary: Invalid email format
                 value:
                   full_name: "John Smith"
                   email: "invalid-email"
-                  activation_code: "INV"
+                  phone: "+1234567890"
+                  password: "SecureP@ss123"
+                  activation_code: "ABCD1234"
+              invalidPassword:
+                summary: Password doesn't meet requirements
+                value:
+                  full_name: "John Smith"
+                  email: "john.smith@example.com"
+                  phone: "+1234567890"
+                  password: "weak"
+                  activation_code: "ABCD1234"
+              invalidActivationCode:
+                summary: Invalid activation code format
+                value:
+                  full_name: "John Smith"
+                  email: "john.smith@example.com"
+                  phone: "+1234567890"
+                  password: "SecureP@ss123"
+                  activation_code: "123"
+              missingRequired:
+                summary: Missing required fields
+                value:
+                  full_name: "John Smith"
+                  email: "john.smith@example.com"
       responses:
         "201":
           description: Registration successful
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  new_id:
-                    type: string
+                allOf:
+                  - $ref: '#/components/schemas/SuccessObject'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          new_id:
+                            type: string
+                            description: "The ID of the newly registered admin"
+              example:
+                data:
+                  new_id: "admin-123"
+                messages: 
+                  - "Registration successful"
+                locations: 
+                  - "admins.controller.js"
+                  - "admins.service.js"
+                  - "admins.database.js"
         "400":
-          description: >-
-            Invalid or expired registration code or Password does not meet complexity
-            requirements
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                status: "error"
+                errors: 
+                  - "Invalid or expired registration code"
+                  - "Password does not meet complexity requirements"
+                locations: 
+                  - "admins.controller.js"
+                  - "admins.service.js"
+                  - "admins.database.js"
         default:
           description: Unexpected error
           content:
@@ -463,23 +512,20 @@ components:
                   description: "Optional: Additional information about the location of each message"
                   example: ["db.js", "service.js"]
       SuccessObject:
-        type: object
-        properties:
-          data:
-            type: array
-            items:
-              type: object
-            description: "The main data payload returned in the response"
-          locations:
-            type: array
-            items:
-              type: string
-            description: "Optional tracking locations related to the data"
-          messages:
-            type: array
-            items:
-              type: string
-            description: "Messages that provide additional information about the response"
+          type: object
+          properties:
+            locations:
+              type: array
+              items:
+                type: string
+              description: "Optional tracking locations related to the data"
+              example: ["tracking location optional"]
+            messages:
+              type: array
+              items:
+                type: string
+              description: "Messages that provide additional information about the response"
+              example: ["tracking location optional"]
 tags:
     -
         name: admins
