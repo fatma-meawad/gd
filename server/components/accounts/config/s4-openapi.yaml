@@ -55,6 +55,7 @@ paths:
     get:
       summary: Get list of businesses (author:@Jany-M)
       description: As an admin, I want to view all existing businesses, so that I can easily see their data and manage them effectively.
+      tags: [accounts]
       responses:
         "200":
           description: Success
