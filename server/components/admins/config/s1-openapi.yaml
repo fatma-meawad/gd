@@ -185,7 +185,7 @@ paths:
         "500":
           description: Unable to verify token. Please try again later.
     put:
-      summary: Reset password
+      summary: Reset the user's password (with a valid token) ( author:@Georgy29 )
       requestBody:
         required: true
         content:
@@ -195,15 +195,53 @@ paths:
               properties:
                 new_password:
                   type: string
+                  description: The new password to be set for the user
+                  minLength: 8
+                  maxLength: 64
       responses:
         "200":
           description: Password reset successful.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+              examples:
+                successExample:
+                  summary: Success message for successful password reset
+                  value:
+                    message: "Password reset successfully."
+                    details: "You can now log in with your new password."
         "400":
-          description: Password does not meet complexity requirements or Invalid or expired token.
+          description: Invalid or expired token, or password does not meet complexity requirements.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  error:
+                    type: string
+              examples:
+                invalidTokenExample:
+                  summary: Invalid token example
+                  value:
+                    message: "The token provided is invalid or expired."
+                    error: "Please check the token and try again."
+                complexityErrorExample:
+                  summary: Password complexity error example
+                  value:
+                    message: "Password does not meet complexity requirements."
+                    error: "Ensure the password is at least 8 characters long and contains a mix of letters, numbers, and symbols."
         "500":
           description: Unable to reset password. Please try again later.
     post:
-      summary: Request password reset
+      summary: Request a password reset for a user email ( author:@Georgy29 )
       requestBody:
         required: true
         content:
@@ -213,13 +251,47 @@ paths:
               properties:
                 email:
                   type: string
+                  description: The user's email address for which the password reset is requested.
+                  format: email
       responses:
         "200":
           description: Check your email for a password reset link.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                successExample:
+                  summary: Success message for requesting a password reset
+                  value:
+                    message: "Check your email for the password reset link."
         "400":
-          description: Email address not found.
+          description: Email address not found or invalid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                notFoundExample:
+                  summary: Email address not found example
+                  value:
+                    message: "The email address provided is not associated with any account."
         "500":
           description: Unable to process request. Please try again later.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
   /admin/logs:
     get:
       summary: Get admin logs
