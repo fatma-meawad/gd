@@ -9,6 +9,36 @@ servers:
     description: local and codespaces
 
 paths:
+  /sellers/{seller_id}/qrcode:
+    get:
+      summary: Retrieve QR code for a specific seller
+      author: @claire-graham
+      description: Returns the QR code URL for a seller, identified by their unique seller ID
+      parameters:
+      - name: seller_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique ID of the seller.
+      responses:
+       '200':
+        description: QR code retrieved successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                qrCodeUrl:
+                  type: string
+                  description: URL of the seller's QR code.
+                  example: "https://example.com/qrcodes/6123abc4567def89012gh345.png"
+       '400':
+         description: Invalid seller ID
+       '404':
+         description: Seller not found
+       '500':
+        description: Internal Server Error   
   /business/:
     post:
       summary: Create a new business
