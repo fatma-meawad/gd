@@ -198,7 +198,7 @@ paths:
 
   /adminlogs:
     get:
-      summary: Retrieve admin logs
+      summary: 'Retrieve admin logs author: @PietroLauria'
       parameters:
         - name: admin_id
           in: query
@@ -249,7 +249,7 @@ paths:
           description: Server error
 
     post:
-      summary: Log an admin action
+      summary: 'Log an admin action author: @PietroLauria'
       requestBody:
         required: true
         content:
