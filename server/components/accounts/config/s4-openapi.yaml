@@ -12,7 +12,6 @@ paths:
   /sellers/{seller_id}/qrcode:
     get:
       summary: Retrieve QR code for a specific seller
-      author: @claire-graham
       description: Returns the QR code URL for a seller, identified by their unique seller ID
       parameters:
       - name: seller_id
@@ -279,6 +278,46 @@ paths:
           description: Business ID does not exist
         "500":
           description: Internal Server Error
+    post:
+      summary: Register a new seller
+      description: Creates a new seller in the system and generates a unique QR code for secure access.
+      requestBody:
+        description: Seller registration information
+        required: true
+        content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              email:
+                type: string
+              businessId:
+                type: string
+            required:
+              - name
+              - email
+              - businessId
+      responses:
+        "201":
+          description: Seller registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  qrCodeUrl:
+                    type: string
+        "400":
+          description: Invalid request body
+        "409":
+          description: Seller with the provided email or business ID already exists
+        "500":
+          description: Internal server error during registration
+
 
   /sellers/{seller_id}/access-history:
     get:
