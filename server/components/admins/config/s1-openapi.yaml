@@ -419,14 +419,15 @@ paths:
                             type: string
                             description: "The ID of the newly registered admin"
               example:
-                data:
-                  new_id: "admin-123"
-                messages:
-                  - "Registration successful"
-                locations:
-                  - "admins.controller.js"
-                  - "admins.service.js"
-                  - "admins.database.js"
+                value:
+                  data:
+                    new_id: admin-123
+                  messages:
+                    - Registration successful
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
+                    - admins.database.js
         "400":
           description: Invalid input data
           content:
@@ -434,14 +435,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
               example:
-                status: "error"
-                errors:
-                  - "Invalid or expired registration code"
-                  - "Password does not meet complexity requirements"
-                locations:
-                  - "admins.controller.js"
-                  - "admins.service.js"
-                  - "admins.database.js"
+                value:
+                  status: "error"
+                  errors:
+                    - "Invalid or expired registration code"
+                    - "Password does not meet complexity requirements"
+                  locations:
+                    - "admins.controller.js"
+                    - "admins.service.js"
+                    - "admins.database.js"
         default:
           description: Unexpected error
           content:
