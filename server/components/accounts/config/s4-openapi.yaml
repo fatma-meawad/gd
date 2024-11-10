@@ -72,6 +72,10 @@ paths:
                     type: object
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
         default:
           description: Unexpected error
           content:
@@ -343,21 +347,21 @@ paths:
 
 components:
   schemas:
-      ErrorObject:
-          type: object
-          properties:
-              status:
-                  type: string
-                  description: "error"
-              errors:
-                  type: array
-                  items:
-                      type: string
-                  description: "Error messages"
-                  example: ["invalid", "not available"]
-              locations:
-                  type: array
-                  items:
-                      type: string
-                  description: "Optional: Additional information about the location of each message"
-                  example: ["db.js", "service.js"]
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
