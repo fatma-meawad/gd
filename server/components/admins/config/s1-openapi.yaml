@@ -9,6 +9,8 @@ servers:
 paths:
   /admins/login:
     post:
+      tags:
+        - admins
       summary: "Login admin with attempt tracking - author: @alberto"
       description: |
         **Story:** As a registered administrator, I want to log into the system securely, with the system tracking login attempts to prevent unauthorized access.
@@ -51,6 +53,8 @@ paths:
             password
   /admins/{id}/deactivate:
     put:
+      tags:
+        - admins
       summary: "Deactivate an admin - author: @alberto"
       description: |
         **Story:** As an administrator with appropriate permissions, I want to soft delete an admin account so that it's no longer active but the data is preserved for potential future recovery.
@@ -325,6 +329,8 @@ paths:
           description: Import processing failed
   /admins/register:
     post:
+      tags:
+        - admins
       summary: "Register a new admin - author: @alberto"
       description: |
         **Story:** As an administrator, I want to register using a verified code provided by the Galleria owners so that I can manage the gallery.
@@ -380,3 +386,7 @@ paths:
             requirements
         "500":
           description: Unable to register. Please try again later.
+tags:
+    -
+        name: admins
+        description: ''
