@@ -145,12 +145,43 @@ paths:
           description: Email delivery failed
   /admins/password-reset:
     get:
-      summary: Validate password reset token
+      summary: Validate password reset token ( author:@Georgy29 )
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: Token to be validated
       responses:
         "200":
           description: Valid token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                successExample:
+                  summary: Valid token example
+                  value:
+                    message: "Token is valid. Proceed with password reset."
         "400":
           description: Invalid or expired token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                invalidExample:
+                  summary: Expired token example
+                  value:
+                    message: "The provided token is invalid or expired. Please request a new password reset."
         "500":
           description: Unable to verify token. Please try again later.
     put:
