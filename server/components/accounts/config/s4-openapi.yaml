@@ -207,8 +207,8 @@ paths:
   /business/{business_id}/{seller_id}/sellers:
    post:
      tags: 
-         - Seller Management
-     summary: Create an account for a seller with QR code
+          [accounts]
+     summary: Create an account for a seller with QR code (author:@claire-graham)
      parameters:
         - name: business_id
           in: path
@@ -240,6 +240,27 @@ paths:
                 - name
                 - email
                 - businessId
+     components:
+     schemas:
+         ErrorObject:
+             type: object
+             properties:
+                 status:
+                     type: string
+                     description: "error"
+                 errors:
+                     type: array
+                     items:
+                         type: string
+                     description: "Error messages"
+                     example: ["invalid", "not available"]
+                 locations:
+                     type: array
+                     items:
+                         type: string
+                     description: "Optional: Additional information about the location of each message"
+                     example: ["db.js", "service.js"]
+
      responses:
         "201":
           description: Account created with QR code
@@ -249,10 +270,40 @@ paths:
                 type: object
                 properties:
                   new_seller_id: { type: string }
+                  example: "new-seller-12345" 
+                qrCodeUrl:
+                    type: string
+                    example: "https://example.com/qrcodes/seller12345.png"
         "400":
           description: Invalid Data
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid input data. Missing required fields."
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An unexpected error occurred while creating the seller account."
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An unexpected error occurred."
 
   /sellers:
     get:
@@ -302,7 +353,7 @@ paths:
           description: Internal Server Error
     post:
       tags:
-       - Seller Management
+       [accounts]
       summary: Register a new seller {author:@claire-graham}
       description: Creates a new seller in the system and generates a unique QR code for secure access.
       requestBody:
