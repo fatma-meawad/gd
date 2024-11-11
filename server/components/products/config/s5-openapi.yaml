@@ -102,7 +102,7 @@ paths:
                     type: string
                   detailed_description:
                     type: string
-                  product_photos: #product photos may not be needed here, as there is a table for photos
+                  product_photos:
                     type: array
                     items:
                       type: string
@@ -141,7 +141,7 @@ paths:
 
   /products/{product_id}/tags:
     post:
-      summary: Add tags to a product
+      summary: "Add tags to a product (tester: @Alona)"
       parameters:
         - in: path
           name: product_id
@@ -178,7 +178,7 @@ paths:
 
   /products/{product_id}/price:
     post:
-      summary: Update product price
+      summary: "Update product price (Tester: @Alona)"
       parameters:
         - in: path
           name: product_id
@@ -435,7 +435,7 @@ paths:
 
   /tags:
     get:
-      summary: Retrieve tags for a specific product
+      summary: "Retrieve tags for a specific product (tester: @Alona)"
       parameters:
         - name: product_id
           in: query
