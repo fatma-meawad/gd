@@ -78,7 +78,7 @@ paths:
                 value:
                   sender_id: "1"
                   recipient_id: "2"
-                  thread: "1"
+                  thread: "thread name"
                   content: "Hello!"
                   time: "2024-11-08T19:18:53Z"
       responses:
@@ -110,7 +110,7 @@ paths:
                     success: true
                     sender_id: "1"
                     recipient_id: "2"
-                    thread: "1"
+                    thread: "thread name"
                     content: "Hello!"
                     time: "2024-11-08T19:18:53Z"
         "400":
