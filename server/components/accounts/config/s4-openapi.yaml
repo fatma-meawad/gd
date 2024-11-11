@@ -370,40 +370,164 @@ paths:
           description: Business ID does not exist
         "500":
           description: Internal Server Error
-
+ 
   /sellers/{seller_id}/access-history:
-    get:
-      summary: Get access history of a seller
-      parameters:
-        - name: seller_id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Success
-        "404":
-          description: No access history found for this seller
-        "500":
-          description: Internal Server Error
+   get:
+    summary: Get access history of a seller
+    description: Retrieve the access history of a specific seller based on seller ID.
+    parameters:
+      - name: seller_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique identifier of the seller
+    responses:
+      "200":
+        description: Successfully retrieved access history for the seller
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                access_history:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      date:
+                        type: string
+                        format: date-time
+                        example: "2023-10-10T15:23:01Z"
+                      location:
+                        type: string
+                        example: "Milan, Italy"
+                      device:
+                        type: string
+                        example: "Mobile"
+            examples:
+              example-200:
+                summary: Successful response with access history
+                value:
+                  access_history:
+                    - date: "2023-10-10T15:23:01Z"
+                      location: "Milan, Italy"
+                      device: "Mobile"
+                    - date: "2023-10-11T10:45:12Z"
+                      location: "Rome, Italy"
+                      device: "Desktop"
+      "404":
+        description: No access history found for this seller
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "No access history found for this seller"
+            examples:
+              example-404:
+                summary: No access history
+                value:
+                  error: "No access history found for this seller"
+      "500":
+        description: Internal Server Error
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: string
+                  example: "An unexpected error occurred on the server."
+            examples:
+              example-500:
+                summary: Internal server error
+                value:
+                  error: "An unexpected error occurred on the server."
+
 
   /business/{business_id}/sellers/export:
     get:
       summary: Export sellers for a business
+      description: Exports a list of sellers associated with a specific business.
       parameters:
         - name: business_id
           in: path
           required: true
           schema:
             type: string
+          description: Unique identifier of the business
       responses:
         "200":
-          description: Success
+          description: Successfully exported sellers for the business
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sellers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "seller123"
+                        name:
+                          type: string
+                          example: "John Doe"
+                        profile_photo:
+                          type: string
+                          example: "https://example.com/photos/johndoe.jpg"
+                        address:
+                          type: string
+                          example: "123 Business St, City, Country"
+              examples:
+                example-200:
+                  summary: Successful export of sellers
+                  value:
+                    sellers:
+                      - id: "seller123"
+                        name: "John Doe"
+                        profile_photo: "https://example.com/photos/johndoe.jpg"
+                        address: "123 Business St, City, Country"
+                      - id: "seller456"
+                        name: "Jane Smith"
+                        profile_photo: "https://example.com/photos/janesmith.jpg"
+                        address: "456 Another Rd, City, Country"
         "404":
           description: No sellers found for this business
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "No sellers found for this business"
+              examples:
+                example-404:
+                  summary: No sellers found
+                  value:
+                    error: "No sellers found for this business"
         "500":
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An unexpected error occurred on the server."
+              examples:
+                example-500:
+                  summary: Internal server error
+                  value:
+                    error: "An unexpected error occurred on the server."
+
 
   /business/{business_id}/sellers/import:
     post:
