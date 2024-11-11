@@ -212,7 +212,7 @@ paths:
           in: query
           description: "ID of the admin to filter logs by."
           schema:
-            type: string
+            type: number
         - name: keyword
           in: query
           description: "Keyword to search for in log details."
