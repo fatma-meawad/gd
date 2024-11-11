@@ -564,13 +564,17 @@ paths:
                         properties:
                           id:
                             type: string
+                            description: "The unique identifier of the registered admin"
                           email:
                             type: string
+                            description: "The email address of the registered admin"
                           full_name:
                             type: string
+                            description: "The full name of the registered admin"
                           created_at:
                             type: string
                             format: date-time
+                            description: "Timestamp when the admin was registered"
                         required:
                           - id
                           - email
@@ -586,6 +590,8 @@ paths:
                     - "Registration successful"
                   locations:
                     - "admins.controller.js"
+                    - "admins.service.js"
+                    - "admins.database.js"
         "400":
           description: Invalid input data
           content:
@@ -634,26 +640,33 @@ components:
           type: string
           format: password
           minLength: 8
+          pattern: "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$"
+          description: "Admin password - must be at least 8 characters with mix of letters, numbers and symbols"
           writeOnly: true
         address:
           type: string
           maxLength: 200
+          description: "Physical address"
           writeOnly: true
         activation_code:
           type: string
           pattern: "^[A-Z0-9]{8}$"
+          description: "8-character activation code provided by Galleria owners"
           writeOnly: true
         profile_photo:
           type: string
           format: uri
+          description: "URL to profile photo"
           writeOnly: true
         bio:
           type: string
           maxLength: 500
+          description: "Admin biography or description"
           writeOnly: true
         created_at:
           type: string
           format: date-time
+          description: "Timestamp when the admin account was created"
           readOnly: true
       required:
         - full_name
