@@ -220,6 +220,26 @@ paths:
           required: true
           schema:
             type: string
+     requestBody:
+        description: The data needed to create a seller account.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                businessId:
+                  type: string
+                qrCodeUrl:
+                  type: string
+              required:
+                - name
+                - email
+                - businessId
      responses:
         "201":
           description: Account created with QR code
