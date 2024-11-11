@@ -13,6 +13,8 @@ paths:
     post:
       summary: Create a new business (author:@rbekkum)
       description: Related story S4-1 - Allows admins to create a business account with details like title, phone, address, and main owner's info.
+      tags:
+        - accounts
       requestBody:
         required: true
         content:
@@ -51,10 +53,14 @@ paths:
                   new_id: { type: string }
         "400":
           description: Invalid data
-        "500":
-          description: Internal Server Error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     get:
-      summary: Get list of businesses
+      summary: Get list of businesses (tester:@rbekkum)
       responses:
         "200":
           description: Success
@@ -180,7 +186,7 @@ paths:
 
   /business/{business_id}/{seller_id}/sellers:
     post:
-      summary: Create an account for a seller with QR code
+      summary: Create an account for a seller with QR code (tester:@rbekkum)
       parameters:
         - name: business_id
           in: path
@@ -289,7 +295,7 @@ paths:
 
   /business/{business_id}/sellers/import:
     post:
-      summary: Import sellers for a business
+      summary: Import sellers for a business (tester:@rbekkum)
       parameters:
         - name: business_id
           in: path
@@ -334,3 +340,25 @@ paths:
           description: Invalid inactivity period
         "500":
           description: Failed to send notifications
+
+components:
+  schemas:
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
+
