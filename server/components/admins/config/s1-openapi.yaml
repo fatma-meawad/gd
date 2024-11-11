@@ -152,7 +152,7 @@ paths:
     get:
       tags: 
         - admins
-      summary: Validate password reset token ( author:@Georgy29 )
+      summary: Validate password reset token (author:@Georgy29)
       parameters:
         - in: query
           name: token
@@ -162,33 +162,36 @@ paths:
           description: Token to be validated
       responses:
         "200":
-          description: Valid token.
+          description: Valid token
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: "#/components/schemas/SuccessObject"
               examples:
                 successExample:
                   summary: Valid token example
                   value:
-                    message: "Token is valid. Proceed with password reset."
+                    status: "success"
+                    locations:
+                      - "tracking location optional"
+                    messages:
+                      - "Token is valid. Proceed with password reset."
         "400":
           description: Invalid or expired token.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-              examples:
-                invalidExample:
-                  summary: Expired token example
-                  value:
-                    message: "The provided token is invalid or expired. Please request a new password reset."
+                $ref: "#/components/schemas/ErrorObject"
+              example:
+                value:
+                  status: "error"
+                  errors:
+                    - "The provided token is invalid or expired."
+                    - "Please request a new password reset."
+                  locations:
+                    - "admins.controller.js"
+                    - "admins.service.js"
+                    - "admins.database.js"
         default:
           description: Unexpected error
           content:
@@ -196,9 +199,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
     put:
-      tags: 
-        - admin
-      summary: Reset the user's password (with a valid token) ( author:@Georgy29 )
+      tags:
+        - admins
+      summary: Reset the user's password (with a valid token) (author:@Georgy29)
       requestBody:
         required: true
         content:
@@ -217,40 +220,46 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  details:
-                    type: string
+                $ref: "#/components/schemas/SuccessObject"
               examples:
                 successExample:
                   summary: Success message for successful password reset
                   value:
-                    message: "Password reset successfully."
-                    details: "You can now log in with your new password."
+                    status: "success"
+                    locations:
+                      - "admins.controller.js"
+                      - "admins.service.js"
+                    messages:
+                      - "Password reset successfully."
+                      - "You can now log in with your new password."
         "400":
           description: Invalid or expired token, or password does not meet complexity requirements.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  error:
-                    type: string
+                $ref: "#/components/schemas/ErrorObject"
               examples:
                 invalidTokenExample:
                   summary: Invalid token example
                   value:
-                    message: "The token provided is invalid or expired."
-                    error: "Please check the token and try again."
+                    status: "error"
+                    errors:
+                      - "The token provided is invalid or expired."
+                      - "Please check the token and try again."
+                    locations:
+                      - "admins.controller.js"
+                      - "admins.service.js"
                 complexityErrorExample:
                   summary: Password complexity error example
                   value:
-                    message: "Password does not meet complexity requirements."
-                    error: "Ensure the password is at least 8 characters long and contains a mix of letters, numbers, and symbols."
+                    status: "error"
+                    errors:
+                      - "Password does not meet complexity requirements."
+                      - "Ensure the password is at least 8 characters long and contains a mix of letters, numbers, and symbols."
+                    locations:
+                      - "admins.controller.js"
+                      - "admins.service.js"
+                      - "admins.database.js"
         default:
           description: Unexpected error
           content:
@@ -259,8 +268,8 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
     post:
       tags: 
-        - admin
-      summary: Request a password reset for a user email ( author:@Georgy29 )
+        - admins
+      summary: Request a password reset link to an email (author:@Georgy29)
       requestBody:
         required: true
         content:
@@ -278,29 +287,33 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: "#/components/schemas/SuccessObject"
               examples:
                 successExample:
                   summary: Success message for requesting a password reset
                   value:
-                    message: "Check your email for the password reset link."
+                    status: "success"
+                    locations:
+                      - "admins.controller.js"
+                      - "admins.service.js"
+                    messages:
+                      - "Check your email for the password reset link."
         "400":
           description: Email address not found or invalid.
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: "#/components/schemas/ErrorObject"
               examples:
                 notFoundExample:
                   summary: Email address not found example
                   value:
-                    message: "The email address provided is not associated with any account."
+                    status: "error"
+                    errors:
+                      - "The email address provided is not associated with any account."
+                    locations:
+                      - "admins.controller.js"
+                      - "admins.service.js"
         default:
           description: Unexpected error
           content:
