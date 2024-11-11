@@ -642,32 +642,32 @@ components:
         - phone
         - password
         - activation_code
-    ErrorObject:
-      type: object
-      properties:
+ErrorObject:
+    type: object
+    properties:
         status:
-          type: string
-          description: "The status of the error (e.g., 'error')"
+            type: string
+            description: "error"
         errors:
-          type: array
-          items:
-            type: string
-          description: "List of error messages"
-          example: ["invalid", "not available"]
+            type: array
+            items:
+                type: string
+            description: "Error messages"
+            example: ["invalid", "not available"]
         locations:
-          type: array
-          items:
-            type: string
-          description: "Optional: Locations where the error occurred (e.g., file names)"
-          example: ["db.js", "service.js"]
-    SuccessObject:
+            type: array
+            items:
+                type: string
+            description: "Optional: Additional information about the location of each message"
+            example: ["db.js", "service.js"]
+SuccessObject:
       type: object
       properties:
         locations:
           type: array
           items:
             type: string
-          description: "Optional: Tracking locations related to the response data"
+          description: "Optional tracking locations related to the data"
           example: ["tracking location optional"]
         messages:
           type: array
