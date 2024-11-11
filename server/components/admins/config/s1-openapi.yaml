@@ -189,8 +189,12 @@ paths:
                   summary: Expired token example
                   value:
                     message: "The provided token is invalid or expired. Please request a new password reset."
-        "500":
-          description: Unable to verify token. Please try again later.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     put:
       tags: 
         - admin
@@ -247,8 +251,12 @@ paths:
                   value:
                     message: "Password does not meet complexity requirements."
                     error: "Ensure the password is at least 8 characters long and contains a mix of letters, numbers, and symbols."
-        "500":
-          description: Unable to reset password. Please try again later.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     post:
       tags: 
         - admin
@@ -293,15 +301,12 @@ paths:
                   summary: Email address not found example
                   value:
                     message: "The email address provided is not associated with any account."
-        "500":
-          description: Unable to process request. Please try again later.
+        default:
+          description: Unexpected error
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                $ref: "#/components/schemas/ErrorObject"
 
   /admin/logs:
     get:
@@ -457,3 +462,43 @@ paths:
             requirements
         "500":
           description: Unable to register. Please try again later.
+
+components:
+  schemas:
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "The status of the error (e.g., 'error')"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "List of error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Locations where the error occurred (e.g., file names)"
+          example: ["db.js", "service.js"]
+
+    SuccessObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "The status of the response (e.g., 'success')"
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Tracking locations related to the response data"
+          example: ["tracking location optional"]
+        messages:
+          type: array
+          items:
+            type: string
+          description: "Messages that provide additional context about the response"
+          example: ["Tracking location optional"]
