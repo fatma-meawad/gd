@@ -8,7 +8,7 @@ servers:
 paths:
   /messages/send:
     post:
-      summary: Send a message
+      summary: Send a message tester:@PietroLauria
       requestBody:
         required: true
         content:
@@ -45,7 +45,7 @@ paths:
 
   /messages/{thread_id}:
     get:
-      summary: Get messages by thread ID
+      summary: Get messages by thread ID tester:@PietroLauria
       parameters:
         - name: thread_id
           in: path
@@ -125,7 +125,7 @@ paths:
 
   /admins/{id}/status:
     post:
-      summary: Update admin availability status
+      summary: Update admin availability status tester:@PietroLauria
       parameters:
         - name: id
           in: path
