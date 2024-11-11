@@ -8,7 +8,6 @@ const database = process.env.NODE_ENV === "test"
 const connectionString = `postgresql://${process.env.POSTGRES_USER}:${process.env.POSTGRES_PASSWORD}@${process.env.POSTGRES_HOST}:${process.env.POSTGRES_PORT}/${database}`;
 
 const pool = new Pool({ connectionString });
-
 module.exports = {
     query: (text, params) => pool.query(text, params),
     end: () => pool.end(),
