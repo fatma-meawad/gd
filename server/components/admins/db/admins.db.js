@@ -103,7 +103,12 @@ module.exports.postAdminsRegisterDb = async (registrationData) => {
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
 */
   return {
-    data: {},
+    data: {
+      id: "admin-123",
+      email: registrationData.email,
+      full_name: registrationData.full_name,
+      created_at: new Date().toISOString()
+    },
     messages: ["postAdminsRegisterDb not implemented yet"],
     locations: ["admins.database.js"],
   };
