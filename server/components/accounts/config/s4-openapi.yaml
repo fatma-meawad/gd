@@ -240,26 +240,6 @@ paths:
                 - name
                 - email
                 - businessId
-     components:
-     schemas:
-         ErrorObject:
-             type: object
-             properties:
-                 status:
-                     type: string
-                     description: "error"
-                 errors:
-                     type: array
-                     items:
-                         type: string
-                     description: "Error messages"
-                     example: ["invalid", "not available"]
-                 locations:
-                     type: array
-                     items:
-                         type: string
-                     description: "Optional: Additional information about the location of each message"
-                     example: ["db.js", "service.js"]
      responses:
         "201":
           description: Account created with QR code
@@ -269,10 +249,10 @@ paths:
                 type: object
                 properties:
                   new_seller_id: { type: string }
-                  example: "new-seller-12345" 
-                qrCodeUrl:
-                    type: string
-                    example: "https://example.com/qrcodes/seller12345.png"
+                example: "new-seller-12345"
+              qrCodeUrl:
+              type: string
+                example:"https://example.com/qrcodes/seller12345.png"
         "400":
           description: Invalid Data
           content: 
