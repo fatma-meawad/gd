@@ -8,7 +8,7 @@ module.exports.postBusinessDb = async () => {
 */
   return {
     messages: ["postBusinessDb not implemented yet"],
-    locations: ["business.database.js"]
+    locations: ["business.database.js"],
   };
 };
 
