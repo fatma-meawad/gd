@@ -34,10 +34,10 @@ paths:
             schema:
               type: object
               properties:
-                username:
-                  type: string
+                email:
+                  $ref: "#/components/schemas/AdminData/properties/email"
                 password:
-                  type: string
+                  $ref: "#/components/schemas/AdminData/properties/password"
       responses:
         "200":
           description: Login successful
@@ -188,9 +188,9 @@ paths:
           description: Email delivery failed
   /admins/password-reset:
     get:
-      tags: 
+      tags:
         - admins
-      summary: Validate password reset token (author:@Georgy29) (tester @alberto") 
+      summary: Validate password reset token (author:@Georgy29) (tester @alberto")
       parameters:
         - in: query
           name: token
@@ -314,7 +314,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
     post:
-      tags: 
+      tags:
         - admins
       summary: Request a password reset link to an email (author:@Georgy29)
       requestBody:
@@ -488,7 +488,7 @@ paths:
     post:
       tags:
         - admins
-      summary: "Register a new admin - author: @alberto, tester:@Georgy29" 
+      summary: "Register a new admin - author: @alberto, tester:@Georgy29"
       description: |
         **Story:** As an administrator, I want to register using a verified code provided by the Galleria owners so that I can manage the gallery.
 
@@ -562,19 +562,30 @@ paths:
                       data:
                         type: object
                         properties:
-                          new_id:
+                          id:
                             type: string
-                            description: "The ID of the newly registered admin"
+                          email:
+                            type: string
+                          full_name:
+                            type: string
+                          created_at:
+                            type: string
+                            format: date-time
+                        required:
+                          - id
+                          - email
+                          - full_name
               example:
                 value:
                   data:
-                    new_id: admin-123
+                    id: "admin-123"
+                    full_name: "John Smith"
+                    email: "john.smith@example.com"
+                    phone: "+1234567890"
                   messages:
-                    - Registration successful
+                    - "Registration successful"
                   locations:
-                    - admins.controller.js
-                    - admins.service.js
-                    - admins.database.js
+                    - "admins.controller.js"
         "400":
           description: Invalid input data
           content:
@@ -602,6 +613,10 @@ components:
     AdminData:
       type: object
       properties:
+        id:
+          type: string
+          description: "Unique identifier for the admin"
+          readOnly: true
         full_name:
           type: string
           minLength: 2
@@ -619,23 +634,27 @@ components:
           type: string
           format: password
           minLength: 8
-          description: "Admin password - must be at least 8 characters with mix of letters, numbers and symbols"
+          writeOnly: true
         address:
           type: string
           maxLength: 200
-          description: "Physical address"
+          writeOnly: true
         activation_code:
           type: string
           pattern: "^[A-Z0-9]{8}$"
-          description: "8-character activation code provided by Galleria owners"
+          writeOnly: true
         profile_photo:
           type: string
           format: uri
-          description: "URL to profile photo"
+          writeOnly: true
         bio:
           type: string
           maxLength: 500
-          description: "Admin biography or description"
+          writeOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
       required:
         - full_name
         - email
@@ -643,35 +662,35 @@ components:
         - password
         - activation_code
     ErrorObject:
-        type: object
-        properties:
-            status:
-                type: string
-                description: "error"
-            errors:
-                type: array
-                items:
-                    type: string
-                description: "Error messages"
-                example: ["invalid", "not available"]
-            locations:
-                type: array
-                items:
-                    type: string
-                description: "Optional: Additional information about the location of each message"
-                example: ["db.js", "service.js"]
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
     SuccessObject:
-          type: object
-          properties:
-            locations:
-              type: array
-              items:
-                type: string
-              description: "Optional tracking locations related to the data"
-              example: ["tracking location optional"]
-            messages:
-              type: array
-              items:
-                type: string
-              description: "Messages that provide additional information about the response"
-              example: ["tracking location optional"]
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional tracking locations related to the data"
+          example: ["tracking location optional"]
+        messages:
+          type: array
+          items:
+            type: string
+          description: "Messages that provide additional information about the response"
+          example: ["tracking location optional"]
