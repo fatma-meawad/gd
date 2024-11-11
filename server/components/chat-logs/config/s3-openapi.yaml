@@ -123,15 +123,15 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
 
   /messages/{thread}:
+    parameters:
+      - name: thread
+        in: path
+        required: true
+        schema:
+          type: string
     get:
       summary: "Get messages by thread name (author: @Iryna)"
       description: As an admin, I want to retrieve all messages within a specific thread so that I can view the conversation history with other admins in the system.
-      parameters:
-        - name: thread
-          in: path
-          required: true
-          schema:
-            type: string
       responses:
         "200":
           description: Success
