@@ -41,35 +41,14 @@ components:
             type: string
           description: "Messages that provide additional information about the response"
           example: ["tracking location optional"]
-    MessageObject:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          readOnly: true
-        sender_id:
-          type: string
-        recipient_id:
-          type: string
-        thread:
-          type: string
-        content:
-          type: string
-        time:
-          type: string
-          format: date-time
-        messages:
-          type: array
-        locations:
-          type: array
-
+          
 paths:
   /messages:
     post:
       summary: "Send a message (author: @Iryna)"
       description: As an admin, I want to send messages to other admins in the system so that I can communicate.
-      tags: [chat-logs]
+      tags: 
+        - chat-logs
       requestBody:
         required: true
         content:
@@ -186,10 +165,6 @@ paths:
                 allOf:
                   -
                     $ref: "#/components/schemas/SuccessObject"
-                  -
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/MessageObject"
         "404":
           description: No message history found
         "500":
