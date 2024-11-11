@@ -6,6 +6,11 @@ info:
 servers:
   - url: "/api/s1"
     description: local and codespaces
+
+tags:
+  - name: admins
+    description: admin management s1
+
 paths:
   /admins/login:
     post:
@@ -145,6 +150,8 @@ paths:
           description: Email delivery failed
   /admins/password-reset:
     get:
+      tags: 
+        - admins
       summary: Validate password reset token ( author:@Georgy29 )
       parameters:
         - in: query
@@ -185,6 +192,8 @@ paths:
         "500":
           description: Unable to verify token. Please try again later.
     put:
+      tags: 
+        - admin
       summary: Reset the user's password (with a valid token) ( author:@Georgy29 )
       requestBody:
         required: true
@@ -241,6 +250,8 @@ paths:
         "500":
           description: Unable to reset password. Please try again later.
     post:
+      tags: 
+        - admin
       summary: Request a password reset for a user email ( author:@Georgy29 )
       requestBody:
         required: true
