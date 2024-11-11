@@ -199,6 +199,7 @@ paths:
   /adminlogs:
     get:
       summary: 'Retrieve admin logs author: @PietroLauria'
+      description: "As an admin, I want to be able to search the logs by keyword or admin name so that I can quickly find specific actions or review a particular admin's activity."
       parameters:
         - name: admin_id
           in: query
@@ -250,6 +251,7 @@ paths:
 
     post:
       summary: 'Log an admin action author: @PietroLauria'
+      description: "As a system, I need to log all admin actions (like sending or editing a message) with details of who performed the action, what data was used, and the time it occurred so that administrators can later review all system activity."
       requestBody:
         required: true
         content:
