@@ -144,24 +144,30 @@ paths:
                     type: boolean
                   messages:
                     type: array
+                    items:
+                      type: string
                   locations:
                     type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      thread:
-                        type: string
-                      sender:
-                        type: string
-                      recipient:
-                        type: string
-                      content:
-                        type: string
-                      time:
-                        type: string
-                        format: date-time
+                    items:
+                      type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        thread:
+                          type: string
+                        sender:
+                          type: string
+                        recipient:
+                          type: string
+                        content:
+                          type: string
+                        time:
+                          type: string
+                          format: date-time
                 allOf:
                   - $ref: "#/components/schemas/SuccessObject"
         "404":
