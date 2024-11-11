@@ -6,6 +6,11 @@ info:
 servers:
   - url: "/api/s1"
     description: local and codespaces
+
+tags:
+  - name: admins
+    description: admin management s1
+
 paths:
   /admins/login:
     post:
@@ -105,7 +110,7 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
   /admins/{id}/profile:
     put:
-      summary: Update admin profile
+      summary: Update admin profile (tester:@Georgy29)
       requestBody:
         required: true
         content:
@@ -158,7 +163,7 @@ paths:
           description: You are not authorized to view this resource
   /admins/status-notifications:
     post:
-      summary: Send status notifications to admins
+      summary: Send status notifications to admins (tester:@Georgy29)
       requestBody:
         required: true
         content:
@@ -183,16 +188,70 @@ paths:
           description: Email delivery failed
   /admins/password-reset:
     get:
-      summary: "Validate password reset token - tester @alberto"
+      tags: 
+        - admins
+      summary: Validate password reset token (author:@Georgy29) (tester @alberto") 
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: Token to be validated
+
       responses:
         "200":
-          description: Valid token.
+          description: Valid token
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessObject"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          userId:
+                            type: string
+                          additionalInfo:
+                            type: string
+              examples:
+                successExample:
+                  summary: Valid token example
+                  value:
+                    status: "success"
+                    messages:
+                      - "Token is valid. Proceed with password reset."
+                    data:
+                      userId: "12345"
+                      additionalInfo: "Sample additional data (expiry_date)"
         "400":
           description: Invalid or expired token.
-        "500":
-          description: Unable to verify token. Please try again later.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+              example:
+                value:
+                  status: "error"
+                  errors:
+                    - "The provided token is invalid or expired."
+                    - "Please request a new password reset."
+                  locations:
+                    - "admins.controller.js"
+                    - "admins.service.js"
+                    - "admins.database.js"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     put:
-      summary: "Reset password - tester @alberto"
+      tags:
+        - admins
+      summary: Reset the user's password (with a valid token) (author:@Georgy29) (tester @alberto")
       requestBody:
         required: true
         content:
@@ -202,15 +261,62 @@ paths:
               properties:
                 new_password:
                   type: string
+                  description: The new password to be set for the user
+                  minLength: 8
+                  maxLength: 64
       responses:
         "200":
           description: Password reset successful.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessObject"
+              examples:
+                successExample:
+                  summary: Success message for successful password reset
+                  value:
+                    status: "success"
+                    messages:
+                      - "Password reset successfully."
+                      - "You can now log in with your new password."
         "400":
-          description: Password does not meet complexity requirements or Invalid or expired token.
-        "500":
-          description: Unable to reset password. Please try again later.
+          description: Invalid or expired token, or password does not meet complexity requirements.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+              examples:
+                invalidTokenExample:
+                  summary: Invalid token example
+                  value:
+                    status: "error"
+                    errors:
+                      - "The token provided is invalid or expired."
+                      - "Please check the token and try again."
+                    locations:
+                      - "admins.controller.js"
+                      - "admins.service.js"
+                complexityErrorExample:
+                  summary: Password complexity error example
+                  value:
+                    status: "error"
+                    errors:
+                      - "Password does not meet complexity requirements."
+                      - "Ensure the password is at least 8 characters long and contains a mix of letters, numbers, and symbols."
+                    locations:
+                      - "admins.controller.js"
+                      - "admins.service.js"
+                      - "admins.database.js"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     post:
-      summary: Request password reset
+      tags: 
+        - admins
+      summary: Request a password reset link to an email (author:@Georgy29)
       requestBody:
         required: true
         content:
@@ -220,13 +326,54 @@ paths:
               properties:
                 email:
                   type: string
+                  description: The user's email address for which the password reset is requested.
+                  format: email
       responses:
         "200":
           description: Check your email for a password reset link.
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SuccessObject"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          message:
+                            type: string
+                            example: "Check your email for the password reset link."
+              examples:
+                successExample:
+                  summary: Success message for requesting a password reset
+                  value:
+                    status: "success"
+                    messages:
+                      - "Check your email for the password reset link."
         "400":
-          description: Email address not found.
-        "500":
-          description: Unable to process request. Please try again later.
+          description: Email address not found or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+              examples:
+                notFoundExample:
+                  summary: Email address not found example
+                  value:
+                    status: "error"
+                    errors:
+                      - "The email address provided is not associated with any account."
+                    locations:
+                      - "admins.controller.js"
+                      - "admins.service.js"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+
   /admin/logs:
     get:
       summary: Get admin logs
@@ -341,7 +488,7 @@ paths:
     post:
       tags:
         - admins
-      summary: "Register a new admin - author: @alberto"
+      summary: "Register a new admin - author: @alberto, tester:@Georgy29" 
       description: |
         **Story:** As an administrator, I want to register using a verified code provided by the Galleria owners so that I can manage the gallery.
 
@@ -496,38 +643,35 @@ components:
         - password
         - activation_code
     ErrorObject:
-      type: object
-      properties:
-        status:
-          type: string
-          description: "error"
-        errors:
-          type: array
-          items:
-            type: string
-          description: "Error messages"
-          example: ["invalid", "not available"]
-        locations:
-          type: array
-          items:
-            type: string
-          description: "Optional: Additional information about the location of each message"
-          example: ["db.js", "service.js"]
+        type: object
+        properties:
+            status:
+                type: string
+                description: "error"
+            errors:
+                type: array
+                items:
+                    type: string
+                description: "Error messages"
+                example: ["invalid", "not available"]
+            locations:
+                type: array
+                items:
+                    type: string
+                description: "Optional: Additional information about the location of each message"
+                example: ["db.js", "service.js"]
     SuccessObject:
-      type: object
-      properties:
-        locations:
-          type: array
-          items:
-            type: string
-          description: "Optional tracking locations related to the data"
-          example: ["tracking location optional"]
-        messages:
-          type: array
-          items:
-            type: string
-          description: "Messages that provide additional information about the response"
-          example: ["tracking location optional"]
-tags:
-  - name: admins
-    description: admin management s1
+          type: object
+          properties:
+            locations:
+              type: array
+              items:
+                type: string
+              description: "Optional tracking locations related to the data"
+              example: ["tracking location optional"]
+            messages:
+              type: array
+              items:
+                type: string
+              description: "Messages that provide additional information about the response"
+              example: ["tracking location optional"]

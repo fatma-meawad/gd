@@ -81,11 +81,11 @@ module.exports.postAdminsStatusNotifications = async () => {
   }
 };
 
-module.exports.getAdminsPasswordReset = async () => {
+module.exports.getAdminsPasswordReset = async (token) => {
   // Implement your business logic here...
 
   try {
-    let result = await admins.getAdminsPasswordResetDb();
+    let result = await admins.getAdminsPasswordResetDb(token);
     //delete this when you actually implement something.
     result.messages.push("getAdminsPasswordReset services not implemented yet");
     result.locations.push("admins.services.js");
@@ -96,11 +96,11 @@ module.exports.getAdminsPasswordReset = async () => {
   }
 };
 
-module.exports.putAdminsPasswordReset = async () => {
+module.exports.putAdminsPasswordReset = async (adminId, newPassword) => {
   // Implement your business logic here...
 
   try {
-    let result = await admins.putAdminsPasswordResetDb();
+    let result = await admins.putAdminsPasswordResetDb(adminId, newPassword);
     //delete this when you actually implement something.
     result.messages.push("putAdminsPasswordReset services not implemented yet");
     result.locations.push("admins.services.js");
@@ -111,11 +111,11 @@ module.exports.putAdminsPasswordReset = async () => {
   }
 };
 
-module.exports.postAdminsPasswordReset = async () => {
+module.exports.postAdminsPasswordReset = async (email) => {
   // Implement your business logic here...
 
   try {
-    let result = await admins.postAdminsPasswordResetDb();
+    let result = await admins.postAdminsPasswordResetDb(email);
     //delete this when you actually implement something.
     result.messages.push(
       "postAdminsPasswordReset services not implemented yet"
