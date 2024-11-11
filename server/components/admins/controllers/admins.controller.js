@@ -196,7 +196,7 @@ exports.postAdminsPasswordReset = asyncHandler(async (req, res) => {
 });
 
 exports.postAdminsRegister = asyncHandler(async (req, res) => {
-  const options = {
+  const registrationData = {
     body: req.body,
   };
 
@@ -210,10 +210,12 @@ exports.postAdminsRegister = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await admins.postAdminsRegister(...Object.values(options));
+  let result = await admins.postAdminsRegister(
+    ...Object.values(registrationData)
+  );
 
   // Temporary response
   result.messages.push("postAdminsRegister controller not implemented yet");
   result.locations.push("admins.controller.js");
-  res.status(200).send(result);
+  res.status(201).send(result);
 });

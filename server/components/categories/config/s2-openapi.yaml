@@ -8,7 +8,7 @@ servers:
 paths:
   /subcategories:
     get:
-      summary: Retrieves a list of all subcategories
+      summary: "Retrieves a list of all subcategories (tester: @Wong Chung Man)"
       responses:
         "200":
           description: Success
@@ -126,14 +126,38 @@ paths:
           description: Unauthorized
   /categories:
     get:
-      summary: Retrieves a list of all categories
+      summary: "Retrieves a list of all categories (author: @Wong Chung Man)"
+      description: As an admin, I would like to retrieve categories, so that I can understand the general overall activity of each registered business.
+      tags:
+        - categories
       responses:
         "200":
           description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Success
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     post:
-      summary: Creates a new category
+      summary: "Creates a new category (author: @Wong Chung Man)"
+      description: As an admin, I would like to create categories, so that I can understand the general overall activity of each registered business.
+      tags:
+        - categories
       requestBody:
         required: true
         content:
@@ -157,13 +181,38 @@ paths:
                 properties:
                   id:
                     type: string
+                example:
+                  title: Food
+                  photo_url: https://url.com/photo.jpg
+                  description: This is something you can eat.
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Invalid input
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
   /categories/{id}:
     put:
-      summary: Updates a category by ID
+      summary: "Updates a category by ID (author: @Wong Chung Man)"
+      description: As an admin, I would like to update categories, so that I can understand the general overall activity of each registered business.
+      tags:
+        - categories
       parameters:
         - name: id
           in: path
@@ -195,12 +244,38 @@ paths:
                 properties:
                   id:
                     type: string
+                example:
+                  id: 1
+                  title: Eletronic appliances
+                  photo_url: https://url.com/photo.jpg
+                  description: This is soemthing electrical.
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Invalid input
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     delete:
-      summary: Deletes a category by ID
+      summary: "Deletes a category by ID (author: @Wong Chung Man)"
+      description: As an admin, I would like to delete categories, so that I can understand the general overall activity of each registered business.
+      tags:
+        - categories
       parameters:
         - name: id
           in: path
@@ -217,15 +292,41 @@ paths:
                 properties:
                   id:
                     type: string
+                example:
+                  id: 1
         "400":
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Invalid input
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
         "402":
           description: Cannot delete element with internal categories or elements
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Cannot delete element with internal categories or elements
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
   /categories/products:
     get:
-      summary: Retrieves products based on category and business account
+      summary: "Retrieves products based on category and business account (tester: @Wong Chung Man)"
       parameters:
         - name: categoryId
           in: query
@@ -244,9 +345,29 @@ paths:
           description: Invalid input
   /categories/lookups:
     get:
-      summary: Retrieves lookups for categories with product and account associations
+      summary: "Retrieves lookups for categories with product and account associations (tester: @Wong Chung Man)"
       responses:
         "200":
           description: Lookups for categories with info for number of products and number of accounts associated
         "400":
           description: Failed to retrieve resource
+components:
+  schemas:
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]

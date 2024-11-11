@@ -44,7 +44,7 @@ labels: Sprint-0
 
 - [ ] Move your issue to **in-review**
 
-### Deadline for merging this is Tuesday 13th of Nov
+### Deadline for merging this is Wednesday 14th of Nov
 
 ### Aligning
 
