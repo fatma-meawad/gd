@@ -152,7 +152,7 @@ paths:
 
   /business/{business_id}/location_id:
     get:
-      summary: Get business location details
+      summary: Get business location details (tester:@claire-graham)
       parameters:
         - name: business_id
           in: path
