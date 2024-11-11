@@ -26,6 +26,43 @@ components:
             type: string
           description: "Optional: Additional information about the location of each message"
           example: ["db.js", "service.js"]
+    SuccessObject:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional tracking locations related to the data"
+          example: ["tracking location optional"]
+        messages:
+          type: array
+          items:
+            type: string
+          description: "Messages that provide additional information about the response"
+          example: ["tracking location optional"]
+    MessageObject:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        sender_id:
+          type: string
+        recipient_id:
+          type: string
+        thread:
+          type: string
+        content:
+          type: string
+        time:
+          type: string
+          format: date-time
+        messages:
+          type: array
+        locations:
+          type: array
 
 paths:
   /messages:
@@ -41,9 +78,11 @@ paths:
               type: object
               properties:
                 sender_id:
-                  type: integer
+                  type: string
                 recipient_id:
-                  type: integer
+                  type: string
+                thread:
+                  type: string
                 content:
                   type: string
                 time:
@@ -51,13 +90,15 @@ paths:
               required:
                 - sender_id
                 - recipient_id
+                - thread
                 - content
                 - time
             examples:
               validMessage:
                 value:
-                  sender_id: 1
-                  recipient_id: 2
+                  sender_id: "1"
+                  recipient_id: "2"
+                  thread: "1"
                   content: "Hello!"
                   time: "2024-11-08T19:18:53Z"
       responses:
@@ -71,11 +112,13 @@ paths:
                   success:
                     type: boolean
                   id:
-                    type: integer
-                  sender:
-                    type: integer
+                    type: string
+                  sender_id:
+                    type: string
                   recipient_id:
-                    type: integer
+                    type: string
+                  thread:
+                    type: string
                   content:
                     type: string
                   time:
@@ -84,9 +127,9 @@ paths:
                 successfulResponse:
                   value:
                     success: true
-                    id: "1"
                     sender_id: "1"
                     recipient_id: "2"
+                    thread: "1"
                     content: "Hello!"
                     time: "2024-11-08T19:18:53Z"
         "400":
@@ -98,12 +141,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
 
-  /messages/{thread_id}:
+  /messages/{thread}:
     get:
-      summary: "Get messages by thread ID (author: @Iryna)"
+      summary: "Get messages by thread name (author: @Iryna)"
       description: As an admin, I want to retrieve all messages within a specific thread so that I can view the conversation history with other admins in the system.
       parameters:
-        - name: thread_id
+        - name: thread
           in: path
           required: true
           schema:
@@ -120,19 +163,30 @@ paths:
                     type: boolean
                   messages:
                     type: array
-                    items:
+                  locations:
+                    type: array
+                  items:
                       type: object
                       properties:
                         id:
                           type: integer
+                        thread:
+                          type: string
                         sender:
-                          type: integer
+                          type: string
                         recipient:
-                          type: integer
+                          type: string
                         content:
                           type: string
                         time:
                           type: string
+                allOf:
+                  -
+                    $ref: "#/components/schemas/SuccessObject"
+                  -
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/MessageObject"
         "404":
           description: No message history found
         "500":

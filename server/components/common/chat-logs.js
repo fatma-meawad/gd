@@ -1,11 +1,11 @@
-function sendMessage(sender_id, thread_id, content, time) {
+function sendMessage(sender_id, thread, content, time) {
   // Implement send message logic here
   return { success: true, message: "Message sent successfully" };
 }
 
-function getMessages(thread_id) {
+function getMessages(thread) {
   // Implement get messages logic here
-  return [{ sender_id: "123", content: "Hello", time: "2024-10-29T10:00:00Z" }];
+  return [{ sender_id: "123", thread: "1", content: "Hello", time: "2024-10-29T10:00:00Z" }];
 }
 
 function logAdminAction(

@@ -25,9 +25,9 @@ exports.postMessages = asyncHandler(async (req, res) => {
   res.status(200).send(result);
 });
 
-exports.getMessagesByThreadId = asyncHandler(async (req, res) => {
+exports.getMessagesByThread = asyncHandler(async (req, res) => {
   const options = {
-    thread_id: req.params["thread_id"],
+    thread: req.params["thread"],
   };
 
   /**  request:
@@ -40,10 +40,10 @@ exports.getMessagesByThreadId = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await messages.getMessagesByThreadId(...Object.values(options));
+  let result = await messages.getMessagesByThread(...Object.values(options));
 
   // Temporary response
-  result.messages.push("getMessagesByThreadId controller not implemented yet");
+  result.messages.push("getMessagesByThread controller not implemented yet");
   result.locations.push("messages.controller.js");
   res.status(200).send(result);
 });

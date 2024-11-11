@@ -5,7 +5,7 @@ const { handleError } = require("../../../middleware/errorhandler");
 
 router.post("/", controller.postMessages);
 
-router.get("/:thread_id", controller.getMessagesByThreadId);
+router.get("/:thread", controller.getMessagesByThread);
 
 router.delete("/:thread_id", controller.deleteMessagesByThreadId);
 
