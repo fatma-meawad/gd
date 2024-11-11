@@ -10,7 +10,7 @@ CREATE TABLE Message (
     recipient_id INTEGER NOT NULL REFERENCES AdminAccount(id),
     thread VARCHAR(16) NOT NULL,
     content TEXT NOT NULL,
-    time VARCHAR(20) NOT NULL,
+    time TIMESTAMP NOT NULL,
 );
 
 

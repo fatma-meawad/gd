@@ -87,6 +87,7 @@ paths:
                   type: string
                 time:
                   type: string
+                  format: date-time
               required:
                 - sender_id
                 - recipient_id
@@ -123,6 +124,7 @@ paths:
                     type: string
                   time:
                     type: string
+                    format: date-time
               examples:
                 successfulResponse:
                   value:
@@ -180,6 +182,7 @@ paths:
                           type: string
                         time:
                           type: string
+                          format: date-time
                 allOf:
                   -
                     $ref: "#/components/schemas/SuccessObject"
