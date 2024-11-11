@@ -81,7 +81,7 @@ module.exports.postAdminsStatusNotifications = async () => {
   }
 };
 
-module.exports.getAdminsPasswordReset = async () => {
+module.exports.getAdminsPasswordReset = async (token) => {
   // Implement your business logic here...
 
   try {

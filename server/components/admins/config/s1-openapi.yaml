@@ -72,7 +72,7 @@ paths:
           description: Unable to deactivate the account. Please try again later.
   /admins/{id}/profile:
     put:
-      summary: Update admin profile
+      summary: Update admin profile (tester:@Georgy29)
       requestBody:
         required: true
         content:
@@ -125,7 +125,7 @@ paths:
           description: You are not authorized to view this resource
   /admins/status-notifications:
     post:
-      summary: Send status notifications to admins
+      summary: Send status notifications to admins (tester:@Georgy29)
       requestBody:
         required: true
         content:
@@ -172,10 +172,11 @@ paths:
                   summary: Valid token example
                   value:
                     status: "success"
-                    locations:
-                      - "tracking location optional"
                     messages:
                       - "Token is valid. Proceed with password reset."
+                    data:
+                      userId: 12345            
+                      additionalInfo: "Sample additional data (expirity_date)" 
         "400":
           description: Invalid or expired token.
           content:
@@ -226,9 +227,6 @@ paths:
                   summary: Success message for successful password reset
                   value:
                     status: "success"
-                    locations:
-                      - "admins.controller.js"
-                      - "admins.service.js"
                     messages:
                       - "Password reset successfully."
                       - "You can now log in with your new password."
@@ -293,9 +291,6 @@ paths:
                   summary: Success message for requesting a password reset
                   value:
                     status: "success"
-                    locations:
-                      - "admins.controller.js"
-                      - "admins.service.js"
                     messages:
                       - "Check your email for the password reset link."
         "400":
@@ -515,3 +510,10 @@ components:
             type: string
           description: "Messages that provide additional context about the response"
           example: ["Tracking location optional"]
+        data:                  
+          type: object        
+          description: "Optional field for additional data related to the response"
+          additionalProperties: true  # Allows flexibility in structure(have 1 or more data to output)
+          example:
+            key1: "value1"
+            key2: "value2"
