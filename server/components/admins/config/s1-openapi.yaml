@@ -166,7 +166,17 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessObject"
+                allOf:
+                  - $ref: "#/components/schemas/SuccessObject"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          userId:
+                            type: string
+                          additionalInfo:
+                            type: string
               examples:
                 successExample:
                   summary: Valid token example
@@ -175,8 +185,8 @@ paths:
                     messages:
                       - "Token is valid. Proceed with password reset."
                     data:
-                      userId: 12345            
-                      additionalInfo: "Sample additional data (expirity_date)" 
+                      userId: "12345"
+                      additionalInfo: "Sample additional data (expiry_date)"
         "400":
           description: Invalid or expired token.
           content:
@@ -285,7 +295,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SuccessObject"
+                allOf:
+                  - $ref: "#/components/schemas/SuccessObject"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          message:
+                            type: string
+                            example: "Check your email for the password reset link."
               examples:
                 successExample:
                   summary: Success message for requesting a password reset
