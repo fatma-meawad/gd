@@ -109,7 +109,7 @@ module.exports.postAdminsRegisterDb = async (registrationData) => {
       id: "admin-123",
       email: registrationData.email,
       full_name: registrationData.full_name,
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
     },
     messages: ["postAdminsRegisterDb not implemented yet"],
     locations: ["admins.database.js"],
