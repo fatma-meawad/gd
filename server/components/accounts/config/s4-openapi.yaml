@@ -373,7 +373,7 @@ paths:
  
   /sellers/{seller_id}/access-history:
    get:
-    summary: Get access history of a seller
+    summary: Get access history of a seller (author:@LorenzoMaiocchi98)
     description: Retrieve the access history of a specific seller based on seller ID.
     parameters:
       - name: seller_id
@@ -450,7 +450,7 @@ paths:
 
   /business/{business_id}/sellers/export:
     get:
-      summary: Export sellers for a business
+      summary: Export sellers for a business (author:@LorenzoMaiocchi98)
       description: Exports a list of sellers associated with a specific business.
       parameters:
         - name: business_id
