@@ -11,7 +11,8 @@ servers:
 paths:
   /business/:
     post:
-      summary: Create a new business
+      summary: Create a new business (author:@rbekkum)
+      description: Related story S4-1 - Allows admins to create a business account with details like title, phone, address, and main owner's info.
       requestBody:
         required: true
         content:
@@ -73,7 +74,8 @@ paths:
 
   /business/{id}:
     put:
-      summary: Update a business
+      summary: Update a business (author:@rbekkum)
+      description: Related story S4-3 - Allows admins to deactivate a business account and prevent further activity.
       parameters:
         - name: id
           in: path
@@ -144,7 +146,8 @@ paths:
 
   /business/{business_id}/sellers/:
     post:
-      summary: Add a seller to a business author @yourname
+      summary: Add a seller to a business (author:@rbekkum)
+      description: Related story S4-2 - Allows admins to add or remove sellers associated with a specific business account.
       parameters:
         - name: business_id
           in: path
