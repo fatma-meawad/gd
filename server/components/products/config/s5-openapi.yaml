@@ -8,7 +8,8 @@ servers:
 paths:
   /products:
     get:
-      summary: Get all products
+      summary: "Get all products (author: @Marika)"
+      description: As an Admin, I would like to view a list of products so that I can see the product catalog in an easy way.
       responses:
         "200":
           description: Success
@@ -140,7 +141,8 @@ paths:
 
   /products/{product_id}/tags:
     post:
-      summary: "Add tags to a product (tester: @Alona)"
+      summary: "Add tags to a product (author: @Marika) (tester: @Alona)"
+      description: As admin, I would like to mark products as favorites, best sellers, or newly-arrived, so that I can highlight specific products based on seller requests.
       parameters:
         - in: path
           name: product_id
@@ -177,7 +179,8 @@ paths:
 
   /products/{product_id}/price:
     post:
-      summary: "Update product price (Tester: @Alona)"
+      summary: "Update product price (author: @Marika) (tester: @Alona)"
+      description: As admin, I would like to associate the price of an item to a date in which it was set, so that I can track the history of the product price.
       parameters:
         - in: path
           name: product_id
@@ -247,7 +250,7 @@ paths:
 
   /products/bulk-edit:
     post:
-      summary: Bulk edit products
+      summary: "Bulk edit products (tester: @Marika)"
       requestBody:
         required: true
         content:
@@ -287,7 +290,7 @@ paths:
 
   /products/{id}/expiration-date:
     put:
-      summary: Update product expiration date
+      summary: "Update product expiration date (tester: @Marika)"
       parameters:
         - in: path
           name: id
@@ -321,7 +324,7 @@ paths:
 
   /products/{id}/discount:
     put:
-      summary: Apply a discount to a product
+      summary: "Apply a discount to a product (tester: @Marika)"
       parameters:
         - in: path
           name: id
@@ -434,7 +437,8 @@ paths:
 
   /tags:
     get:
-      summary: "Retrieve tags for a specific product (tester: @Alona)"
+      summary: "Retrieve tags for a specific product (author: @Marika) (tester: @Alona)"
+      description: As admin, I would like to mark products as favorites, best sellers, or newly-arrived, so that I can highlight specific products based on seller requests.
       parameters:
         - name: product_id
           in: query
@@ -470,7 +474,8 @@ paths:
           description: Product not found
 
     post:
-      summary: Create a new tag
+      summary: "Create a new tag (author: @Marika)"
+      description: As admin, I would like to mark products as favorites, best sellers, or newly-arrived, so that I can highlight specific products based on seller requests.
       requestBody:
         required: true
         content:
