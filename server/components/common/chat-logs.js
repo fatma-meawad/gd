@@ -5,7 +5,14 @@ function sendMessage(sender_id, thread, content, time) {
 
 function getMessages(thread) {
   // Implement get messages logic here
-  return [{ sender_id: "123", thread: "1", content: "Hello", time: "2024-10-29T10:00:00Z" }];
+  return [
+    {
+      sender_id: "123",
+      thread: "1",
+      content: "Hello",
+      time: "2024-10-29T10:00:00Z",
+    },
+  ];
 }
 
 function logAdminAction(
