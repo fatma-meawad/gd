@@ -205,9 +205,11 @@ paths:
           description: Internal Server Error
 
   /business/{business_id}/{seller_id}/sellers:
-    post:
-      summary: Create an account for a seller with QR code
-      parameters:
+   post:
+     tags: 
+         - Seller Management
+     summary: Create an account for a seller with QR code
+     parameters:
         - name: business_id
           in: path
           required: true
@@ -218,7 +220,7 @@ paths:
           required: true
           schema:
             type: string
-      responses:
+     responses:
         "201":
           description: Account created with QR code
           content:
