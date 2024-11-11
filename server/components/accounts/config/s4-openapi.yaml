@@ -260,7 +260,6 @@ paths:
                          type: string
                      description: "Optional: Additional information about the location of each message"
                      example: ["db.js", "service.js"]
-
      responses:
         "201":
           description: Account created with QR code
