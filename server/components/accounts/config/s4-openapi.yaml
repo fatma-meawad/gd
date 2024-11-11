@@ -325,6 +325,16 @@ paths:
           description: Seller with the provided email or business ID already exists
         "500":
           description: Internal server error during registration
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "An unexpected error occurred."
 
 
   /sellers/{seller_id}/access-history:
