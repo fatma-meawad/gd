@@ -188,9 +188,9 @@ paths:
           description: Email delivery failed
   /admins/password-reset:
     get:
-      tags: 
+      tags:
         - admins
-      summary: Validate password reset token (author:@Georgy29) (tester @alberto") 
+      summary: Validate password reset token (author:@Georgy29) (tester @alberto")
       parameters:
         - in: query
           name: token
@@ -314,7 +314,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
     post:
-      tags: 
+      tags:
         - admins
       summary: Request a password reset link to an email (author:@Georgy29)
       requestBody:
@@ -488,7 +488,7 @@ paths:
     post:
       tags:
         - admins
-      summary: "Register a new admin - author: @alberto, tester:@Georgy29" 
+      summary: "Register a new admin - author: @alberto, tester:@Georgy29"
       description: |
         **Story:** As an administrator, I want to register using a verified code provided by the Galleria owners so that I can manage the gallery.
 
@@ -662,35 +662,35 @@ components:
         - password
         - activation_code
     ErrorObject:
-        type: object
-        properties:
-            status:
-                type: string
-                description: "error"
-            errors:
-                type: array
-                items:
-                    type: string
-                description: "Error messages"
-                example: ["invalid", "not available"]
-            locations:
-                type: array
-                items:
-                    type: string
-                description: "Optional: Additional information about the location of each message"
-                example: ["db.js", "service.js"]
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
     SuccessObject:
-          type: object
-          properties:
-            locations:
-              type: array
-              items:
-                type: string
-              description: "Optional tracking locations related to the data"
-              example: ["tracking location optional"]
-            messages:
-              type: array
-              items:
-                type: string
-              description: "Messages that provide additional information about the response"
-              example: ["tracking location optional"]
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional tracking locations related to the data"
+          example: ["tracking location optional"]
+        messages:
+          type: array
+          items:
+            type: string
+          description: "Messages that provide additional information about the response"
+          example: ["tracking location optional"]
