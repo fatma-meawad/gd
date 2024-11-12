@@ -38,7 +38,7 @@ paths:
                   example: "http://nightmareonelmstreet.com"
                 description:
                   type: string
-                  example: "Yeaahhh Baby"
+                  example: "Yeahhh Baby"
                 main_owner_name:
                   type: string
                   example: "Austin Powers"
@@ -61,7 +61,7 @@ paths:
                   main_owner_phone,
                 ]
       responses:
-        "201":  # Adjusted to follow RESTful standards for creation
+        "201":  # Explicitly using 201 for successful creation
           description: Business created successfully
           content:
             application/json:
@@ -83,8 +83,8 @@ paths:
                   value:
                     status: "error"
                     errors: ["Invalid email format for main_owner_email", "Phone number format is invalid"]
-                    locations: ["db.js", "service.js"]
-        default:  # Catches any unspecified errors, removing the need for a 500 explicitly
+                    locations: ["business.controller.js", "business.services.js"]
+        default:
           description: Unexpected error
           content:
             application/json:

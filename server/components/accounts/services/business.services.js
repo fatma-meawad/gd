@@ -3,19 +3,28 @@ const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
 module.exports.postBusiness = async (businessData) => {
-  // Validate required fields (validation can also stay in the controller if preferred)
-  const { title, image, phone, address, main_owner_name, main_owner_email, main_owner_phone } = businessData;
-  
-  // Check email format
+  const {
+    title,
+    image,
+    phone,
+    address,
+    main_owner_name,
+    main_owner_email,
+    main_owner_phone,
+  } = businessData;
+
+  if (!title || !image || !phone || !address || !main_owner_name || !main_owner_email || !main_owner_phone) {
+    throw new AppError("Validation error: Missing required fields", 400);
+  }
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(main_owner_email)) {
     throw new AppError("Validation error: Invalid email format", 400);
   }
 
-  // Call database function
   try {
-    const result = await businessDb.postBusinessDb(businessData);  // Pass businessData to DB layer
-    return result;  // Expected to return { new_id: "some_id" }
+    const result = await businessDb.postBusinessDb(businessData);
+    return result;
   } catch (error) {
     throw new AppError("Database error", 500);
   }

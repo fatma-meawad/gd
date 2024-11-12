@@ -2,26 +2,52 @@ const asyncHandler = require("express-async-handler");
 const businessService = require("../services/business.services");
 const AppError = require("../../../utils/error");
 
-exports.postBusiness = asyncHandler(async (req, res) => {
-  try {
-    // Call the service layer function to handle the creation logic
-    const result = await businessService.postBusiness(req.body);
+exports.postBusiness = asyncHandler(async (req, res, next) => {
+  const {
+    title,
+    image,
+    phone,
+    address,
+    web_address,
+    main_owner_name,
+    main_owner_email,
+    main_owner_phone,
+  } = req.body;
 
+  const errors = [];
+  if (!title) errors.push("Title is required");
+  if (!image) errors.push("Image URL is required");
+  if (!phone) errors.push("Phone is required");
+  if (!address) errors.push("Address is required");
+  if (!web_address) errors.push("Web address is required");
+  if (!main_owner_name) errors.push("Main owner name is required");
+  if (!main_owner_email || !main_owner_email.includes("@")) errors.push("Valid main owner email is required");
+  if (!main_owner_phone) errors.push("Main owner phone is required");
+
+  if (errors.length > 0) {
+    return res.status(400).json({
+      status: "error",
+      errors,
+      locations: ["business.controller.js"],
+    });
+  }
+
+  try {
+    const result = await businessService.postBusiness(req.body);
     if (result && result.new_id) {
-      res.status(201).json({ new_id: result.new_id, message: "Business created successfully" });
+      res.status(201).json({ new_id: result.new_id });
     } else {
       throw new AppError("Business creation failed", 500);
     }
   } catch (error) {
-    const status = error.status || 500;
-    const response = {
-      status: status === 400 ? "Bad Request" : "Internal Server Error",
+    res.status(error.statusCode || 500).json({
+      status: "error",
       errors: [error.message || "An unexpected error occurred"],
       locations: ["business.controller.js", "business.services.js"],
-    };
-    res.status(status).json(response);
+    });
   }
 });
+
 
 exports.getBusiness = asyncHandler(async (req, res) => {
   const options = {};

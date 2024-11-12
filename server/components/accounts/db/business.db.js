@@ -1,10 +1,28 @@
 const schema = require("../schema.json");
 
 module.exports.postBusinessDb = async (businessData) => {
-  // Mocking a database insert and return of a new business ID
-  const newId = "12345"; // Replace this with actual DB insertion logic in production
-  return { new_id: newId };
+  try {
+    const result = await pool.query(
+      `INSERT INTO BusinessAccount (title, image, phone, address, web_address, description, main_owner_name, main_owner_email, main_owner_phone) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+      [
+        businessData.title,
+        businessData.image,
+        businessData.phone,
+        businessData.address,
+        businessData.web_address,
+        businessData.description,
+        businessData.main_owner_name,
+        businessData.main_owner_email,
+        businessData.main_owner_phone,
+      ]
+    );
+    return { new_id: result.rows[0].id };
+  } catch (error) {
+    throw new AppError("Database insertion error", 500);
+  }
 };
+
 
 module.exports.getBusinessDb = async (options) => {
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
