@@ -7,7 +7,7 @@ CREATE DATABASE Products;
 
 CREATE TABLE Product (
     id SERIAL PRIMARY KEY
-    name VARCHAR(100) NOT NULL CHECK (char_length(product_name) >=3),
+    product_name VARCHAR(100) NOT NULL CHECK (char_length(product_name) >=3),
     category_id INTEGER NOT NULL,
     short_description VARCHAR(1000) NOT NULL CHECK (char_length(short_description) >=20),
     detailed_description VARCHAR (10000),
