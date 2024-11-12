@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === "strict") {
   );
 }
 
-router.use("/businesses", require("./businesses"));
+router.use("/business", require("./business"));
 router.use("/sellers", require("./sellers"));
 
 module.exports = router;

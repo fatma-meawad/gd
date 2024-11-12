@@ -81,11 +81,11 @@ module.exports.postAdminsStatusNotifications = async () => {
   }
 };
 
-module.exports.getAdminsPasswordReset = async (token) => {
+module.exports.getAdminsPasswordReset = async () => {
   // Implement your business logic here...
 
   try {
-    let result = await admins.getAdminsPasswordResetDb(token);
+    let result = await admins.getAdminsPasswordResetDb();
     //delete this when you actually implement something.
     result.messages.push("getAdminsPasswordReset services not implemented yet");
     result.locations.push("admins.services.js");
@@ -96,11 +96,11 @@ module.exports.getAdminsPasswordReset = async (token) => {
   }
 };
 
-module.exports.putAdminsPasswordReset = async (adminId, newPassword) => {
+module.exports.putAdminsPasswordReset = async () => {
   // Implement your business logic here...
 
   try {
-    let result = await admins.putAdminsPasswordResetDb(adminId, newPassword);
+    let result = await admins.putAdminsPasswordResetDb();
     //delete this when you actually implement something.
     result.messages.push("putAdminsPasswordReset services not implemented yet");
     result.locations.push("admins.services.js");
@@ -111,11 +111,11 @@ module.exports.putAdminsPasswordReset = async (adminId, newPassword) => {
   }
 };
 
-module.exports.postAdminsPasswordReset = async (email) => {
+module.exports.postAdminsPasswordReset = async () => {
   // Implement your business logic here...
 
   try {
-    let result = await admins.postAdminsPasswordResetDb(email);
+    let result = await admins.postAdminsPasswordResetDb();
     //delete this when you actually implement something.
     result.messages.push(
       "postAdminsPasswordReset services not implemented yet"
@@ -128,11 +128,11 @@ module.exports.postAdminsPasswordReset = async (email) => {
   }
 };
 
-module.exports.postAdminsRegister = async (registrationData) => {
+module.exports.postAdminsRegister = async () => {
   // Implement your business logic here...
 
   try {
-    let result = await admins.postAdminsRegisterDb(registrationData);
+    let result = await admins.postAdminsRegisterDb();
     //delete this when you actually implement something.
     result.messages.push("postAdminsRegister services not implemented yet");
     result.locations.push("admins.services.js");

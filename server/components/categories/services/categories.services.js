@@ -17,11 +17,11 @@ module.exports.getCategories = async () => {
   }
 };
 
-module.exports.postCategories = async (title, photo_url, string) => {
+module.exports.postCategories = async () => {
   // Implement your business logic here...
 
   try {
-    let result = await categories.postCategoriesDb(title, photo_url, string);
+    let result = await categories.postCategoriesDb();
     //delete this when you actually implement something.
     result.messages.push("postCategories services not implemented yet");
     result.locations.push("categories.services.js");
@@ -32,21 +32,11 @@ module.exports.postCategories = async (title, photo_url, string) => {
   }
 };
 
-module.exports.putCategoriesById = async (
-  id,
-  title,
-  photo_url,
-  description
-) => {
+module.exports.putCategoriesById = async (id) => {
   // Implement your business logic here...
 
   try {
-    let result = await categories.putCategoriesByIdDb(
-      id,
-      title,
-      photo_url,
-      description
-    );
+    let result = await categories.putCategoriesByIdDb(id);
     //delete this when you actually implement something.
     result.messages.push("putCategoriesById services not implemented yet");
     result.locations.push("categories.services.js");

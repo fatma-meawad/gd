@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const businesses = require("../services/businesses.services");
+const business = require("../services/business.services");
 const AppError = require("../../../utils/error");
 
 exports.postBusiness = asyncHandler(async (req, res) => {
@@ -17,69 +17,33 @@ exports.postBusiness = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await businesses.postBusiness(...Object.values(options));
+  let result = await business.postBusiness(...Object.values(options));
 
   // Temporary response
   result.messages.push("postBusiness controller not implemented yet");
-  result.locations.push("businesses.controller.js");
+  result.locations.push("business.controller.js");
   res.status(200).send(result);
 });
 
-/**  request:
+exports.getBusiness = asyncHandler(async (req, res) => {
+  const options = {};
+
+  /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
       2- the openapi validator should match the types with the contract, so make sure they match
       3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-*/
+  */
 
-/**  response:
+  /**  response:
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
-*/
-exports.getBusinesses = asyncHandler(async (req, res) => {
-  const { limit = 50, offset = 0 } = req.query;
+  */
+  let result = await business.getBusiness(...Object.values(options));
 
-  const parsedLimit = parseInt(limit);
-  const parsedOffset = parseInt(offset);
-
-  if (isNaN(parsedLimit) || parsedLimit <= 0) {
-    return res.status(400).json({
-      status: "error",
-      errors: ["Limit must be a positive integer"],
-      locations: ["businesses.controller.js"],
-    });
-  }
-
-  if (isNaN(parsedOffset) || parsedOffset < 0) {
-    return res.status(400).json({
-      status: "error",
-      errors: ["Offset must be a non-negative integer"],
-      locations: ["businesses.controller.js"],
-    });
-  }
-
-  try {
-    const result = await businesses.getBusinesses({
-      limit: parsedLimit,
-      offset: parsedOffset,
-    });
-
-    // Check for empty results and send a 404 response
-    if (!result.businesses || result.businesses.length === 0) {
-      return res.status(404).json({
-        status: "error",
-        errors: ["No businesses found"],
-        locations: ["businesses.controller.js"],
-      });
-    }
-
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({
-      status: "error",
-      errors: ["Internal server error"],
-      locations: ["businesses.controller.js"],
-    });
-  }
+  // Temporary response
+  result.messages.push("getBusiness controller not implemented yet");
+  result.locations.push("business.controller.js");
+  res.status(200).send(result);
 });
 
 exports.putBusinessById = asyncHandler(async (req, res) => {
@@ -98,11 +62,11 @@ exports.putBusinessById = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await businesses.putBusinessById(...Object.values(options));
+  let result = await business.putBusinessById(...Object.values(options));
 
   // Temporary response
   result.messages.push("putBusinessById controller not implemented yet");
-  result.locations.push("businesses.controller.js");
+  result.locations.push("business.controller.js");
   res.status(200).send(result);
 });
 
@@ -121,7 +85,7 @@ exports.getBusinessByBusinessIdLocationId = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await businesses.getBusinessByBusinessIdLocationId(
+  let result = await business.getBusinessByBusinessIdLocationId(
     ...Object.values(options)
   );
 
@@ -129,7 +93,7 @@ exports.getBusinessByBusinessIdLocationId = asyncHandler(async (req, res) => {
   result.messages.push(
     "getBusinessByBusinessIdLocationId controller not implemented yet"
   );
-  result.locations.push("businesses.controller.js");
+  result.locations.push("business.controller.js");
   res.status(200).send(result);
 });
 
@@ -149,7 +113,7 @@ exports.postBusinessByBusinessIdSellers = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await businesses.postBusinessByBusinessIdSellers(
+  let result = await business.postBusinessByBusinessIdSellers(
     ...Object.values(options)
   );
 
@@ -157,7 +121,7 @@ exports.postBusinessByBusinessIdSellers = asyncHandler(async (req, res) => {
   result.messages.push(
     "postBusinessByBusinessIdSellers controller not implemented yet"
   );
-  result.locations.push("businesses.controller.js");
+  result.locations.push("business.controller.js");
   res.status(200).send(result);
 });
 
@@ -178,7 +142,7 @@ exports.postBusinessByBusinessIdBySellerIdSellers = asyncHandler(
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-    let result = await businesses.postBusinessByBusinessIdBySellerIdSellers(
+    let result = await business.postBusinessByBusinessIdBySellerIdSellers(
       ...Object.values(options)
     );
 
@@ -186,7 +150,7 @@ exports.postBusinessByBusinessIdBySellerIdSellers = asyncHandler(
     result.messages.push(
       "postBusinessByBusinessIdBySellerIdSellers controller not implemented yet"
     );
-    result.locations.push("businesses.controller.js");
+    result.locations.push("business.controller.js");
     res.status(200).send(result);
   }
 );
@@ -207,7 +171,7 @@ exports.getBusinessByBusinessIdSellersExport = asyncHandler(
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-    let result = await businesses.getBusinessByBusinessIdSellersExport(
+    let result = await business.getBusinessByBusinessIdSellersExport(
       ...Object.values(options)
     );
 
@@ -215,7 +179,7 @@ exports.getBusinessByBusinessIdSellersExport = asyncHandler(
     result.messages.push(
       "getBusinessByBusinessIdSellersExport controller not implemented yet"
     );
-    result.locations.push("businesses.controller.js");
+    result.locations.push("business.controller.js");
     res.status(200).send(result);
   }
 );
@@ -237,7 +201,7 @@ exports.postBusinessByBusinessIdSellersImport = asyncHandler(
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-    let result = await businesses.postBusinessByBusinessIdSellersImport(
+    let result = await business.postBusinessByBusinessIdSellersImport(
       ...Object.values(options)
     );
 
@@ -245,7 +209,7 @@ exports.postBusinessByBusinessIdSellersImport = asyncHandler(
     result.messages.push(
       "postBusinessByBusinessIdSellersImport controller not implemented yet"
     );
-    result.locations.push("businesses.controller.js");
+    result.locations.push("business.controller.js");
     res.status(200).send(result);
   }
 );

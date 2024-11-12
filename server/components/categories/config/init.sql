@@ -7,11 +7,8 @@ CREATE DATABASE Categories;
 -- Add the attributes you need to implement your feature?
 
 CREATE TABLE Category (
-    id SERIAL PRIMARY KEY,
-    name  VARCHAR(255),
-    photo_url text,
-    descrption text,
-    is_deleted BIT
+    id SERIAL PRIMARY KEY
+
 );
 
 
