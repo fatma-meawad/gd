@@ -450,7 +450,7 @@ paths:
 
   /business/{business_id}/sellers/export:
     get:
-      summary: Export sellers for a business (author:@LorenzoMaiocchi98)
+      summary: Export sellers for a business (author:@LorenzoMaiocchi98, reviewer:@Georgy29)
       description: Exports a list of sellers associated with a specific business.
       parameters:
         - name: business_id
