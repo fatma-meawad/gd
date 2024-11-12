@@ -15,11 +15,8 @@ exports.getProducts = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await products.getProducts(...Object.values(options));
+  let result = await products.getProducts();
 
-  // Temporary response
-  result.messages.push("getProducts controller not implemented yet");
-  result.locations.push("products.controller.js");
   res.status(200).send(result);
 });
 
