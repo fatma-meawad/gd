@@ -1,9 +1,11 @@
+-- Drop the database if it already exists, then recreate it
+DROP DATABASE IF EXISTS "accounts";
 
 -- Create the database if it does not exist
-CREATE DATABASE Accounts;
+CREATE DATABASE accounts;
 
 -- Connect to the database
-\c Accounts
+\c accounts
 
 -- Create the BusinessAccount table with the required attributes for the business endpoint
 CREATE TABLE IF NOT EXISTS BusinessAccount (
