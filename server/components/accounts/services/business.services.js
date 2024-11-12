@@ -2,18 +2,22 @@ const business = require("../db/business.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
-module.exports.postBusiness = async () => {
-  // Implement your business logic here...
+module.exports.postBusiness = async (businessData) => {
+  // Validate required fields (validation can also stay in the controller if preferred)
+  const { title, image, phone, address, main_owner_name, main_owner_email, main_owner_phone } = businessData;
+  
+  // Check email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(main_owner_email)) {
+    throw new AppError("Validation error: Invalid email format", 400);
+  }
 
+  // Call database function
   try {
-    let result = await business.postBusinessDb();
-    //delete this when you actually implement something.
-    result.messages.push("postBusiness services not implemented yet");
-    result.locations.push("business.services.js");
-
-    return result;
+    const result = await businessDb.postBusinessDb(businessData);  // Pass businessData to DB layer
+    return result;  // Expected to return { new_id: "some_id" }
   } catch (error) {
-    throw new AppError(error);
+    throw new AppError("Database error", 500);
   }
 };
 

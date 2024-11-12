@@ -1,28 +1,26 @@
 const asyncHandler = require("express-async-handler");
-const business = require("../services/business.services");
+const businessService = require("../services/business.services");
 const AppError = require("../../../utils/error");
 
 exports.postBusiness = asyncHandler(async (req, res) => {
-  const options = {
-    body: req.body,
-  };
+  try {
+    // Call the service layer function to handle the creation logic
+    const result = await businessService.postBusiness(req.body);
 
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
-
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await business.postBusiness(...Object.values(options));
-
-  // Temporary response
-  result.messages.push("postBusiness controller not implemented yet");
-  result.locations.push("business.controller.js");
-  res.status(200).send(result);
+    if (result && result.new_id) {
+      res.status(201).json({ new_id: result.new_id, message: "Business created successfully" });
+    } else {
+      throw new AppError("Business creation failed", 500);
+    }
+  } catch (error) {
+    const status = error.status || 500;
+    const response = {
+      status: status === 400 ? "Bad Request" : "Internal Server Error",
+      errors: [error.message || "An unexpected error occurred"],
+      locations: ["business.controller.js", "business.services.js"],
+    };
+    res.status(status).json(response);
+  }
 });
 
 exports.getBusiness = asyncHandler(async (req, res) => {
