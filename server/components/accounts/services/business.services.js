@@ -1,6 +1,5 @@
-const business = require("../db/business.db");
-const path = require("path");
-const AppError = require(path.join(__dirname, "../../../utils/error"));
+const businessDb = require("../db/business.db");
+const AppError = require("../../../utils/error");
 
 module.exports.postBusiness = async (businessData) => {
   const {
@@ -14,19 +13,42 @@ module.exports.postBusiness = async (businessData) => {
   } = businessData;
 
   if (!title || !image || !phone || !address || !main_owner_name || !main_owner_email || !main_owner_phone) {
-    throw new AppError("Validation error: Missing required fields", 400);
+    throw new AppError({
+      message: "Validation error: Missing required fields",
+      statusCode: 400,
+      errors: ["Missing required fields"],
+      locations: ["business.services.js"],
+    });
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(main_owner_email)) {
-    throw new AppError("Validation error: Invalid email format", 400);
+    throw new AppError({
+      message: "Validation error: Invalid email format",
+      statusCode: 400,
+      errors: ["Invalid email format"],
+      locations: ["business.services.js"],
+    });
   }
 
   try {
     const result = await businessDb.postBusinessDb(businessData);
+    if (!result || !result.new_id) {
+      throw new AppError({
+        message: "Database insertion failed",
+        statusCode: 500,
+        errors: ["Failed to insert new business"],
+        locations: ["business.services.js"],
+      });
+    }
     return result;
   } catch (error) {
-    throw new AppError("Database error", 500);
+    throw new AppError({
+      message: error.message || "Database error",
+      statusCode: 500,
+      errors: ["Database error occurred"],
+      locations: ["business.services.js"],
+    });
   }
 };
 
