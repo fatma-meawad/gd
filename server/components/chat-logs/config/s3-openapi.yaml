@@ -12,7 +12,7 @@ tags:
   - name: adminlogs
     description: "Logs of admins actions"
   - name: messages
-    description: "Logs of messages between admins"
+    description: "Messages between admins"
 paths:
   /messages:
     post:
