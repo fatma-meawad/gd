@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "The Starry Night",
+    "short_description": "The Starry Night is an oil on canvas by the Dutch post-impressionist painter Vincent van Gogh."
+  },
+  {
+    "id": 2,
+    "name": "The Scream",
+    "short_description": "The Scream is the popular name given to a composition created by Norwegian Expressionist artist Edvard Munch in 1893."
+  },
+  {
+    "id": 3,
+    "name": "The Persistence of Memory",
+    "short_description": "The Persistence of Memory is a 1931 painting by artist Salvador Dalí."
+  }
+]
