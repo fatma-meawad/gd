@@ -1,25 +1,43 @@
 const schema = require("../schema.json");
 
 module.exports.getAdminlogsDb = async (options) => {
-  /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
-  1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
-  2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
-  3- you can access the schema.json (imported above) and use objects in it/modify or create them.
-*/
-  return {
-    messages: ["getAdminlogsDb not implemented yet"],
-    locations: ["adminlogs.database.js"],
-  };
+  // Hard-coded logs data
+  const logs = [
+    {
+      id: 1,
+      action_type: "edit",
+      admin_id: 101,
+      message_id: 201,
+      action_time: "2023-11-10T10:30:00Z",
+      details: "Edited message content.",
+    },
+    {
+      id: 2,
+      action_type: "create",
+      admin_id: 102,
+      message_id: 202,
+      action_time: "2023-11-10T11:00:00Z",
+      details: "Created new message.",
+    },
+    {
+      id: 3,
+      action_type: "delete",
+      admin_id: 101,
+      message_id: 203,
+      action_time: "2023-11-11T09:15:00Z",
+      details: "Deleted a message.",
+    },
+  ];
+
+  // In a real implementation, you would perform a database query here using 'options'
+
+  return logs;
 };
 
-module.exports.postAdminlogsDb = async (options) => {
-  /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
-  1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
-  2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
-  3- you can access the schema.json (imported above) and use objects in it/modify or create them.
-*/
+module.exports.postAdminlogsDb = async (logData) => {
+  // Simulate insertion by returning a hard-coded response
   return {
-    messages: ["postAdminlogsDb not implemented yet"],
-    locations: ["adminlogs.database.js"],
+    log_id: 0, // Simulated new log ID
+    success: true,
   };
 };

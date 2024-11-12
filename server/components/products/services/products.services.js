@@ -17,11 +17,15 @@ module.exports.getProducts = async () => {
   }
 };
 
-module.exports.postProducts = async () => {
+module.exports.postProducts = async (name, category_id, short_description) => {
   // Implement your business logic here...
 
   try {
-    let result = await products.postProductsDb();
+    let result = await products.postProductsDb(
+      name,
+      category_id,
+      short_description
+    );
     //delete this when you actually implement something.
     result.messages.push("postProducts services not implemented yet");
     result.locations.push("products.services.js");
