@@ -1,4 +1,4 @@
-function sendMessage(sender_id, recipient_id, thread, content) {
+function sendMessage(sender_id, thread, content, time) {
   // Implement send message logic here
   return { success: true, message: "Message sent successfully" };
 }
@@ -7,10 +7,8 @@ function getMessages(thread) {
   // Implement get messages logic here
   return [
     {
-      id: 1,
-      sender_id: 123,
-      recipient_id: 2,
-      thread: 1,
+      sender_id: "123",
+      thread: "1",
       content: "Hello",
       time: "2024-10-29T10:00:00Z",
     },

@@ -28,25 +28,30 @@ paths:
               type: object
               properties:
                 sender_id:
-                  type: integer
+                  type: string
                 recipient_id:
-                  type: integer
+                  type: string
                 thread:
                   type: string
                 content:
                   type: string
+                time:
+                  type: string
+                  format: date-time
               required:
                 - sender_id
                 - recipient_id
                 - thread
                 - content
+                - time
             examples:
               validMessage:
                 value:
-                  sender_id: 1
-                  recipient_id: 2
+                  sender_id: "1"
+                  recipient_id: "2"
                   thread: "thread name"
                   content: "Hello!"
+                  time: "2024-11-08T19:18:53Z"
       responses:
         "200":
           description: Message sent successfully
@@ -58,11 +63,11 @@ paths:
                   success:
                     type: boolean
                   id:
-                    type: integer
+                    type: string
                   sender_id:
-                    type: integer
+                    type: string
                   recipient_id:
-                    type: integer
+                    type: string
                   thread:
                     type: string
                   content:
@@ -74,9 +79,8 @@ paths:
                 successfulResponse:
                   value:
                     success: true
-                    id: 1
-                    sender_id: 1
-                    recipient_id: 2
+                    sender_id: "1"
+                    recipient_id: "2"
                     thread: "thread name"
                     content: "Hello!"
                     time: "2024-11-08T19:18:53Z"
@@ -123,13 +127,13 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: integer
+                          type: string
                         thread:
                           type: string
-                        sender_id:
-                          type: integer
-                        recipient_id:
-                          type: integer
+                        sender:
+                          type: string
+                        recipient:
+                          type: string
                         content:
                           type: string
                         time:
