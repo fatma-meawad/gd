@@ -6,10 +6,7 @@ module.exports.getAdminlogs = async (options) => {
   // Implement your business logic here...
 
   try {
-    console.log("ciao")
-
     let logs = await adminlogs.getAdminlogsDb(options);
-    console.log(logs)
     return logs;
   } catch (error) {
     throw new AppError(error);

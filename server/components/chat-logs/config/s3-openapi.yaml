@@ -212,7 +212,7 @@ paths:
           in: query
           description: "ID of the admin to filter logs by."
           schema:
-            type: number
+            type: integer
         - name: keyword
           in: query
           description: "Keyword to search for in log details."
@@ -247,7 +247,7 @@ paths:
                   type: object
                   properties:
                     id:
-                      type: number
+                      type: integer
                       description: "Primary key of the log entry."
                     action_type:
                       type: string
@@ -330,7 +330,7 @@ paths:
                 type: object
                 properties:
                   log_id:
-                    type: number
+                    type: integer
                     description: "ID of the created log entry."
                   success:
                     type: boolean
