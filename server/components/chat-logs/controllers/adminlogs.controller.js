@@ -2,52 +2,91 @@ const asyncHandler = require("express-async-handler");
 const adminlogs = require("../services/adminlogs.services");
 const AppError = require("../../../utils/error");
 
+// GET /adminlogs
 exports.getAdminlogs = asyncHandler(async (req, res) => {
   const options = {
-    admin_id: req.query["admin_id"],
-    keyword: req.query["keyword"],
-    date_range: req.query["date_range"],
-    sort_by: req.query["sort_by"],
-    order: req.query["order"],
+    admin_id: req.query.admin_id ? parseInt(req.query.admin_id, 10) : undefined,
+    keyword: req.query.keyword || undefined,
+    date_range: req.query.date_range || undefined,
+    sort_by: req.query.sort_by || undefined,
+    order: req.query.order || undefined,
   };
 
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
+  // Validate admin_id if provided
+  if (options.admin_id !== undefined && isNaN(options.admin_id)) {
+    return res.status(400).json({ error: "Invalid admin_id format" });
+  }
 
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await adminlogs.getAdminlogs(...Object.values(options));
+  // Validate date_range if provided
+  if (
+    options.date_range &&
+    !/^\d{4}-\d{2}-\d{2}:\d{4}-\d{2}-\d{2}$/.test(options.date_range)
+  ) {
+    return res
+      .status(400)
+      .json({ error: "date_range must be in format YYYY-MM-DD:YYYY-MM-DD" });
+  }
 
-  // Temporary response
-  result.messages.push("getAdminlogs controller not implemented yet");
-  result.locations.push("adminlogs.controller.js");
-  res.status(200).send(result);
+  // Validate sort_by if provided
+  const validSortBy = ["date", "keyword", "admin_id"];
+  if (options.sort_by && !validSortBy.includes(options.sort_by)) {
+    return res.status(400).json({ error: "Invalid sort_by value" });
+  }
+
+  // Validate order if provided
+  const validOrder = ["asc", "desc"];
+  if (options.order && !validOrder.includes(options.order)) {
+    return res.status(400).json({ error: "Invalid order value" });
+  }
+
+  // Call the service function
+  const logs = await adminlogs.getAdminlogs(options);
+  // If no logs found, return 404
+  if (!logs || logs.length === 0) {
+    return res
+      .status(404)
+      .json({ error: "No logs found for the specified criteria." });
+  }
+
+  res.status(200).json(logs);
 });
 
+// POST /adminlogs
 exports.postAdminlogs = asyncHandler(async (req, res) => {
-  const options = {
-    body: req.body,
+  const { admin_id, action_type, message_id, action_time, details } = req.body;
+
+  // Validate required fields
+  if (admin_id === undefined || action_type === undefined) {
+    return res
+      .status(400)
+      .json({ error: "Missing required fields: admin_id or action_type" });
+  }
+
+  // Validate data types
+  if (typeof admin_id !== "number") {
+    return res.status(400).json({ error: "admin_id must be a number" });
+  }
+
+  if (typeof action_type !== "string") {
+    return res.status(400).json({ error: "action_type must be a string" });
+  }
+
+  // Validate action_time if provided
+  if (action_time && isNaN(Date.parse(action_time))) {
+    return res.status(400).json({ error: "Invalid action_time format" });
+  }
+
+  // Construct logData object
+  const logData = {
+    admin_id,
+    action_type,
+    message_id,
+    action_time,
+    details,
   };
 
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
+  // Call the service function
+  const result = await adminlogs.postAdminlogs(logData);
 
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await adminlogs.postAdminlogs(...Object.values(options));
-
-  // Temporary response
-  result.messages.push("postAdminlogs controller not implemented yet");
-  result.locations.push("adminlogs.controller.js");
-  res.status(200).send(result);
+  res.status(200).json(result);
 });

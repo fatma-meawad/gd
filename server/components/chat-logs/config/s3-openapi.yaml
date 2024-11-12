@@ -1,15 +1,20 @@
 openapi: 3.0.0
 info:
   title: Messaging API
+  description: "The Messaging and Logs API enables communication and tracks actions.
+                Messaging: Admins can send, edit, and view messages with other admins, organized in threads. Each message action triggers email notifications for efficient updates.
+                Logs: Records all admin actions, allowing search, filtering, and sorting by keywords or admin names for transparency and accountability."
   version: 1.0.0
 servers:
   - url: "/api/s3"
     description: local and codespaces
-
+tags:
+  - name: adminlogs
+    description: "Logs of admins actions"
 paths:
   /messages:
     post:
-      summary: "Send a message (author: @Iryna)"
+      summary: "Send a message tester:@PietroLauria (author: @Iryna)"
       description: As an admin, I want to send messages to other admins in the system so that I can communicate.
       tags:
         - chat-logs
@@ -94,7 +99,7 @@ paths:
         schema:
           type: string
     get:
-      summary: "Get messages by thread name (author: @Iryna)"
+      summary: "Get messages by thread name tester:@PietroLauria (author: @Iryna)"
       description: As an admin, I want to retrieve all messages within a specific thread so that I can view the conversation history with other admins in the system.
       responses:
         "200":
@@ -182,7 +187,7 @@ paths:
 
   /admins/{id}/status:
     post:
-      summary: Update admin availability status (tester:@Iryna)
+      summary: Update admin availability status tester:@PietroLauria (tester:@Iryna)
       parameters:
         - name: id
           in: path
@@ -255,31 +260,41 @@ paths:
 
   /adminlogs:
     get:
-      summary: Retrieve admin logs
+      summary: "Retrieve admin logs Author: @PietroLauria"
+      description: "Fetches admin action logs with optional filters by admin ID, keyword, date range, and sorting options."
+      tags: [adminlogs]
       parameters:
         - name: admin_id
           in: query
+          description: "ID of the admin to filter logs by."
           schema:
-            type: string
+            type: integer
         - name: keyword
           in: query
+          description: "Keyword to search for in log details."
           schema:
             type: string
         - name: date_range
           in: query
           schema:
             type: string
+            pattern: '^\d{4}-\d{2}-\d{2}:\d{4}-\d{2}-\d{2}$'
+          description: "Date range filter in the format YYYY-MM-DD:YYYY-MM-DD."
         - name: sort_by
           in: query
+          description: "Field to sort by."
           schema:
             type: string
+            enum: [date, keyword, admin_id]
         - name: order
           in: query
+          description: "Order of sorting, either ascending or descending."
           schema:
             type: string
+            enum: [asc, desc]
       responses:
         "200":
-          description: Logs retrieved successfully
+          description: "Logs retrieved successfully."
           content:
             application/json:
               schema:
@@ -287,92 +302,135 @@ paths:
                 items:
                   type: object
                   properties:
-                    log_id:
+                    id:
+                      type: integer
+                      description: "Primary key of the log entry."
+                    action_type:
                       type: string
+                      description: "Type of action performed."
+                    admin_id:
+                      type: number
+                      description: "ID of the admin who performed the action."
+                    message_id:
+                      type: number
+                      description: "ID of the associated message, if applicable."
+                    action_time:
+                      type: string
+                      format: date-time
+                      description: "Timestamp of when the action occurred."
                     details:
                       type: string
+                      description: "Additional information about the action."
               examples:
-                array of logs:
+                array_of_logs:
                   value:
-                    - log_id: some text
-                      details: some text
-                    - log_id: some text
-                      details: some text
+                    - id: 1
+                      action_type: "edit"
+                      admin_id: 101
+                      message_id: 201
+                      action_time: "2023-11-10T10:30:00Z"
+                      details: "Edited message content."
+                    - id: 2
+                      action_type: "create"
+                      admin_id: 102
+                      message_id: 202
+                      action_time: "2023-11-10T11:00:00Z"
+                      details: "Created new message."
         "400":
-          description: Invalid query parameters
+          description: "Invalid query parameters."
         "404":
-          description: No logs found
-        "500":
-          description: Server error
+          description: "No logs found for the specified criteria."
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 
     post:
-      summary: Log an admin action
+      summary: "Log an admin action Author: @PietroLauria"
+      description: "Creates a log entry for an action performed by an admin."
+      tags: [adminlogs]
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - admin_id
+                - action_type
               properties:
                 admin_id:
-                  type: string
+                  type: number
+                  description: "ID of the admin performing the action."
                 action_type:
                   type: string
+                  description: "Type of action performed by the admin."
                 message_id:
-                  type: string
+                  type: number
+                  description: "ID of the associated message, if applicable."
                 action_time:
                   type: string
+                  format: date-time
+                  description: "Timestamp of the action."
                 details:
                   type: string
+                  description: "Additional details about the action."
       responses:
         "200":
-          description: Log created successfully
+          description: "Log created successfully."
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   log_id:
-                    type: string
+                    type: integer
+                    description: "ID of the created log entry."
                   success:
                     type: boolean
+                    description: "Indicates if the log creation was successful."
         "400":
-          description: Missing required fields admin_id or action_type
-        "500":
-          description: Unable to log admin action due to server error
-
+          description: "Missing required fields: admin_id or action_type."
+        default:
+          description: "Unexpected error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 components:
   schemas:
-    ErrorObject:
-      type: object
-      properties:
-        status:
-          type: string
-          description: "error"
-        errors:
-          type: array
-          items:
+      ErrorObject:
+        type: object
+        properties:
+          status:
             type: string
-          description: "Error messages"
-          example: ["invalid", "not available"]
-        locations:
-          type: array
-          items:
-            type: string
-          description: "Optional: Additional information about the location of each message"
-          example: ["db.js", "service.js"]
-    SuccessObject:
-      type: object
-      properties:
-        locations:
-          type: array
-          items:
-            type: string
-          description: "Optional tracking locations related to the data"
-          example: ["tracking location optional"]
-        messages:
-          type: array
-          items:
-            type: string
-          description: "Messages that provide additional information about the response"
-          example: ["tracking location optional"]
+            description: "error"
+          errors:
+            type: array
+            items:
+              type: string
+            description: "Error messages"
+            example: ["invalid", "not available"]
+          locations:
+            type: array
+            items:
+              type: string
+            description: "Optional: Additional information about the location of each message"
+            example: ["db.js", "service.js"]
+      SuccessObject:
+        type: object
+        properties:
+          locations:
+            type: array
+            items:
+              type: string
+            description: "Optional tracking locations related to the data"
+            example: ["tracking location optional"]
+          messages:
+            type: array
+            items:
+              type: string
+            description: "Messages that provide additional information about the response"
+            example: ["tracking location optional"]
