@@ -1,18 +1,22 @@
 openapi: 3.0.0
 info:
   title: Messaging API
-  description:
-    "The Messaging and Logs API enables communication and tracks actions.
-    Messaging: Admins can send, edit, and view messages with other admins, organized in threads. Each message action triggers email notifications for efficient updates.
-    Logs: Records all admin actions, allowing search, filtering, and sorting by keywords or admin names for transparency and accountability."
   version: 1.0.0
+  description: >-
+    The Messaging and Logs API enables communication and tracks actions.| Messaging: Admins can send,
+    edit, and view messages with other admins, organized in threads. Each message action triggers email
+    notifications for efficient updates. Logs Records all admin actions, allowing search, filtering, and
+    sorting by keywords or admin names for transparency and accountability.
 servers:
-  - url: "/api/s3"
+  -
+    url: "/api/s3"
     description: local and codespaces
 tags:
-  - name: adminlogs
+  -
+    name: adminlogs
     description: "Logs of admins actions"
-  - name: messages
+  -
+    name: messages
     description: "Messages between admins"
 paths:
   /messages:
@@ -98,7 +102,8 @@ paths:
 
   /messages/{thread}:
     parameters:
-      - name: thread
+      -
+        name: thread
         in: path
         required: true
         schema:
@@ -143,7 +148,8 @@ paths:
                           type: string
                           format: date-time
                 allOf:
-                  - $ref: "#/components/schemas/SuccessObject"
+                  -
+                    $ref: "#/components/schemas/SuccessObject"
         "404":
           description: No message history found
         "500":
@@ -152,7 +158,8 @@ paths:
     delete:
       summary: Delete a message
       parameters:
-        - name: thread_id
+        -
+          name: thread_id
           in: path
           required: true
           schema:
@@ -168,7 +175,8 @@ paths:
     patch:
       summary: Mark message as important (tester:@Iryna)
       parameters:
-        - name: thread_id
+        -
+          name: thread_id
           in: path
           required: true
           schema:
@@ -194,7 +202,8 @@ paths:
     post:
       summary: Update admin availability status tester:@PietroLauria (tester:@Iryna)
       parameters:
-        - name: id
+        -
+          name: id
           in: path
           required: true
           schema:
@@ -220,7 +229,8 @@ paths:
     get:
       summary: Get full message history for an admin (tester:@Iryna)
       parameters:
-        - name: admin_id
+        -
+          name: admin_id
           in: path
           required: true
           schema:
@@ -237,7 +247,8 @@ paths:
     post:
       summary: Reply to a message in a thread
       parameters:
-        - name: thread_id
+        -
+          name: thread_id
           in: path
           required: true
           schema:
@@ -267,36 +278,41 @@ paths:
     get:
       summary: "Retrieve admin logs Author: @PietroLauria"
       description: "Fetches admin action logs with optional filters by admin ID, keyword, date range, and sorting options."
-      tags: [adminlogs]
+      tags: [ adminlogs ]
       parameters:
-        - name: admin_id
+        -
+          name: admin_id
           in: query
           description: "ID of the admin to filter logs by."
           schema:
             type: integer
-        - name: keyword
+        -
+          name: keyword
           in: query
           description: "Keyword to search for in log details."
           schema:
             type: string
-        - name: date_range
+        -
+          name: date_range
           in: query
           schema:
             type: string
             pattern: '^\d{4}-\d{2}-\d{2}:\d{4}-\d{2}-\d{2}$'
           description: "Date range filter in the format YYYY-MM-DD:YYYY-MM-DD."
-        - name: sort_by
+        -
+          name: sort_by
           in: query
           description: "Field to sort by."
           schema:
             type: string
-            enum: [date, keyword, admin_id]
-        - name: order
+            enum: [ date, keyword, admin_id ]
+        -
+          name: order
           in: query
           description: "Order of sorting, either ascending or descending."
           schema:
             type: string
-            enum: [asc, desc]
+            enum: [ asc, desc ]
       responses:
         "200":
           description: "Logs retrieved successfully."
@@ -329,13 +345,15 @@ paths:
               examples:
                 array_of_logs:
                   value:
-                    - id: 1
+                    -
+                      id: 1
                       action_type: "edit"
                       admin_id: 101
                       message_id: 201
                       action_time: "2023-11-10T10:30:00Z"
                       details: "Edited message content."
-                    - id: 2
+                    -
+                      id: 2
                       action_type: "create"
                       admin_id: 102
                       message_id: 202
@@ -355,7 +373,7 @@ paths:
     post:
       summary: "Log an admin action Author: @PietroLauria"
       description: "Creates a log entry for an action performed by an admin."
-      tags: [adminlogs]
+      tags: [ adminlogs ]
       requestBody:
         required: true
         content:
@@ -417,13 +435,13 @@ components:
           items:
             type: string
           description: "Error messages"
-          example: ["invalid", "not available"]
+          example: [ "invalid", "not available" ]
         locations:
           type: array
           items:
             type: string
           description: "Optional: Additional information about the location of each message"
-          example: ["db.js", "service.js"]
+          example: [ "db.js", "service.js" ]
     SuccessObject:
       type: object
       properties:
@@ -432,10 +450,10 @@ components:
           items:
             type: string
           description: "Optional tracking locations related to the data"
-          example: ["tracking location optional"]
+          example: [ "tracking location optional" ]
         messages:
           type: array
           items:
             type: string
           description: "Messages that provide additional information about the response"
-          example: ["tracking location optional"]
+          example: [ "tracking location optional" ]
