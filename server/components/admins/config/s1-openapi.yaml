@@ -16,7 +16,7 @@ paths:
     post:
       tags:
         - admins
-      summary: "Login admin with attempt tracking - author: @alberto"
+      summary: "Login admin with attempt tracking - author: @alberto - tester: @johnhammer"
       description: |
         **Story:** As a registered administrator, I want to log into the system securely, with the system tracking login attempts to prevent unauthorized access.
 
