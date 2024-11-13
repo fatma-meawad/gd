@@ -1,11 +1,11 @@
 const express = require("express");
 const router = new express.Router();
-const controller = require("../controllers/business.controller");
+const controller = require("../controllers/businesses.controller");
 const { handleError } = require("../../../middleware/errorhandler");
 
 router.post("/", controller.postBusiness);
 
-router.get("/", controller.getBusiness);
+router.get("/", controller.getBusinesses);
 
 router.put("/:id", controller.putBusinessById);
 
