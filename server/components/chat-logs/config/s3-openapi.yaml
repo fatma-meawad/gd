@@ -1,9 +1,10 @@
 openapi: 3.0.0
 info:
   title: Messaging API
-  description: "The Messaging and Logs API enables communication and tracks actions.
-                Messaging: Admins can send, edit, and view messages with other admins, organized in threads. Each message action triggers email notifications for efficient updates.
-                Logs: Records all admin actions, allowing search, filtering, and sorting by keywords or admin names for transparency and accountability."
+  description:
+    "The Messaging and Logs API enables communication and tracks actions.
+    Messaging: Admins can send, edit, and view messages with other admins, organized in threads. Each message action triggers email notifications for efficient updates.
+    Logs: Records all admin actions, allowing search, filtering, and sorting by keywords or admin names for transparency and accountability."
   version: 1.0.0
 servers:
   - url: "/api/s3"
@@ -11,10 +12,15 @@ servers:
 tags:
   - name: adminlogs
     description: "Logs of admins actions"
+  - name: messages
+    description: "Messages between admins"
 paths:
-  /messages/send:
+  /messages:
     post:
-      summary: Send a message tester:@PietroLauria
+      summary: "Send a message tester:@PietroLauria (author: @Iryna)"
+      description: As an admin, I want to send messages to other admins in the system so that I can communicate.
+      tags:
+        - chat-logs
       requestBody:
         required: true
         content:
@@ -23,13 +29,27 @@ paths:
               type: object
               properties:
                 sender_id:
-                  type: string
-                thread_id:
+                  type: integer
+                recipient_id:
+                  type: integer
+                thread:
                   type: string
                 content:
                   type: string
-                time:
-                  type: string
+              required:
+                - sender_id
+                - recipient_id
+                - thread
+                - content
+            examples:
+              validMessage:
+                value:
+                  id: 1
+                  sender_id: 1
+                  recipient_id: 2
+                  thread: "thread name"
+                  content: "Hello!"
+                  time: "2024-11-08T19:18:53Z"
       responses:
         "200":
           description: Message sent successfully
@@ -41,23 +61,51 @@ paths:
                   success:
                     type: boolean
                   id:
+                    type: integer
+                  sender_id:
+                    type: integer
+                  recipient_id:
+                    type: integer
+                  thread:
                     type: string
                   content:
                     type: string
+                  time:
+                    type: string
+                    format: date-time
+              examples:
+                successfulResponse:
+                  value:
+                    success: true
+                    id: 1
+                    sender_id: 1
+                    recipient_id: 2
+                    thread: "thread name"
+                    content: "Hello!"
+                    time: "2024-11-08T19:18:53Z"
         "400":
           description: Input can't be empty
-        "500":
-          description: Error sending message, please try again later
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 
-  /messages/{thread_id}:
+  /messages/{thread}:
+    parameters:
+      - name: thread
+        in: path
+        required: true
+        schema:
+          type: string
     get:
-      summary: Get messages by thread ID tester:@PietroLauria
-      parameters:
-        - name: thread_id
-          in: path
-          required: true
-          schema:
-            type: string
+      summary: "Get messages by thread name tester:@PietroLauria (author: @Iryna)"
+      description: As an admin, I want to retrieve all messages within a specific thread so that I can view the conversation history with other admins in the system.
       responses:
         "200":
           description: Success
@@ -71,18 +119,31 @@ paths:
                   messages:
                     type: array
                     items:
+                      type: string
+                  locations:
+                    type: array
+                    items:
+                      type: string
+                  data:
+                    type: array
+                    items:
                       type: object
                       properties:
                         id:
-                          type: string
-                        sender:
-                          type: string
-                        recipient:
+                          type: integer
+                        sender_id:
+                          type: integer
+                        recipient_id:
+                          type: integer
+                        thread:
                           type: string
                         content:
                           type: string
                         time:
                           type: string
+                          format: date-time
+                allOf:
+                  - $ref: "#/components/schemas/SuccessObject"
         "404":
           description: No message history found
         "500":
@@ -105,7 +166,7 @@ paths:
           description: Email failure, try again later
 
     patch:
-      summary: Mark message as important
+      summary: Mark message as important (tester:@Iryna)
       parameters:
         - name: thread_id
           in: path
@@ -131,7 +192,7 @@ paths:
 
   /admins/{id}/status:
     post:
-      summary: Update admin availability status tester:@PietroLauria
+      summary: Update admin availability status tester:@PietroLauria (tester:@Iryna)
       parameters:
         - name: id
           in: path
@@ -157,7 +218,7 @@ paths:
 
   /messages/history/{admin_id}:
     get:
-      summary: Get full message history for an admin
+      summary: Get full message history for an admin (tester:@Iryna)
       parameters:
         - name: admin_id
           in: path
@@ -345,21 +406,36 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
 components:
   schemas:
-      ErrorObject:
-        type: object
-        properties:
-          status:
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
             type: string
-            description: "error"
-          errors:
-            type: array
-            items:
-              type: string
-            description: "Error messages"
-            example: ["invalid", "not available"]
-          locations:
-            type: array
-            items:
-              type: string
-            description: "Optional: Additional information about the location of each message"
-            example: ["db.js", "service.js"]
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
+    SuccessObject:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional tracking locations related to the data"
+          example: ["tracking location optional"]
+        messages:
+          type: array
+          items:
+            type: string
+          description: "Messages that provide additional information about the response"
+          example: ["tracking location optional"]

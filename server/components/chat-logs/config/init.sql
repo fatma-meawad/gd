@@ -5,7 +5,12 @@ CREATE DATABASE CHATLOGS;
 
 
 CREATE TABLE Message (
-   
+    id SERIAL PRIMARY KEY,
+    sender_id INTEGER NOT NULL,
+    recipient_id INTEGER NOT NULL,
+    thread VARCHAR(60) NOT NULL,
+    content TEXT NOT NULL,
+    time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 );
 
 
