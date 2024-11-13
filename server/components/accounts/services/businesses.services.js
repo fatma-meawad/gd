@@ -11,7 +11,7 @@ module.exports.postBusinesses = async (businessesData) => {
     main_owner_name,
     main_owner_email,
     main_owner_phone,
-  } = businessesData;
+  } = businessData;
 
   // Validation logic
   if (

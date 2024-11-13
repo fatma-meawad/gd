@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const businesses = require("../services/businesses.services");
+const businessesService = require("../services/businesses.services");
 const AppError = require("../../../utils/error");
 
 exports.postBusinesses = asyncHandler(async (req, res) => {
@@ -22,8 +22,9 @@ exports.postBusinesses = asyncHandler(async (req, res) => {
   if (!address) errors.push("Address is required");
   if (!web_address) errors.push("Web address is required");
   if (!main_owner_name) errors.push("Main owner name is required");
-  if (!main_owner_email || !main_owner_email.includes("@"))
+  if (!main_owner_email || !main_owner_email.includes("@")) {
     errors.push("Valid main owner email is required");
+  }
   if (!main_owner_phone) errors.push("Main owner phone is required");
 
   // If validation errors are found, return 400 response
@@ -31,17 +32,17 @@ exports.postBusinesses = asyncHandler(async (req, res) => {
     return res.status(400).json({
       status: "error",
       errors,
-      locations: ["businesses.controller.js"],
+      locations: ["businesses.controller.js"],locations: ["businesses.controller.js", "businesses.services.js"],
     });
   }
 
   try {
-    // Call the service layer function (or mock) to handle creation logic
-    const result = await businessesService.postBusiness(req.body);
+    // Call the service layer function to handle creation logic
+    const result = await businessesService.postBusinesses(req.body);
 
     // Check for successful result
     if (result && result.new_id) {
-      res.status(201).json({ new_id: result.new_id }); // 201 on successful creation
+      return res.status(201).json({ new_id: result.new_id }); // 201 on successful creation
     } else {
       // If no result ID is returned, throw a controlled 500 error
       throw new AppError({
@@ -60,6 +61,7 @@ exports.postBusinesses = asyncHandler(async (req, res) => {
     });
   }
 });
+
 
 exports.getBusinesses = asyncHandler(async (req, res) => {
   const { limit = 50, offset = 0 } = req.query;
