@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const businessService = require("../services/business.services");
 const AppError = require("../../../utils/error");
 
-exports.postBusiness = asyncHandler(async (req, res, next) => {
+exports.postBusiness = asyncHandler(async (req, res) => {
   const {
     title,
     image,
@@ -33,13 +33,17 @@ exports.postBusiness = asyncHandler(async (req, res, next) => {
   }
 
   try {
+    // Call the mock service layer function to handle the creation logic
     const result = await businessService.postBusiness(req.body);
     if (result && result.new_id) {
+      // Return a 201 if creation is successful
       res.status(201).json({ new_id: result.new_id });
     } else {
+      // If something went wrong in the service layer, throw an error
       throw new AppError("Business creation failed", 500);
     }
   } catch (error) {
+    // Catch unexpected errors and return a 500 error
     res.status(error.statusCode || 500).json({
       status: "error",
       errors: [error.message || "An unexpected error occurred"],

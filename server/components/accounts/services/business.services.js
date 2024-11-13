@@ -1,4 +1,3 @@
-const businessDb = require("../db/business.db");
 const AppError = require("../../../utils/error");
 
 module.exports.postBusiness = async (businessData) => {
@@ -12,7 +11,16 @@ module.exports.postBusiness = async (businessData) => {
     main_owner_phone,
   } = businessData;
 
-  if (!title || !image || !phone || !address || !main_owner_name || !main_owner_email || !main_owner_phone) {
+  // Validation logic
+  if (
+    !title ||
+    !image ||
+    !phone ||
+    !address ||
+    !main_owner_name ||
+    !main_owner_email ||
+    !main_owner_phone
+  ) {
     throw new AppError({
       message: "Validation error: Missing required fields",
       statusCode: 400,
@@ -21,6 +29,7 @@ module.exports.postBusiness = async (businessData) => {
     });
   }
 
+  // Email format validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(main_owner_email)) {
     throw new AppError({
@@ -32,21 +41,24 @@ module.exports.postBusiness = async (businessData) => {
   }
 
   try {
-    const result = await businessDb.postBusinessDb(businessData);
-    if (!result || !result.new_id) {
-      throw new AppError({
-        message: "Database insertion failed",
-        statusCode: 500,
-        errors: ["Failed to insert new business"],
-        locations: ["business.services.js"],
-      });
-    }
-    return result;
+    // Simulate a mock response for successful insertion
+    const mockResult = { new_id: "mock-business-id-123" };
+    return mockResult;
+
+    // Uncomment below if you want to simulate a service-level error
+    // throw new AppError({
+    //   message: "Mock database error",
+    //   statusCode: 500,
+    //   errors: ["Simulated database error"],
+    //   locations: ["business.services.js"],
+    // });
+
   } catch (error) {
+    // Handle errors by re-throwing with an AppError
     throw new AppError({
-      message: error.message || "Database error",
+      message: error.message || "Unexpected error",
       statusCode: 500,
-      errors: ["Database error occurred"],
+      errors: ["Unexpected service error occurred"],
       locations: ["business.services.js"],
     });
   }
