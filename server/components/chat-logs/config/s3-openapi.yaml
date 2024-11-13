@@ -1,9 +1,10 @@
 openapi: 3.0.0
 info:
   title: Messaging API
-  description: "The Messaging and Logs API enables communication and tracks actions.
-                Messaging: Admins can send, edit, and view messages with other admins, organized in threads. Each message action triggers email notifications for efficient updates.
-                Logs: Records all admin actions, allowing search, filtering, and sorting by keywords or admin names for transparency and accountability."
+  description:
+    "The Messaging and Logs API enables communication and tracks actions.
+    Messaging: Admins can send, edit, and view messages with other admins, organized in threads. Each message action triggers email notifications for efficient updates.
+    Logs: Records all admin actions, allowing search, filtering, and sorting by keywords or admin names for transparency and accountability."
   version: 1.0.0
 servers:
   - url: "/api/s3"
@@ -345,21 +346,21 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
 components:
   schemas:
-      ErrorObject:
-        type: object
-        properties:
-          status:
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
             type: string
-            description: "error"
-          errors:
-            type: array
-            items:
-              type: string
-            description: "Error messages"
-            example: ["invalid", "not available"]
-          locations:
-            type: array
-            items:
-              type: string
-            description: "Optional: Additional information about the location of each message"
-            example: ["db.js", "service.js"]
+          description: "Error messages"
+          example: ["invalid", "not available"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]

@@ -2,9 +2,13 @@ const sellers = require("../db/sellers.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
-module.exports.getSellers = async (businessId, limit, offset, searchSellerName) => {
+module.exports.getSellers = async (
+  businessId,
+  limit,
+  offset,
+  searchSellerName
+) => {
   try {
-    
     let result = await sellers.getSellersDb({
       businessId,
       limit,
@@ -12,7 +16,6 @@ module.exports.getSellers = async (businessId, limit, offset, searchSellerName) 
       searchSellerName,
     });
 
-   
     if (!result.messages) {
       result.messages = [];
     }
@@ -27,35 +30,44 @@ module.exports.getSellers = async (businessId, limit, offset, searchSellerName) 
 
 module.exports.getSellersBySellerIdAccessHistory = async (seller_id) => {
   try {
- 
     let result = await sellers.getSellersBySellerIdAccessHistoryDb(seller_id);
 
-  
     if (!result.messages) {
       result.messages = [];
     }
-    result.messages.push("getSellersBySellerIdAccessHistory services executed successfully");
+    result.messages.push(
+      "getSellersBySellerIdAccessHistory services executed successfully"
+    );
     result.locations = ["sellers.services.js"];
 
     return result;
   } catch (error) {
-    throw new AppError(error.message || "Error in getSellersBySellerIdAccessHistory", 500);
+    throw new AppError(
+      error.message || "Error in getSellersBySellerIdAccessHistory",
+      500
+    );
   }
 };
 
 module.exports.postSellersInactiveNotifications = async (inactivity_period) => {
   try {
-  
-    let result = await sellers.postSellersInactiveNotificationsDb(inactivity_period);
+    let result = await sellers.postSellersInactiveNotificationsDb(
+      inactivity_period
+    );
 
     if (!result.messages) {
       result.messages = [];
     }
-    result.messages.push("postSellersInactiveNotifications services executed successfully");
+    result.messages.push(
+      "postSellersInactiveNotifications services executed successfully"
+    );
     result.locations = ["sellers.services.js"];
 
     return result;
   } catch (error) {
-    throw new AppError(error.message || "Error in postSellersInactiveNotifications", 500);
+    throw new AppError(
+      error.message || "Error in postSellersInactiveNotifications",
+      500
+    );
   }
 };

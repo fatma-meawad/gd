@@ -53,7 +53,9 @@ module.exports.getSellersBySellerIdAccessHistoryDb = async (seller_id) => {
   }
 };
 
-module.exports.postSellersInactiveNotificationsDb = async (inactivity_period) => {
+module.exports.postSellersInactiveNotificationsDb = async (
+  inactivity_period
+) => {
   try {
     const query = `
       SELECT id, name, email 
@@ -63,7 +65,7 @@ module.exports.postSellersInactiveNotificationsDb = async (inactivity_period) =>
     const result = await pool.query(query);
 
     // Supponiamo di inviare notifiche (simulato qui)
-    const notifications = result.rows.map(seller => ({
+    const notifications = result.rows.map((seller) => ({
       seller_id: seller.id,
       message: `Notification sent to ${seller.name} (${seller.email}) for inactivity.`,
     }));

@@ -155,11 +155,11 @@ paths:
                   message:
                     type: string
         default:
-         description: Unexpected error
-         content:
-             application/json:
-                 schema:
-                  $ref: "#/components/schemas/ErrorObject"
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 
   /products/{product_id}/tags:
     post:
@@ -418,11 +418,11 @@ paths:
         "401":
           description: Unauthorized
         default:
-         description: Unexpected error
-         content:
-             application/json:
-                 schema:
-                  $ref: "#/components/schemas/ErrorObject"
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     get:
       tags:
         - products
@@ -450,12 +450,11 @@ paths:
         "404":
           description: Not found
         default:
-         description: Unexpected error
-         content:
-             application/json:
-                 schema:
-                  $ref: "#/components/schemas/ErrorObject"
-
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 
   /tags:
     get:
