@@ -14,6 +14,7 @@ exports.postBusiness = asyncHandler(async (req, res) => {
     main_owner_phone,
   } = req.body;
 
+  // Validation checks for 400 error handling
   const errors = [];
   if (!title) errors.push("Title is required");
   if (!image) errors.push("Image URL is required");
@@ -21,9 +22,11 @@ exports.postBusiness = asyncHandler(async (req, res) => {
   if (!address) errors.push("Address is required");
   if (!web_address) errors.push("Web address is required");
   if (!main_owner_name) errors.push("Main owner name is required");
-  if (!main_owner_email || !main_owner_email.includes("@")) errors.push("Valid main owner email is required");
+  if (!main_owner_email || !main_owner_email.includes("@"))
+    errors.push("Valid main owner email is required");
   if (!main_owner_phone) errors.push("Main owner phone is required");
 
+  // If validation errors are found, return 400 response
   if (errors.length > 0) {
     return res.status(400).json({
       status: "error",
@@ -33,17 +36,23 @@ exports.postBusiness = asyncHandler(async (req, res) => {
   }
 
   try {
-    // Call the mock service layer function to handle the creation logic
+    // Call the service layer function (or mock) to handle creation logic
     const result = await businessService.postBusiness(req.body);
+
+    // Check for successful result
     if (result && result.new_id) {
-      // Return a 201 if creation is successful
-      res.status(201).json({ new_id: result.new_id });
+      res.status(201).json({ new_id: result.new_id }); // 201 on successful creation
     } else {
-      // If something went wrong in the service layer, throw an error
-      throw new AppError("Business creation failed", 500);
+      // If no result ID is returned, throw a controlled 500 error
+      throw new AppError({
+        message: "Business creation failed",
+        statusCode: 500,
+        errors: ["Failed to create new business"],
+        locations: ["business.controller.js", "business.services.js"],
+      });
     }
   } catch (error) {
-    // Catch unexpected errors and return a 500 error
+    // Handling other unexpected errors with 500 response
     res.status(error.statusCode || 500).json({
       status: "error",
       errors: [error.message || "An unexpected error occurred"],

@@ -44,7 +44,6 @@ paths:
                   example: "Austin Powers"
                 main_owner_email:
                   type: string
-                  format: email
                   example: "apowers@mojo.com"
                 main_owner_phone:
                   type: string
