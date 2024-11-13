@@ -39,7 +39,7 @@ module.exports.postBusiness = async (businessData) => {
       locations: ["business.services.js"],
     });
   }
-
+  
   try {
     // Simulate a mock response for successful insertion
     const mockResult = { new_id: "mock-business-id-123" };
