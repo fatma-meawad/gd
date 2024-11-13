@@ -60,11 +60,11 @@ paths:
                   success:
                     type: boolean
                   id:
-                    type: string
+                    type: integer
                   sender_id:
-                    type: string
+                    type: integer
                   recipient_id:
-                    type: string
+                    type: integer
                   thread:
                     type: string
                   content:
