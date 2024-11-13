@@ -9,35 +9,6 @@ servers:
     description: local and codespaces
 
 paths:
-  /sellers/{seller_id}/qrcode:
-    get:
-      summary: Retrieve QR code for a specific seller (author:@claire-graham)
-      description: Returns the QR code URL for a seller, identified by their unique seller ID
-      parameters:
-      - name: seller_id
-        in: path
-        required: true
-        schema:
-          type: string
-        description: The unique ID of the seller.
-      responses:
-       '200':
-        description: QR code retrieved successfully
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                qrCodeUrl:
-                  type: string
-                  description: URL of the seller's QR code.
-                  example: "https://example.com/qrcodes/6123abc4567def89012gh345.png"
-       '400':
-         description: Invalid seller ID
-       '404':
-         description: Seller not found
-       '500':
-        description: Internal Server Error   
   /businesses/:
     post:
       summary: Create a new business (tester:@Jany-M)
@@ -272,7 +243,7 @@ paths:
 
   /business/{business_id}/location_id:
     get:
-      summary: Get business location details (tester:@claire-graham)
+      summary: Get business location details
       parameters:
         - name: business_id
           in: path
@@ -325,10 +296,8 @@ paths:
           description: Internal Server Error
 
   /business/{business_id}/{seller_id}/sellers:
-   post:
-     tags: 
-          [accounts]
-      summary: Create an account for a seller with QR code (tester:@Jany-M) (author:@claire-graham)
+    post:
+      summary: Create an account for a seller with QR code (tester:@Jany-M)
       parameters:
         - name: business_id
           in: path
@@ -340,27 +309,7 @@ paths:
           required: true
           schema:
             type: string
-     requestBody:
-        description: The data needed to create a seller account.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                businessId:
-                  type: string
-                qrCodeUrl:
-                  type: string
-              required:
-                - name
-                - email
-                - businessId
-     responses:
+      responses:
         "201":
           description: Account created with QR code
           content:
@@ -369,44 +318,14 @@ paths:
                 type: object
                 properties:
                   new_seller_id: { type: string }
-                example: "new-seller-12345"
-              qrCodeUrl:
-              type: string
-                example:"https://example.com/qrcodes/seller12345.png"
         "400":
           description: Invalid Data
-          content: 
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Invalid input data. Missing required fields."
         "500":
           description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "An unexpected error occurred while creating the seller account."
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "An unexpected error occurred."
 
   /sellers:
     get:
-      summary: Get list of sellers (author:@Jany-M) (tester:@claire-graham)
+      summary: Get list of sellers (author:@Jany-M)
       description: As an admin, I want to view all existing sellers, so that I can easily see their data and which business they are associated with, and manage them effectively.
       parameters:
         - name: businessId
@@ -451,64 +370,6 @@ paths:
           description: Business ID does not exist
         "500":
           description: Internal Server Error
-    post:
-      tags:
-       [accounts]
-      summary: Register a new seller {author:@claire-graham}
-      description: Creates a new seller in the system and generates a unique QR code for secure access.
-      requestBody:
-        required: true
-        content:
-         application/json:
-          schema:
-            type: object
-            properties:
-              name:
-                type: string
-                example: "John Smith"
-              email:
-                type: string
-                example: "john.smith@opit.com"
-              businessId:
-                type: string
-                example: "john1234"
-              qrcodeURL:
-                type: string
-                example: "https://example.com/qrcodes/seller12345.png"
-            required:
-              - name
-              - email
-              - businessId
-              - qrcodeURL
-      responses:
-        "201":
-          description: Seller registered successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  qrCodeUrl:
-                    type: string
-        "400":
-          description: Invalid request body
-        "409":
-          description: Seller with the provided email or business ID already exists
-        "500":
-          description: Internal server error during registration
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "An unexpected error occurred."
-
 
   /sellers/{seller_id}/access-history:
     get:

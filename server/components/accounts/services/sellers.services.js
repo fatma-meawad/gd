@@ -8,35 +8,55 @@ module.exports.getSellers = async (
   offset,
   searchSellerName
 ) => {
-  // Simulazione dati
-  return {
-    sellers_list: [
-      { id: "1", name: "Seller One", businessId: "123" },
-      { id: "2", name: "Seller Two", businessId: "123" }
-    ],
-    pagination_info: { total: 2, limit: limit, offset: offset },
-    messages: ["getSellers service response"],
-    locations: ["sellers.services.js"]
-  };
+  // Implement your business logic here...
+
+  try {
+    let result = await sellers.getSellersDb(
+      businessId,
+      limit,
+      offset,
+      searchSellerName
+    );
+    //delete this when you actually implement something.
+    result.messages.push("getSellers services not implemented yet");
+    result.locations.push("sellers.services.js");
+
+    return result;
+  } catch (error) {
+    throw new AppError(error);
+  }
 };
 
 module.exports.getSellersBySellerIdAccessHistory = async (seller_id) => {
-  // Simulazione dati di accesso
-  return {
-    accessHistory: [
-      { date: "2023-11-01", action: "login" },
-      { date: "2023-11-05", action: "purchase" }
-    ],
-    messages: ["getSellersBySellerIdAccessHistory response"],
-    locations: ["sellers.services.js"]
-  };
+  // Implement your business logic here...
+
+  try {
+    let result = await sellers.getSellersBySellerIdAccessHistoryDb(seller_id);
+    //delete this when you actually implement something.
+    result.messages.push(
+      "getSellersBySellerIdAccessHistory services not implemented yet"
+    );
+    result.locations.push("sellers.services.js");
+
+    return result;
+  } catch (error) {
+    throw new AppError(error);
+  }
 };
 
 module.exports.postSellersInactiveNotifications = async () => {
-  // Simulazione notifica
-  return {
-    notificationsSent: true,
-    messages: ["postSellersInactiveNotifications service response"],
-    locations: ["sellers.services.js"]
-  };
+  // Implement your business logic here...
+
+  try {
+    let result = await sellers.postSellersInactiveNotificationsDb();
+    //delete this when you actually implement something.
+    result.messages.push(
+      "postSellersInactiveNotifications services not implemented yet"
+    );
+    result.locations.push("sellers.services.js");
+
+    return result;
+  } catch (error) {
+    throw new AppError(error);
+  }
 };
