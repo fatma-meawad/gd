@@ -1,7 +1,7 @@
 const schema = require("../schema.json");
 const AppError = require("../../../utils/error"); // Assuming error handler is used for consistent error responses
 
-module.exports.postBusinessDb = async (businessData) => {
+module.exports.postBusinessesDb = async (businessData) => {
   try {
     // Mock success response with a fixed new_id value
     return { new_id: "12345" }; // Simulate successful database entry

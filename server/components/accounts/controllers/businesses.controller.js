@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const businesses = require("../services/businesses.services");
 const AppError = require("../../../utils/error");
 
-exports.postBusiness = asyncHandler(async (req, res) => {
+exports.postBusinesses = asyncHandler(async (req, res) => {
   const {
     title,
     image,
@@ -31,13 +31,13 @@ exports.postBusiness = asyncHandler(async (req, res) => {
     return res.status(400).json({
       status: "error",
       errors,
-      locations: ["business.controller.js"],
+      locations: ["businesses.controller.js"],
     });
   }
 
   try {
     // Call the service layer function (or mock) to handle creation logic
-    const result = await businessService.postBusiness(req.body);
+    const result = await businessesService.postBusiness(req.body);
 
     // Check for successful result
     if (result && result.new_id) {
@@ -48,7 +48,7 @@ exports.postBusiness = asyncHandler(async (req, res) => {
         message: "Business creation failed",
         statusCode: 500,
         errors: ["Failed to create new business"],
-        locations: ["business.controller.js", "business.services.js"],
+        locations: ["businesses.controller.js", "businesses.services.js"],
       });
     }
   } catch (error) {
@@ -56,25 +56,11 @@ exports.postBusiness = asyncHandler(async (req, res) => {
     res.status(error.statusCode || 500).json({
       status: "error",
       errors: [error.message || "An unexpected error occurred"],
-      locations: ["business.controller.js", "business.services.js"],
+      locations: ["businesses.controller.js", "businesses.services.js"],
     });
   }
 });
 
-
-exports.getBusiness = asyncHandler(async (req, res) => {
-  const options = {};
-
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-*/
-
-/**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-*/
 exports.getBusinesses = asyncHandler(async (req, res) => {
   const { limit = 50, offset = 0 } = req.query;
 

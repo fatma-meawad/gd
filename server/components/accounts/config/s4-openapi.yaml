@@ -82,8 +82,8 @@ paths:
                   value:
                     status: "error"
                     errors: ["Invalid email format for main_owner_email", "Phone number format is invalid"]
-                    locations: ["business.controller.js", "business.services.js"]
-        default:
+                    locations: ["businesses.controller.js", "businesses.services.js"]
+        "500":
           description: Unexpected error
           content:
             application/json:

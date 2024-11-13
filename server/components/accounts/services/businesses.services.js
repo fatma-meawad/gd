@@ -2,7 +2,7 @@ const businesses = require("../db/businesses.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
-module.exports.postBusiness = async (businessData) => {
+module.exports.postBusinesses = async (businessesData) => {
   const {
     title,
     image,
@@ -11,7 +11,7 @@ module.exports.postBusiness = async (businessData) => {
     main_owner_name,
     main_owner_email,
     main_owner_phone,
-  } = businessData;
+  } = businessesData;
 
   // Validation logic
   if (
@@ -27,7 +27,7 @@ module.exports.postBusiness = async (businessData) => {
       message: "Validation error: Missing required fields",
       statusCode: 400,
       errors: ["Missing required fields"],
-      locations: ["business.services.js"],
+      locations: ["businesses.services.js"],
     });
   }
 
@@ -38,7 +38,7 @@ module.exports.postBusiness = async (businessData) => {
       message: "Validation error: Invalid email format",
       statusCode: 400,
       errors: ["Invalid email format"],
-      locations: ["business.services.js"],
+      locations: ["businesses.services.js"],
     });
   }
   
@@ -52,7 +52,7 @@ module.exports.postBusiness = async (businessData) => {
     //   message: "Mock database error",
     //   statusCode: 500,
     //   errors: ["Simulated database error"],
-    //   locations: ["business.services.js"],
+    //   locations: ["businesses.services.js"],
     // });
 
   } catch (error) {
@@ -61,25 +61,10 @@ module.exports.postBusiness = async (businessData) => {
       message: error.message || "Unexpected error",
       statusCode: 500,
       errors: ["Unexpected service error occurred"],
-      locations: ["business.services.js"],
+      locations: ["businesses.services.js"],
     });
   }
 };
-
-/*module.exports.getBusiness = async () => {
-  // Implement your business logic here...
-
-  try {
-    let result = await businesses.getBusinessDb();
-    //delete this when you actually implement something.
-    result.messages.push("getBusiness services not implemented yet");
-    result.locations.push("businesses.services.js");
-
-    return result;
-  } catch (error) {
-    throw new AppError(error);
-  }
-};*/
 
 module.exports.getBusinesses = async ({ limit, offset }) => {
   try {
