@@ -28,27 +28,24 @@ paths:
               type: object
               properties:
                 sender_id:
-                  type: string
+                  type: integer
                 recipient_id:
-                  type: string
+                  type: integer
                 thread:
                   type: string
                 content:
                   type: string
-                time:
-                  type: string
-                  format: date-time
               required:
                 - sender_id
                 - recipient_id
                 - thread
                 - content
-                - time
             examples:
               validMessage:
                 value:
-                  sender_id: "1"
-                  recipient_id: "2"
+                  id: 1
+                  sender_id: 1
+                  recipient_id: 2
                   thread: "thread name"
                   content: "Hello!"
                   time: "2024-11-08T19:18:53Z"
@@ -72,15 +69,13 @@ paths:
                     type: string
                   content:
                     type: string
-                  time:
-                    type: string
-                    format: date-time
               examples:
                 successfulResponse:
                   value:
                     success: true
-                    sender_id: "1"
-                    recipient_id: "2"
+                    id: 1
+                    sender_id: 1
+                    recipient_id: 2
                     thread: "thread name"
                     content: "Hello!"
                     time: "2024-11-08T19:18:53Z"
@@ -127,12 +122,12 @@ paths:
                       type: object
                       properties:
                         id:
-                          type: string
+                          type: integer
+                        sender_id:
+                          type: integer
+                        recipient_id:
+                          type: integer
                         thread:
-                          type: string
-                        sender:
-                          type: string
-                        recipient:
                           type: string
                         content:
                           type: string
