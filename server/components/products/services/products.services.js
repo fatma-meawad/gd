@@ -7,10 +7,7 @@ module.exports.getProducts = async () => {
 
   try {
     let result = await products.getProductsDb();
-    //delete this when you actually implement something.
-    result.messages.push("getProducts services not implemented yet");
-    result.locations.push("products.services.js");
-
+    result.success = true;
     return result;
   } catch (error) {
     throw new AppError(error);
