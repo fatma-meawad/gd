@@ -2,82 +2,70 @@ const asyncHandler = require("express-async-handler");
 const sellers = require("../services/sellers.services");
 const AppError = require("../../../utils/error");
 
-exports.getSellers = asyncHandler(async (req, res) => {
-  const options = {
-    businessId: req.query["businessId"],
-    limit: req.query["limit"],
-    offset: req.query["offset"],
-    searchSellerName: req.query["searchSellerName"],
-  };
+exports.getSellers = asyncHandler(async (req, res, next) => {
+  try {
+    const options = {
+      businessId: req.query["businessId"],
+      limit: parseInt(req.query["limit"], 10) || 50, // Default limit
+      offset: parseInt(req.query["offset"], 10) || 0, // Default offset
+      searchSellerName: req.query["searchSellerName"],
+    };
 
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
+    const result = await sellers.getSellers(options);
 
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await sellers.getSellers(...Object.values(options));
+    if (!result || result.sellers_list.length === 0) {
+      return next(new AppError("No sellers found", 404));
+    }
 
-  // Temporary response
-  result.messages.push("getSellers controller not implemented yet");
-  result.locations.push("sellers.controller.js");
-  res.status(200).send(result);
+    res.status(200).json(result);
+  } catch (error) {
+    next(new AppError("Failed to retrieve sellers", 500));
+  }
 });
 
-exports.getSellersBySellerIdAccessHistory = asyncHandler(async (req, res) => {
-  const options = {
-    seller_id: req.params["seller_id"],
-  };
+exports.getSellersBySellerIdAccessHistory = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const seller_id = req.params["seller_id"];
 
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
+      if (!seller_id) {
+        return next(new AppError("Seller ID is required", 400));
+      }
 
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await sellers.getSellersBySellerIdAccessHistory(
-    ...Object.values(options)
-  );
+      const result = await sellers.getSellersBySellerIdAccessHistory(seller_id);
 
-  // Temporary response
-  result.messages.push(
-    "getSellersBySellerIdAccessHistory controller not implemented yet"
-  );
-  result.locations.push("sellers.controller.js");
-  res.status(200).send(result);
-});
+      if (!result || result.access_history.length === 0) {
+        return next(
+          new AppError("No access history found for this seller", 404)
+        );
+      }
 
-exports.postSellersInactiveNotifications = asyncHandler(async (req, res) => {
-  const options = {
-    body: req.body,
-  };
+      res.status(200).json(result);
+    } catch (error) {
+      next(new AppError("Failed to retrieve access history", 500));
+    }
+  }
+);
 
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
+exports.postSellersInactiveNotifications = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const { inactivity_period } = req.body;
 
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await sellers.postSellersInactiveNotifications(
-    ...Object.values(options)
-  );
+      if (typeof inactivity_period !== "number" || inactivity_period <= 0) {
+        return next(new AppError("Invalid inactivity period", 400));
+      }
 
-  // Temporary response
-  result.messages.push(
-    "postSellersInactiveNotifications controller not implemented yet"
-  );
-  result.locations.push("sellers.controller.js");
-  res.status(200).send(result);
-});
+      const result = await sellers.postSellersInactiveNotifications(
+        inactivity_period
+      );
+
+      res.status(200).json({
+        message: "Notifications sent to inactive sellers",
+        result,
+      });
+    } catch (error) {
+      next(new AppError("Failed to send notifications", 500));
+    }
+  }
+);
