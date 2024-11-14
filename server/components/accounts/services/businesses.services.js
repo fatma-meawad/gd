@@ -2,35 +2,69 @@ const businesses = require("../db/businesses.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
-module.exports.postBusiness = async () => {
-  // Implement your business logic here...
+module.exports.postBusinesses = async (businessesData) => {
+  const {
+    title,
+    image,
+    phone,
+    address,
+    main_owner_name,
+    main_owner_email,
+    main_owner_phone,
+  } = businessesData;
 
+  // Validation logic
+  if (
+    !title ||
+    !image ||
+    !phone ||
+    !address ||
+    !main_owner_name ||
+    !main_owner_email ||
+    !main_owner_phone
+  ) {
+    throw new AppError({
+      message: "Validation error: Missing required fields",
+      statusCode: 400,
+      errors: ["Missing required fields"],
+      locations: ["businesses.services.js"],
+    });
+  }
+
+  // Email format validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(main_owner_email)) {
+    throw new AppError({
+      message: "Validation error: Invalid email format",
+      statusCode: 400,
+      errors: ["Invalid email format"],
+      locations: ["businesses.services.js"],
+    });
+  }
+  
   try {
-    let result = await businesses.postBusinessDb();
-    //delete this when you actually implement something.
-    result.messages.push("postBusiness services not implemented yet");
-    result.locations.push("businesses.services.js");
+    // Simulate a mock response for successful insertion
+    const mockResult = { new_id: "mock-business-id-123" };
+    return mockResult;
 
-    return result;
+    // Uncomment below if you want to simulate a service-level error
+    // throw new AppError({
+    //   message: "Mock database error",
+    //   statusCode: 500,
+    //   errors: ["Simulated database error"],
+    //   locations: ["businesses.services.js"],
+    // });
+
   } catch (error) {
-    throw new AppError(error);
+    // Handle errors by re-throwing with an AppError
+    throw new AppError({
+      message: error.message || "Unexpected error",
+      statusCode: 500,
+      errors: ["Unexpected service error occurred"],
+      locations: ["businesses.services.js"],
+    });
   }
 };
-
-/*module.exports.getBusiness = async () => {
-  // Implement your business logic here...
-
-  try {
-    let result = await businesses.getBusinessDb();
-    //delete this when you actually implement something.
-    result.messages.push("getBusiness services not implemented yet");
-    result.locations.push("businesses.services.js");
-
-    return result;
-  } catch (error) {
-    throw new AppError(error);
-  }
-};*/
 
 module.exports.getBusinesses = async ({ limit, offset }) => {
   try {

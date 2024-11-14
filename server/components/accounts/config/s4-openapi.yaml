@@ -11,7 +11,9 @@ servers:
 paths:
   /businesses/:
     post:
-      summary: Create a new business (tester:@Jany-M)
+      summary: Create a new business (author:@rbekkum) (tester:@Jany-M)
+      description: Allows admins to create a business account with detailed information about the business and the main owner.
+      tags: [accounts]
       requestBody:
         required: true
         content:
@@ -19,15 +21,33 @@ paths:
             schema:
               type: object
               properties:
-                title: { type: string }
-                image: { type: string }
-                phone: { type: string }
-                address: { type: string }
-                web_address: { type: string }
-                description: { type: string }
-                main_owner_name: { type: string }
-                main_owner_email: { type: string, format: email }
-                main_owner_phone: { type: string }
+                title:
+                  type: string
+                  example: "The Western Group"
+                image:
+                  type: string
+                  example: "https://example.com/image.jpg"
+                phone:
+                  type: string
+                  example: "867-5309"
+                address:
+                  type: string
+                  example: "101 Elm Street"
+                web_address:
+                  type: string
+                  example: "http://nightmareonelmstreet.com"
+                description:
+                  type: string
+                  example: "Yeahhh Baby"
+                main_owner_name:
+                  type: string
+                  example: "Austin Powers"
+                main_owner_email:
+                  type: string
+                  example: "apowers@mojo.com"
+                main_owner_phone:
+                  type: string
+                  example: "555-108-5555"
               required:
                 [
                   title,
@@ -40,20 +60,37 @@ paths:
                   main_owner_phone,
                 ]
       responses:
-        "200":
-          description: Success
+        "201":  # Explicitly using 201 for successful creation
+          description: Business created successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  new_id: { type: string }
+                  new_id:
+                    type: string
+                    example: "12345"
         "400":
-          description: Invalid data
+          description: Invalid data provided
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+              examples:
+                example-400:
+                  summary: Invalid input data
+                  value:
+                    status: "error"
+                    errors: ["Invalid email format for main_owner_email", "Phone number format is invalid"]
+                    locations: ["businesses.controller.js", "businesses.services.js"]
         "500":
-          description: Internal Server Error
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     get:
-      summary: Get list of businesses (author:@Jany-M)
+      summary: Get list of businesses (author:@Jany-M) (tester:@rbekkum)
       description: As an admin, I want to view all existing businesses, so that I can easily see their data and manage them effectively.
       tags: [accounts]
       parameters:
@@ -193,7 +230,8 @@ paths:
 
   /business/{id}:
     put:
-      summary: Update a business
+      summary: Update a business (author:@rbekkum)
+      description: Related story S4-3 - Allows admins to deactivate a business account and prevent further activity.
       parameters:
         - name: id
           in: path
@@ -264,7 +302,8 @@ paths:
 
   /business/{business_id}/sellers/:
     post:
-      summary: Add a seller to a business (tester:@Jany-M)
+      summary: Add a seller to a business (author:@rbekkum) (tester:@Jany-M)
+      description: Related story S4-2 - Allows admins to add or remove sellers associated with a specific business account.
       parameters:
         - name: business_id
           in: path
@@ -297,7 +336,7 @@ paths:
 
   /business/{business_id}/{seller_id}/sellers:
     post:
-      summary: Create an account for a seller with QR code (tester:@Jany-M)
+      summary: Create an account for a seller with QR code (tester:@Jany-M) (tester:@rbekkum)
       parameters:
         - name: business_id
           in: path
@@ -407,7 +446,7 @@ paths:
 
   /business/{business_id}/sellers/import:
     post:
-      summary: Import sellers for a business
+      summary: Import sellers for a business (tester:@rbekkum)
       parameters:
         - name: business_id
           in: path
@@ -473,3 +512,4 @@ components:
             type: string
           description: "Optional: Additional information about the location of each message"
           example: ["db.js", "service.js"]
+

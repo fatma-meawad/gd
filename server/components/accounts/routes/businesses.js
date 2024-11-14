@@ -3,11 +3,11 @@ const router = new express.Router();
 const controller = require("../controllers/businesses.controller");
 const { handleError } = require("../../../middleware/errorhandler");
 
-router.post("/", controller.postBusiness);
+router.post("/", controller.postBusinesses);
 
 router.get("/", controller.getBusinesses);
 
-router.put("/:id", controller.putBusinessById);
+router.put("/:id", controller.putBusinessesById);
 
 router.get(
   "/:business_id/location_id",
