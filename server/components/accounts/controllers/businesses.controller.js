@@ -2,6 +2,10 @@ const asyncHandler = require("express-async-handler");
 const businessesService = require("../services/businesses.services");
 const AppError = require("../../../utils/error");
 
+/**
+ * POST /businesses
+ * Handles creation of a new business
+ */
 exports.postBusinesses = asyncHandler(async (req, res) => {
   const {
     title,
@@ -62,7 +66,10 @@ exports.postBusinesses = asyncHandler(async (req, res) => {
   }
 });
 
-
+/**
+ * GET /businesses
+ * Retrieves a list of businesses with pagination support
+ */
 exports.getBusinesses = asyncHandler(async (req, res) => {
   const { limit = 50, offset = 0 } = req.query;
 
@@ -86,7 +93,7 @@ exports.getBusinesses = asyncHandler(async (req, res) => {
   }
 
   try {
-    const result = await businesses.getBusinesses({
+    const result = await businessesService.getBusinesses({
       limit: parsedLimit,
       offset: parsedOffset,
     });
@@ -110,6 +117,10 @@ exports.getBusinesses = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * PUT /businesses/:id
+ * Updates a business by its ID
+ */
 exports.putBusinessesById = asyncHandler(async (req, res) => {
   const options = {
     id: req.params["id"],
@@ -126,7 +137,7 @@ exports.putBusinessesById = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await businesses.putBusinessesById(...Object.values(options));
+  let result = await businessesService.putBusinessesById(...Object.values(options));
 
   // Temporary response
   result.messages.push("putBusinessesById controller not implemented yet");
@@ -134,22 +145,16 @@ exports.putBusinessesById = asyncHandler(async (req, res) => {
   res.status(200).send(result);
 });
 
+/**
+ * GET /businesses/:business_id/location_id
+ * Retrieves business location details by business ID
+ */
 exports.getBusinessByBusinessIdLocationId = asyncHandler(async (req, res) => {
   const options = {
     businesses_id: req.params["businesses_id"],
   };
 
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
-
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await businesses.getBusinessByBusinessIdLocationId(
+  let result = await businessesService.getBusinessByBusinessIdLocationId(
     ...Object.values(options)
   );
 
@@ -161,27 +166,20 @@ exports.getBusinessByBusinessIdLocationId = asyncHandler(async (req, res) => {
   res.status(200).send(result);
 });
 
+/**
+ * POST /businesses/:business_id/sellers
+ * Adds a seller to a business by business ID
+ */
 exports.postBusinessByBusinessIdSellers = asyncHandler(async (req, res) => {
   const options = {
     businesses_id: req.params["businesses_id"],
     body: req.body,
   };
 
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
-
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await businesses.postBusinessByBusinessIdSellers(
+  let result = await businessesService.postBusinessByBusinessIdSellers(
     ...Object.values(options)
   );
 
-  // Temporary response
   result.messages.push(
     "postBusinessByBusinessIdSellers controller not implemented yet"
   );
@@ -189,6 +187,10 @@ exports.postBusinessByBusinessIdSellers = asyncHandler(async (req, res) => {
   res.status(200).send(result);
 });
 
+/**
+ * POST /businesses/:business_id/sellers/:seller_id
+ * Creates an account for a seller with QR code by business and seller IDs
+ */
 exports.postBusinessByBusinessIdBySellerIdSellers = asyncHandler(
   async (req, res) => {
     const options = {
@@ -196,21 +198,10 @@ exports.postBusinessByBusinessIdBySellerIdSellers = asyncHandler(
       seller_id: req.params["seller_id"],
     };
 
-    /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
-
-    /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-    let result = await businesses.postBusinessByBusinessIdBySellerIdSellers(
+    let result = await businessesService.postBusinessByBusinessIdBySellerIdSellers(
       ...Object.values(options)
     );
 
-    // Temporary response
     result.messages.push(
       "postBusinessByBusinessIdBySellerIdSellers controller not implemented yet"
     );
@@ -219,27 +210,20 @@ exports.postBusinessByBusinessIdBySellerIdSellers = asyncHandler(
   }
 );
 
+/**
+ * GET /businesses/:business_id/sellers/export
+ * Exports sellers for a business by business ID
+ */
 exports.getBusinessByBusinessIdSellersExport = asyncHandler(
   async (req, res) => {
     const options = {
       business_id: req.params["business_id"],
     };
 
-    /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
-
-    /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-    let result = await businesses.getBusinessByBusinessIdSellersExport(
+    let result = await businessesService.getBusinessByBusinessIdSellersExport(
       ...Object.values(options)
     );
 
-    // Temporary response
     result.messages.push(
       "getBusinessByBusinessIdSellersExport controller not implemented yet"
     );
@@ -248,6 +232,10 @@ exports.getBusinessByBusinessIdSellersExport = asyncHandler(
   }
 );
 
+/**
+ * POST /businesses/:business_id/sellers/import
+ * Imports sellers for a business by business ID
+ */
 exports.postBusinessByBusinessIdSellersImport = asyncHandler(
   async (req, res) => {
     const options = {
@@ -255,21 +243,10 @@ exports.postBusinessByBusinessIdSellersImport = asyncHandler(
       body: req.body,
     };
 
-    /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
-
-    /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-    let result = await businesses.postBusinessByBusinessIdSellersImport(
+    let result = await businessesService.postBusinessByBusinessIdSellersImport(
       ...Object.values(options)
     );
 
-    // Temporary response
     result.messages.push(
       "postBusinessByBusinessIdSellersImport controller not implemented yet"
     );
