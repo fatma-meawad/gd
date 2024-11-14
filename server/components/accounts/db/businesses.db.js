@@ -1,15 +1,19 @@
 const schema = require("../schema.json");
 const AppError = require("../../../utils/error"); // Assuming error handler is used for consistent error responses
+const mockBusinesses = require("./mock/businesses.json");
 
 module.exports.postBusinessesDb = async (businessData) => {
   try {
-    // Mock success response with a fixed new_id value
-    return { new_id: "12345" }; // Simulate successful database entry
+    // Example condition to demonstrate reachability
+    if (businessData) {
+      return { new_id: "12345" }; // Simulate successful database entry
+    } else {
+      throw new AppError("Invalid business data", 400);
+    }
   } catch (error) {
     throw new AppError("Database insertion error", 500); // Mock error for testing error handling
   }
 };
-
 
 module.exports.getBusinessesDb = async ({ limit, offset }) => {
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();

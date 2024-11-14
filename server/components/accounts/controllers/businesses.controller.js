@@ -32,7 +32,7 @@ exports.postBusinesses = asyncHandler(async (req, res) => {
     return res.status(400).json({
       status: "error",
       errors,
-      locations: ["businesses.controller.js"],locations: ["businesses.controller.js", "businesses.services.js"],
+      locations: ["businesses.controller.js", "businesses.services.js"],
     });
   }
 
@@ -110,7 +110,7 @@ exports.getBusinesses = asyncHandler(async (req, res) => {
   }
 });
 
-exports.putBusinessById = asyncHandler(async (req, res) => {
+exports.putBusinessesById = asyncHandler(async (req, res) => {
   const options = {
     id: req.params["id"],
     body: req.body,
@@ -126,17 +126,17 @@ exports.putBusinessById = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await businesses.putBusinessById(...Object.values(options));
+  let result = await businesses.putBusinessesById(...Object.values(options));
 
   // Temporary response
-  result.messages.push("putBusinessById controller not implemented yet");
+  result.messages.push("putBusinessesById controller not implemented yet");
   result.locations.push("businesses.controller.js");
   res.status(200).send(result);
 });
 
 exports.getBusinessByBusinessIdLocationId = asyncHandler(async (req, res) => {
   const options = {
-    business_id: req.params["business_id"],
+    businesses_id: req.params["businesses_id"],
   };
 
   /**  request:
@@ -163,7 +163,7 @@ exports.getBusinessByBusinessIdLocationId = asyncHandler(async (req, res) => {
 
 exports.postBusinessByBusinessIdSellers = asyncHandler(async (req, res) => {
   const options = {
-    business_id: req.params["business_id"],
+    businesses_id: req.params["businesses_id"],
     body: req.body,
   };
 
