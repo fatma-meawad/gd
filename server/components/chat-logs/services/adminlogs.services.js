@@ -14,10 +14,13 @@ module.exports.getAdminlogs = async (options) => {
 };
 
 module.exports.postAdminlogs = async (logData) => {
+
   try {
+    
     // For now, call the db function and return its result
     const result = await adminlogs.postAdminlogsDb(logData);
     return result;
+  
   } catch (error) {
     throw new AppError(error);
   }

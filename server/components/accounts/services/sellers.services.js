@@ -2,76 +2,61 @@ const sellers = require("../db/sellers.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
-<<<<<<< HEAD
-module.exports.getSellers = async (businessId, limit, offset, searchSellerName) => {
-=======
 module.exports.getSellers = async (
   businessId,
   limit,
   offset,
   searchSellerName
 ) => {
->>>>>>> 52c406ed2d71de0c902189fe242af2905571988d
+  // Implement your business logic here...
+
   try {
-    let result = await sellers.getSellersDb({
+    let result = await sellers.getSellersDb(
       businessId,
       limit,
       offset,
-      searchSellerName,
-    });
-
-    if (!result.messages) {
-      result.messages = [];
-    }
-    result.messages.push("getSellers services executed successfully");
-    result.locations = ["sellers.services.js"];
+      searchSellerName
+    );
+    //delete this when you actually implement something.
+    result.messages.push("getSellers services not implemented yet");
+    result.locations.push("sellers.services.js");
 
     return result;
   } catch (error) {
-    throw new AppError(error.message || "Error in getSellers", 500);
+    throw new AppError(error);
   }
 };
 
 module.exports.getSellersBySellerIdAccessHistory = async (seller_id) => {
+  // Implement your business logic here...
+
   try {
     let result = await sellers.getSellersBySellerIdAccessHistoryDb(seller_id);
-
-    if (!result.messages) {
-      result.messages = [];
-    }
+    //delete this when you actually implement something.
     result.messages.push(
-      "getSellersBySellerIdAccessHistory services executed successfully"
+      "getSellersBySellerIdAccessHistory services not implemented yet"
     );
-    result.locations = ["sellers.services.js"];
+    result.locations.push("sellers.services.js");
 
     return result;
   } catch (error) {
-    throw new AppError(
-      error.message || "Error in getSellersBySellerIdAccessHistory",
-      500
-    );
+    throw new AppError(error);
   }
 };
 
-module.exports.postSellersInactiveNotifications = async (inactivity_period) => {
-  try {
-    let result = await sellers.postSellersInactiveNotificationsDb(
-      inactivity_period
-    );
+module.exports.postSellersInactiveNotifications = async () => {
+  // Implement your business logic here...
 
-    if (!result.messages) {
-      result.messages = [];
-    }
+  try {
+    let result = await sellers.postSellersInactiveNotificationsDb();
+    //delete this when you actually implement something.
     result.messages.push(
-      "postSellersInactiveNotifications services executed successfully"
+      "postSellersInactiveNotifications services not implemented yet"
     );
-    result.locations = ["sellers.services.js"];
+    result.locations.push("sellers.services.js");
 
     return result;
   } catch (error) {
-    throw new AppError(
-      error.message || "Error in postSellersInactiveNotifications",
-      500
-    );
+    throw new AppError(error);
   }
 };
