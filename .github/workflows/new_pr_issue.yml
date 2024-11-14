@@ -15,9 +15,9 @@ jobs:
       with:
         status: ${{ job.status }}
         text: |
-          New ${{ github.event_name == 'issues' && 'Issue' || 'Pull Request' }} opened in ${{ github.repository }}:
+          ${{ github.event_name == 'issues' && 'Issue' || 'Pull Request' }} ${{ github.ref }} in ${{ github.repository }}:
           ${{ github.event.issue.html_url || github.event.pull_request.html_url }}
-        author_name: ${{ github.actor }}
+          author_name: ${{ github.actor }}
         mention: here
         if_mention: failure,cancelled
         job_name: notify_slack
