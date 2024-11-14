@@ -2,7 +2,7 @@ openapi: 3.0.0
 info:
   title: Business and Seller API
   version: 1.0.0
-  description: API for managing businesses and sellers
+  description: "API for managing businesses and sellers"
 
 servers:
   - url: "/api/s4"
@@ -447,10 +447,9 @@ paths:
                 value:
                   error: "An unexpected error occurred on the server."
 
-
   /business/{business_id}/sellers/export:
     get:
-      summary: Export sellers for a business (author:@LorenzoMaiocchi98)
+      summary: Export sellers for a business (author:@LorenzoMaiocchi98, reviewer:@Georgy29)
       description: Exports a list of sellers associated with a specific business.
       parameters:
         - name: business_id
