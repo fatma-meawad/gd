@@ -245,7 +245,7 @@ paths:
 
   /messages/reply/{thread_id}:
     post:
-      summary: Reply to a message in a thread
+      summary: "Reply to a message in a thread (tester: Alona)"
       parameters:
         -
           name: thread_id
