@@ -126,7 +126,7 @@ paths:
           description: Unauthorized
   /categories:
     get:
-      summary: "Retrieves a list of all categories (author: @Wong Chung Man)"
+      summary: "Retrieves a list of all categories (author: @Wong Chung Man, reviewer: @Alona)"
       description: As an admin, I would like to retrieve categories, so that I can understand the general overall activity of each registered business.
       tags:
         - categories
