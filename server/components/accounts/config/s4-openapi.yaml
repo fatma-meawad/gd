@@ -475,7 +475,7 @@ paths:
 
   /sellers/inactive-notifications:
     post:
-      summary: Send notifications to inactive sellers
+      summary: Send notifications to inactive sellers (tester:@Alona)
       requestBody:
         required: true
         content:
