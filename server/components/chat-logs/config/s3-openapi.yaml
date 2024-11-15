@@ -109,7 +109,7 @@ paths:
         schema:
           type: string
     get:
-      summary: "Get messages by thread name tester:@PietroLauria (author: @Iryna)"
+      summary: "Get messages by thread name tester:@PietroLauria (author: @Iryna, tester: @Alona)"
       description: As an admin, I want to retrieve all messages within a specific thread so that I can view the conversation history with other admins in the system.
       responses:
         "200":
