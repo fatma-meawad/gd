@@ -272,7 +272,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
     delete:
-      summary: "Deletes a category by ID (author: @Wong Chung Man)"
+      summary: "Deletes a category by ID (author: @Wong Chung Man, tester: @Alona)"
       description: As an admin, I would like to delete categories, so that I can understand the general overall activity of each registered business.
       tags:
         - categories
