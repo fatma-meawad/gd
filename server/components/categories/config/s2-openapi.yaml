@@ -154,7 +154,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
     post:
-      summary: "Creates a new category (author: @Wong Chung Man)"
+      summary: "Creates a new category (author: @Wong Chung Man, tester: @Alona)"
       description: As an admin, I would like to create categories, so that I can understand the general overall activity of each registered business.
       tags:
         - categories
