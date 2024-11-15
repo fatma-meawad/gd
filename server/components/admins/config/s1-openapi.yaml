@@ -66,7 +66,7 @@ paths:
     put:
       tags:
         - admins
-      summary: "Deactivate an admin - author: @alberto"
+      summary: "Deactivate an admin - author: @alberto, tester: @Alona"
       description: |
         **Story:** As an administrator with appropriate permissions, I want to soft delete an admin account so that it's no longer active but the data is preserved for potential future recovery.
 
