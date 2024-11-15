@@ -190,7 +190,7 @@ paths:
     get:
       tags:
         - admins
-      summary: Validate password reset token (author:@Georgy29) (tester @alberto")
+      summary: Validate password reset token (author:@Georgy29) (tester @alberto") (reviewer:@Alona)
       parameters:
         - in: query
           name: token
@@ -251,7 +251,7 @@ paths:
     put:
       tags:
         - admins
-      summary: Reset the user's password (with a valid token) (author:@Georgy29) (tester @alberto")
+      summary: Reset the user's password (with a valid token) (author:@Georgy29) (tester @alberto") (reviewer:@Alona)
       requestBody:
         required: true
         content:
@@ -316,7 +316,7 @@ paths:
     post:
       tags:
         - admins
-      summary: Request a password reset link to an email (author:@Georgy29)
+      summary: Request a password reset link to an email (author:@Georgy29) (reviewer:@Alona)
       requestBody:
         required: true
         content:
