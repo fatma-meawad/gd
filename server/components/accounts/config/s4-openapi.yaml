@@ -11,7 +11,7 @@ servers:
 paths:
   /businesses/:
     post:
-      summary: Create a new business (author:@rbekkum) (tester:@Jany-M)
+      summary: Create a new business (author:@rbekkum) (tester:@Jany-M) (reviewer:@Alona)
       description: Allows admins to create a business account with detailed information about the business and the main owner.
       tags: [accounts]
       requestBody:
