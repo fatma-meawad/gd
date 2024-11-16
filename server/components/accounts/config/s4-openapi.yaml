@@ -364,7 +364,7 @@ paths:
 
   /sellers:
     get:
-      summary: Get list of sellers (author:@Jany-M)
+      summary: Get list of sellers (author:@Jany-M) (tester:@alberto)
       description: As an admin, I want to view all existing sellers, so that I can easily see their data and which business they are associated with, and manage them effectively.
       parameters:
         - name: businessId
