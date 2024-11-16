@@ -69,9 +69,17 @@ module.exports.getBusinessesDb = async ({ limit, offset }) => {
   }
   */
 
+  const businesses = mockBusinesses.slice(offset, offset + limit);
+  const totalItems = mockBusinesses.length;
+
   // We will use a mock data file for now, to simulate db data: server\components\accounts\db\mock\businesses.json
   return {
-    businesses: mockBusinesses,
+    businesses,
+    pagination_info: {
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      total_items: totalItems
+    }
   };
 };
 
