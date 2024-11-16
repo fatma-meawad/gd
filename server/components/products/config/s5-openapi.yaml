@@ -10,6 +10,7 @@ paths:
     get:
       summary: "Get all products (author: @Marika)"
       description: As an Admin, I would like to view a list of products so that I can see the product catalog in an easy way.
+      tags: [products]
       responses:
         "200":
           description: Success
@@ -26,8 +27,29 @@ paths:
                     type: string
                   short_description:
                     type: string
+              examples:
+                products:
+                  value:
+                    success: true
+                    products:
+                      - id: "1"
+                        name: "Product 1"
+                        short_description: "Short description of product 1"
+                      - id: "2"
+                        name: "Product 2"
+                        short_description: "Short description of product 2"
+                empty:
+                  value:
+                    success: true
+                    products: []
         "401":
           description: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
     post:
       tags:
         - products
@@ -506,22 +528,22 @@ paths:
         "401":
           description: Unauthorized
 components:
-     schemas:
-         ErrorObject:
-             type: object
-             properties:
-                 status:
-                     type: string
-                     description: "error"
-                 errors:
-                     type: array
-                     items:
-                         type: string
-                     description: "Error messages"
-                     example: ["invalid", "not available"]
-                 locations:
-                     type: array
-                     items:
-                         type: string
-                     description: "Optional: Additional information about the location of each message"
-                     example: ["db.js", "service.js"]
+  schemas:
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "error"
+        errors:
+          type: array
+          items:
+            type: string
+          description: "Error messages"
+          example: ["invalid", "not vailable"]
+        locations:
+          type: array
+          items:
+            type: string
+          description: "Optional: Additional information about the location of each message"
+          example: ["db.js", "service.js"]
