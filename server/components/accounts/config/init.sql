@@ -1,4 +1,3 @@
-
 CREATE DATABASE Accounts;
 
 \c Accounts
