@@ -31,8 +31,8 @@ module.exports.getBusinessesDb = async ({ limit, offset }) => {
     pagination_info: {
       limit: parseInt(limit),
       offset: parseInt(offset),
-      total_items: totalItems
-    }
+      total_items: totalItems,
+    },
   };
 };
 
