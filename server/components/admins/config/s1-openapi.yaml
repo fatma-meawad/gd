@@ -316,7 +316,7 @@ paths:
     post:
       tags:
         - admins
-      summary: Request a password reset link to an email (author:@Georgy29)
+      summary: Request a password reset link to an email (author:@Georgy29) (tester:@Jany-M)
       requestBody:
         required: true
         content:

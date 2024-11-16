@@ -276,7 +276,7 @@ paths:
 
   /adminlogs:
     get:
-      summary: "Retrieve admin logs Author: @PietroLauria"
+      summary: "Retrieve admin logs Author: @PietroLauria (tester:@Jany-M)"
       description: "Fetches admin action logs with optional filters by admin ID, keyword, date range, and sorting options."
       tags: [ adminlogs ]
       parameters:
