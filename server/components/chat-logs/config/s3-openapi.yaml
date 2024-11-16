@@ -276,7 +276,7 @@ paths:
 
   /adminlogs:
     get:
-      summary: "Retrieve admin logs Author: @PietroLauria"
+      summary: "Retrieve admin logs Author: @PietroLauria (Reviewer: @alberto)"
       description: "Fetches admin action logs with optional filters by admin ID, keyword, date range, and sorting options."
       tags: [ adminlogs ]
       parameters:
@@ -371,7 +371,7 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
 
     post:
-      summary: "Log an admin action Author: @PietroLauria"
+      summary: "Log an admin action Author: @PietroLauria (Reviewer: @alberto)"
       description: "Creates a log entry for an action performed by an admin."
       tags: [ adminlogs ]
       requestBody:
