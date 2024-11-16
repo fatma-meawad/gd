@@ -21,7 +21,7 @@ tags:
 paths:
   /messages:
     post:
-      summary: "Send a message tester:@PietroLauria (author: @Iryna)"
+      summary: "Send a message tester:@PietroLauria (author: @Iryna) (tester: @alberto)"
       description: As an admin, I want to send messages to other admins in the system so that I can communicate.
       tags:
         - chat-logs
