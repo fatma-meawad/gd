@@ -13,7 +13,7 @@ tags:
 paths:
   /businesses/:
     post:
-      summary: Create a new business (author:@rbekkum) (tester:@Jany-M)
+      summary: Create a new business (author:@rbekkum) (tester:@Jany-M) (reviewer:@Iryna)
       description: Allows admins to create a business account with detailed information about the business and the main owner.
       tags: [accounts]
       requestBody:
@@ -244,7 +244,7 @@ paths:
 
   /business/{id}:
     put:
-      summary: Update a business (author:@rbekkum)
+      summary: Update a business (author:@rbekkum) (tester:@Iryna)
       description: Related story S4-3 - Allows admins to deactivate a business account and prevent further activity.
       parameters:
         - name: id
