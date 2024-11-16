@@ -227,6 +227,12 @@ paths:
                       - "businesses.controller.js"
                       - "businesses.services.js"
                       - "businesses.database.js"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 
   /business/{id}:
     put:
@@ -409,6 +415,12 @@ paths:
           description: Business ID does not exist
         "500":
           description: Internal Server Error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 
   /sellers/{seller_id}/access-history:
     get:
