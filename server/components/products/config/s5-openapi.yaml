@@ -384,7 +384,7 @@ paths:
     post:
       tags:
         - products
-      summary: "Add photos to a product (author: @Alona)"
+      summary: "Add photos to a product (author: @Alona) (tester: @alberto)"
       description: As an admin, I would like to optionally add a gallery of up to 5 photos, which are up to 1 MB each, to a product for quick visual recognition.
       parameters:
         - in: path
