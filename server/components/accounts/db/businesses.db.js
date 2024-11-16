@@ -22,53 +22,6 @@ module.exports.getBusinessesDb = async ({ limit, offset }) => {
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
   */
 
-  /* This throws an error during lint, error  'pool' is not defined, so we'll put it aside for now
-  try {
-    // Build the SQL query with pagination
-    const query = `
-      SELECT 
-        id,
-        title,
-        image,
-        phone,
-        address,
-        web_address,
-        description,
-        main_owner_name,
-        main_owner_email,
-        main_owner_phone,
-        created_at,
-        updated_at,
-        is_active,
-        COALESCE(deactivated_at, 0) as deactivated_at
-      FROM BusinessAccount
-      ORDER BY created_at DESC
-      LIMIT $1 OFFSET $2
-    `;
-
-    // Get total count for pagination
-    const countQuery = 'SELECT COUNT(*) as total FROM BusinessAccount';
-    
-    // Execute both queries
-    const [results, countResult] = await Promise.all([
-      pool.query(query, [limit, offset]),
-      pool.query(countQuery)
-    ]);
-
-    // Format the response according to the schema
-    return {
-      businesses: results.rows,
-      pagination_info: {
-        limit: parseInt(limit),
-        offset: parseInt(offset),
-        total_items: parseInt(countResult.rows[0].total)
-      }
-    };
-  } catch (error) {
-    throw new Error(`Database error in getBusinessesDb: ${error.message}`);
-  }
-  */
-
   const businesses = mockBusinesses.slice(offset, offset + limit);
   const totalItems = mockBusinesses.length;
 
