@@ -8,7 +8,7 @@ servers:
 paths:
   /subcategories:
     get:
-      summary: "Retrieves a list of all subcategories (tester: @Wong Chung Man)"
+      summary: "Retrieves a list of all subcategories (tester: @Wong Chung Man) (tester: @alberto)"
       responses:
         "200":
           description: Success
