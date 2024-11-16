@@ -7,7 +7,9 @@ info:
 servers:
   - url: "/api/s4"
     description: local and codespaces
-
+tags:
+  - name: accounts
+    description: Operations related to business and sellers accounts
 paths:
   /businesses/:
     post:
@@ -60,7 +62,7 @@ paths:
                   main_owner_phone,
                 ]
       responses:
-        "201":  # Explicitly using 201 for successful creation
+        "201": # Explicitly using 201 for successful creation
           description: Business created successfully
           content:
             application/json:
@@ -81,8 +83,13 @@ paths:
                   summary: Invalid input data
                   value:
                     status: "error"
-                    errors: ["Invalid email format for main_owner_email", "Phone number format is invalid"]
-                    locations: ["businesses.controller.js", "businesses.services.js"]
+                    errors:
+                      [
+                        "Invalid email format for main_owner_email",
+                        "Phone number format is invalid",
+                      ]
+                    locations:
+                      ["businesses.controller.js", "businesses.services.js"]
         "500":
           description: Unexpected error
           content:
@@ -92,7 +99,8 @@ paths:
     get:
       summary: Get list of businesses (author:@Jany-M) (tester:@rbekkum) (reviewer:@alberto)
       description: As an admin, I want to view all existing businesses, so that I can easily see their data and manage them effectively.
-      tags: [accounts]
+      tags:
+        - accounts
       parameters:
         - name: limit
           in: query
@@ -227,6 +235,12 @@ paths:
                       - "businesses.controller.js"
                       - "businesses.services.js"
                       - "businesses.database.js"
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 
   /business/{id}:
     put:
@@ -409,6 +423,12 @@ paths:
           description: Business ID does not exist
         "500":
           description: Internal Server Error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
 
   /sellers/{seller_id}/access-history:
     get:
@@ -512,4 +532,3 @@ components:
             type: string
           description: "Optional: Additional information about the location of each message"
           example: ["db.js", "service.js"]
-
