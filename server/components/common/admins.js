@@ -1,24 +1,24 @@
 /**
  * REFACTORING NOTE - November 17, 2024 author: @alberto
- * 
+ *
  * I have commented out the following functions to maintain better separation of concerns
  * between squads:
- * 
+ *
  * 1. checkAdminAuthorization(adminId, action)
  *    - Each squad should handle its own domain-specific authorizations
  *    - Permission checks should be managed within each squad's own database
- * 
+ *
  * 2. getAdminList(page, pageSize)
  *    - Admin list management should be internal to Squad 1
  *    - Other squads should use Squad 1's API endpoints if they need admin information
- * 
+ *
  * 3. notifyAllAdmins(message)
  *    - Notifications should use Squad 3's messaging system
  *    - Admin-specific notifications should be handled within Squad 1
- * 
+ *
  * 4. logAdminAction(adminId, action, details)
  *    - Logging should be handled by Squad 3's logging system
- * 
+ *
  * ONLY REMAINING EXPOSED FUNCTION:
  * - isAdminActive(adminId): Basic admin status check needed across all squads
  */
