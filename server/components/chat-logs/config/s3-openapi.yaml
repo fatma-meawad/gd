@@ -21,7 +21,7 @@ tags:
 paths:
   /messages:
     post:
-      summary: "Send a message tester:@PietroLauria (author: @Iryna) (tester: @alberto)"
+      summary: "Send a message tester:@PietroLauria (author: @Iryna) (reviewer: @Alona) (tester: @alberto)"
       description: As an admin, I want to send messages to other admins in the system so that I can communicate.
       tags:
         - chat-logs
@@ -109,7 +109,7 @@ paths:
         schema:
           type: string
     get:
-      summary: "Get messages by thread name tester:@PietroLauria (author: @Iryna)"
+      summary: "Get messages by thread name tester:@PietroLauria (author: @Iryna, tester: @Alona)"
       description: As an admin, I want to retrieve all messages within a specific thread so that I can view the conversation history with other admins in the system.
       responses:
         "200":
@@ -245,7 +245,7 @@ paths:
 
   /messages/reply/{thread_id}:
     post:
-      summary: Reply to a message in a thread
+      summary: "Reply to a message in a thread (tester: Alona)"
       parameters:
         -
           name: thread_id
