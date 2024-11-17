@@ -71,7 +71,7 @@ exports.postBusinesses = asyncHandler(async (req, res) => {
  * Retrieves a list of businesses with pagination support
  */
 exports.getBusinesses = asyncHandler(async (req, res) => {
-  const { limit = 50, offset = 0 } = req.query;
+  const { limit = 50, offset = 0 } = req.query; // 50 was a value specified in project requirements
 
   const parsedLimit = parseInt(limit);
   const parsedOffset = parseInt(offset);
