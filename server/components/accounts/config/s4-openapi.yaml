@@ -97,7 +97,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorObject"
     get:
-      summary: Get list of businesses (author:@Jany-M) (tester:@rbekkum)
+      summary: Get list of businesses (author:@Jany-M) (tester:@rbekkum) (reviewer:@alberto)
       description: As an admin, I want to view all existing businesses, so that I can easily see their data and manage them effectively.
       tags:
         - accounts
@@ -360,7 +360,7 @@ paths:
 
   /sellers:
     get:
-      summary: Get list of sellers (author:@Jany-M, tester:@Alona)
+      summary: Get list of sellers (author:@Jany-M, tester:@Alona, @alberto)
       description: As an admin, I want to view all existing sellers, so that I can easily see their data and which business they are associated with, and manage them effectively.
       parameters:
         - name: businessId

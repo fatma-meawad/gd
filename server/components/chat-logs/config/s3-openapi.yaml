@@ -21,7 +21,7 @@ tags:
 paths:
   /messages:
     post:
-      summary: "Send a message tester:@PietroLauria (author: @Iryna) (reviewer: @Alona)"
+      summary: "Send a message tester:@PietroLauria (author: @Iryna) (reviewer: @Alona) (tester: @alberto)"
       description: As an admin, I want to send messages to other admins in the system so that I can communicate.
       tags:
         - chat-logs
@@ -276,7 +276,7 @@ paths:
 
   /adminlogs:
     get:
-      summary: "Retrieve admin logs Author: @PietroLauria (tester:@Jany-M)"
+      summary: "Retrieve admin logs Author: @PietroLauria (tester:@Jany-M) (Reviewer: @alberto)"
       description: "Fetches admin action logs with optional filters by admin ID, keyword, date range, and sorting options."
       tags: [ adminlogs ]
       parameters:
@@ -371,7 +371,7 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
 
     post:
-      summary: "Log an admin action Author: @PietroLauria (reviewer:@Jany-M)"
+      summary: "Log an admin action Author: @PietroLauria (reviewer:@Jany-M, @alberto)"
       description: "Creates a log entry for an action performed by an admin."
       tags: [ adminlogs ]
       requestBody:
