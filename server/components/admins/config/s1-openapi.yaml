@@ -16,7 +16,7 @@ paths:
     post:
       tags:
         - admins
-      summary: "Login admin with attempt tracking - author: @alberto, tester: @Alona"
+      summary: "Login admin with attempt tracking - author: @alberto - tester: @johnhammer, @Alona"
       description: |
         **Story:** As a registered administrator, I want to log into the system securely, with the system tracking login attempts to prevent unauthorized access.
 
@@ -190,7 +190,7 @@ paths:
     get:
       tags:
         - admins
-      summary: Validate password reset token (author:@Georgy29) (tester @alberto") (reviewer:@Alona)
+      summary: Validate password reset token (author:@Georgy29) (tester @alberto") (reviewer:@Alona) (reviewer:@Jany-M)
       parameters:
         - in: query
           name: token
@@ -316,7 +316,7 @@ paths:
     post:
       tags:
         - admins
-      summary: Request a password reset link to an email (author:@Georgy29) (reviewer:@Alona)
+      summary: Request a password reset link to an email (author:@Georgy29) (tester:@Jany-M) (reviewer:@Alona)
       requestBody:
         required: true
         content:
