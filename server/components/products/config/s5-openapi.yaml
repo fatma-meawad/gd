@@ -8,7 +8,7 @@ servers:
 paths:
   /products:
     get:
-      summary: "Get all products (author: @Marika)"
+      summary: "Get all products (author: @Marika) (reviewer:@Jany-M)"
       description: As an Admin, I would like to view a list of products so that I can see the product catalog in an easy way.
       tags: [products]
       responses:
@@ -53,7 +53,7 @@ paths:
     post:
       tags:
         - products
-      summary: "Create a new product (author: @Alona)"
+      summary: "Create a new product (author: @Alona) (tester:@Jany-M)"
       description: As an admin, I would like to add a new product, so that I could manage a product catalogue.
       requestBody:
         required: true
