@@ -371,7 +371,7 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
 
     post:
-      summary: "Log an admin action Author: @PietroLauria"
+      summary: "Log an admin action Author: @PietroLauria (reviewer:@Jany-M)"
       description: "Creates a log entry for an action performed by an admin."
       tags: [ adminlogs ]
       requestBody:
