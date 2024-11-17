@@ -34,7 +34,7 @@ function getAdminLogs(admin_id, keyword, date_range) {
     {
       admin_id,
       action_type: "delete",
-      message_id: "789",
+      message_id: 789,
       action_time: "2024-10-29T12:00:00Z",
       details: "Deleted message",
     },

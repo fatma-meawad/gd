@@ -190,7 +190,7 @@ paths:
     get:
       tags:
         - admins
-      summary: Validate password reset token (author:@Georgy29) (tester @alberto") (reviewer:@Alona) (reviewer:@Jany-M)
+      summary: Validate password reset token (author:@Georgy29) (tester @alberto") (reviewer:@Alona) (reviewer:@Jany-M, @PietroLauria)
       parameters:
         - in: query
           name: token
@@ -488,7 +488,7 @@ paths:
     post:
       tags:
         - admins
-      summary: "Register a new admin - author: @alberto, tester:@Georgy29 reviewer:@Iryna"
+      summary: "Register a new admin - author: @alberto, (tester:@Georgy29, @PietroLauria) reviewer:@Iryna"
       description: |
         **Story:** As an administrator, I want to register using a verified code provided by the Galleria owners so that I can manage the gallery.
 
