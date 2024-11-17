@@ -137,7 +137,9 @@ exports.putBusinessesById = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await businessesService.putBusinessesById(...Object.values(options));
+  let result = await businessesService.putBusinessesById(
+    ...Object.values(options)
+  );
 
   // Temporary response
   result.messages.push("putBusinessesById controller not implemented yet");
@@ -198,9 +200,10 @@ exports.postBusinessByBusinessIdBySellerIdSellers = asyncHandler(
       seller_id: req.params["seller_id"],
     };
 
-    let result = await businessesService.postBusinessByBusinessIdBySellerIdSellers(
-      ...Object.values(options)
-    );
+    let result =
+      await businessesService.postBusinessByBusinessIdBySellerIdSellers(
+        ...Object.values(options)
+      );
 
     result.messages.push(
       "postBusinessByBusinessIdBySellerIdSellers controller not implemented yet"

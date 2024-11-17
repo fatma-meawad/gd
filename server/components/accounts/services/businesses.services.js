@@ -41,7 +41,7 @@ module.exports.postBusinesses = async (businessesData) => {
       locations: ["businesses.services.js"],
     });
   }
-  
+
   try {
     // Simulate a mock response for successful insertion
     const mockResult = { new_id: "mock-business-id-123" };
@@ -54,7 +54,6 @@ module.exports.postBusinesses = async (businessesData) => {
     //   errors: ["Simulated database error"],
     //   locations: ["businesses.services.js"],
     // });
-
   } catch (error) {
     // Handle errors by re-throwing with an AppError
     throw new AppError({
