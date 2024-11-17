@@ -16,7 +16,7 @@ paths:
     post:
       tags:
         - admins
-      summary: "Login admin with attempt tracking - author: @alberto"
+      summary: "Login admin with attempt tracking - author: @alberto, tester: @Alona"
       description: |
         **Story:** As a registered administrator, I want to log into the system securely, with the system tracking login attempts to prevent unauthorized access.
 
@@ -66,7 +66,7 @@ paths:
     put:
       tags:
         - admins
-      summary: "Deactivate an admin - author: @alberto"
+      summary: "Deactivate an admin - author: @alberto, tester: @Alona"
       description: |
         **Story:** As an administrator with appropriate permissions, I want to soft delete an admin account so that it's no longer active but the data is preserved for potential future recovery.
 
@@ -190,7 +190,7 @@ paths:
     get:
       tags:
         - admins
-      summary: Validate password reset token (author:@Georgy29) (tester @alberto")
+      summary: Validate password reset token (author:@Georgy29) (tester @alberto") (reviewer:@Alona)
       parameters:
         - in: query
           name: token
@@ -251,7 +251,7 @@ paths:
     put:
       tags:
         - admins
-      summary: Reset the user's password (with a valid token) (author:@Georgy29) (tester @alberto")
+      summary: Reset the user's password (with a valid token) (author:@Georgy29) (tester @alberto") (reviewer:@Alona)
       requestBody:
         required: true
         content:
@@ -316,7 +316,7 @@ paths:
     post:
       tags:
         - admins
-      summary: Request a password reset link to an email (author:@Georgy29) (tester:@Jany-M)
+      summary: Request a password reset link to an email (author:@Georgy29) (tester:@Jany-M) (reviewer:@Alona)
       requestBody:
         required: true
         content:
