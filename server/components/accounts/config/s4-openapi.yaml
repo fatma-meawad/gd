@@ -13,7 +13,7 @@ tags:
 paths:
   /businesses/:
     post:
-      summary: Create a new business (author:@rbekkum) (tester:@Jany-M)
+      summary: Create a new business (author:@rbekkum) (tester:@Jany-M) (reviewer:@Alona)
       description: Allows admins to create a business account with detailed information about the business and the main owner.
       tags: [accounts]
       requestBody:
@@ -378,7 +378,7 @@ paths:
 
   /sellers:
     get:
-      summary: Get list of sellers (author:@Jany-M)
+      summary: Get list of sellers (author:@Jany-M, tester:@Alona)
       description: As an admin, I want to view all existing sellers, so that I can easily see their data and which business they are associated with, and manage them effectively.
       parameters:
         - name: businessId
@@ -495,7 +495,7 @@ paths:
 
   /sellers/inactive-notifications:
     post:
-      summary: Send notifications to inactive sellers
+      summary: Send notifications to inactive sellers (tester:@Alona)
       requestBody:
         required: true
         content:
