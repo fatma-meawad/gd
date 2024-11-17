@@ -217,24 +217,6 @@ paths:
                   summary: No businesses found
                   value:
                     error: "No businesses found"
-        "500":
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorObject"
-              examples:
-                example-500:
-                  summary: Internal server error
-                  value:
-                    messages:
-                      - "getBusinesses controller not implemented yet"
-                      - "getBusinesses services not implemented yet"
-                      - "getBusinesses database not implemented yet"
-                    locations:
-                      - "businesses.controller.js"
-                      - "businesses.services.js"
-                      - "businesses.database.js"
         default:
           description: Unexpected error
           content:
@@ -421,8 +403,6 @@ paths:
           description: Permission denied
         "404":
           description: Business ID does not exist
-        "500":
-          description: Internal Server Error
         default:
           description: Unexpected error
           content:
