@@ -110,7 +110,7 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
   /admins/{id}/profile:
     put:
-      summary: Update admin profile (tester:@Georgy29)
+      summary: Update admin profile (tester:@Georgy29) (tester:@Iryna)
       requestBody:
         required: true
         content:
@@ -488,7 +488,7 @@ paths:
     post:
       tags:
         - admins
-      summary: "Register a new admin - author: @alberto, tester:@Georgy29"
+      summary: "Register a new admin - author: @alberto, tester:@Georgy29 reviewer:@Iryna"
       description: |
         **Story:** As an administrator, I want to register using a verified code provided by the Galleria owners so that I can manage the gallery.
 
