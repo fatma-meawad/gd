@@ -1,18 +1,25 @@
-CREATE DATABASE Products;
+CREATE USER products_user WITH PASSWORD 'products_password';
 
-\c Products
+DROP DATABASE IF EXISTS products;
+
+CREATE DATABASE products;
+
+ALTER DATABASE products OWNER TO products_user;
+
+\c products products_user;
+
 -- Don't add tables here. 
 
 -- Add the attributes you need to implement your feature?
-
-CREATE TABLE Product (
-    id SERIAL PRIMARY KEY
-    product_name VARCHAR(100) NOT NULL CHECK (char_length(product_name) >=3),
+CREATE TABLE product (
+    id SERIAL PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL CONSTRAINT namechk CHECK (char_length(product_name) >= 3),
     category_id INTEGER NOT NULL,
-    short_description VARCHAR(1000) NOT NULL CHECK (char_length(short_description) >=20),
-    detailed_description VARCHAR (10000),
+    short_description VARCHAR(1000) NOT NULL CONSTRAINT descripchk CHECK (char_length(short_description) >= 20),
+    detailed_description VARCHAR(10000),
     product_url VARCHAR(1000)
 );
+
 
 CREATE TABLE ProductPhotos (
     id SERIAL PRIMARY KEY,

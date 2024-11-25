@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const businessesService = require("../services/businesses.services");
 const AppError = require("../../../utils/error");
-
+const test = require("../../categories/controllers/categories.controller");
 /**
  * POST /businesses
  * Handles creation of a new business
@@ -17,7 +17,7 @@ exports.postBusinesses = asyncHandler(async (req, res) => {
     main_owner_email,
     main_owner_phone,
   } = req.body;
-
+  test.deleteCategoriesById();
   // Validation checks for 400 error handling
   const errors = [];
   if (!title) errors.push("Title is required");
@@ -70,6 +70,7 @@ exports.postBusinesses = asyncHandler(async (req, res) => {
  * GET /businesses
  * Retrieves a list of businesses with pagination support
  */
+
 exports.getBusinesses = asyncHandler(async (req, res) => {
   const { limit = 50, offset = 0 } = req.query; // 50 was a value specified in project requirements
 

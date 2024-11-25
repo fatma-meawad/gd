@@ -1,0 +1,8 @@
+services:
+  app:
+    image: profmeawad/valiant:linux
+    ports:
+      - "9000:4999"
+    volumes:
+      - ./specs.yaml:/usr/src/app/specs.yaml
+  

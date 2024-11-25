@@ -1,8 +1,12 @@
+CREATE USER chatlogs_user WITH PASSWORD 'chatlogs_password';
 
-CREATE DATABASE CHATLOGS;
+DROP DATABASE IF EXISTS chatlogs;
 
-\c CHATLOGS
+CREATE DATABASE chatlogs;
 
+ALTER DATABASE chatlogs OWNER TO chatlogs_user;
+
+\c chatlogs chatlogs_user;
 
 CREATE TABLE Message (
     id SERIAL PRIMARY KEY,
@@ -10,7 +14,7 @@ CREATE TABLE Message (
     recipient_id INTEGER NOT NULL,
     thread VARCHAR(60) NOT NULL,
     content TEXT NOT NULL,
-    time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 

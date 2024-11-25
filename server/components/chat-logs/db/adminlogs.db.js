@@ -1,5 +1,3 @@
-const schema = require("../schema.json");
-
 module.exports.getAdminlogsDb = async (options) => {
   // Hard-coded logs data
   const logs = [
@@ -35,7 +33,6 @@ module.exports.getAdminlogsDb = async (options) => {
 };
 
 module.exports.postAdminlogsDb = async (logData) => {
-
   // Simulate insertion by returning a hard-coded response
   return {
     log_id: 0, // Simulated new log ID

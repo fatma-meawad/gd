@@ -1,6 +1,13 @@
-CREATE DATABASE AdminAccounts;
+CREATE USER admin_user WITH PASSWORD 'admin_password';
 
-\c AdminAccounts
+DROP DATABASE IF EXISTS admins;
+
+CREATE DATABASE admins;
+
+ALTER DATABASE admins OWNER TO admin_user;
+
+\c admins admin_user;
+
 -- Don't add tables here. 
 
 -- Add the attributes you need to implement your feature?

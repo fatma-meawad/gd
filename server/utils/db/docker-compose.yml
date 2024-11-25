@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../../components/accounts/config/init.sql:/docker-entrypoint-initdb.d/init-accounts.sql
+      - ../../components/accounts/config/init-test.sql:/docker-entrypoint-initdb.d/init-accounts-test.sql
+      - ../../components/admins/config/init.sql:/docker-entrypoint-initdb.d/init-admins.sql
+      - ../../components/admins/config/init-test.sql:/docker-entrypoint-initdb.d/init-admins-test.sql
+      - ../../components/chat-logs/config/init.sql:/docker-entrypoint-initdb.d/init-chat-logs.sql
+      - ../../components/chat-logs/config/init-test.sql:/docker-entrypoint-initdb.d/init-chat-logs-test.sql
+      - ../../components/products/config/init.sql:/docker-entrypoint-initdb.d/init-products.sql
+      - ../../components/products/config/init-test.sql:/docker-entrypoint-initdb.d/init-products-test.sql
+      - ../../components/categories/config/init-test.sql:/docker-entrypoint-initdb.d/init-categories-test.sql
+      - ../../components/categories/config/init.sql:/docker-entrypoint-initdb.d/init-categories.sql

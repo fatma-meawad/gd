@@ -1,5 +1,3 @@
-const schema = require("../schema.json");
-
 module.exports.postAdminsLoginDb = async (options) => {
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
   1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
@@ -69,7 +67,7 @@ module.exports.getAdminsPasswordResetDb = async (token) => {
   return {
     messages: ["getAdminsPasswordResetDb not implemented yet"],
     locations: ["admins.database.js"],
-    data: {} // admin_id, reset_token, ip_adress
+    data: {}, // admin_id, reset_token, ip_adress
   };
 };
 
@@ -94,7 +92,7 @@ module.exports.postAdminsPasswordResetDb = async (options) => {
   return {
     messages: ["postAdminsPasswordResetDb not implemented yet"],
     locations: ["admins.database.js"],
-    data: {} //email, ip_adress (optional)
+    data: {}, //email, ip_adress (optional)
   };
 };
 

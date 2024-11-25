@@ -1,6 +1,19 @@
+const { StatusCodes } = require("http-status-codes");
+
+function isOpenApi(err) {
+  if (
+    !err.errors ||
+    !err.errors[0].errorCode ||
+    !err.errors[0].errorCode.includes("openapi.")
+  )
+    return false;
+  return true;
+}
+
 const handleError = (err, req, res, next) => {
-  const status = err.statusCode || err.status || 500;
-  const isOpenApiValidationError = Array.isArray(err.errors); //errorCode :openapi.validation
+  const status =
+    err.statusCode || err.status || StatusCodes.INTERNAL_SERVER_ERROR;
+  const isOpenApiValidationError = isOpenApi(err);
 
   const sendObject = { ...Object(err) };
 

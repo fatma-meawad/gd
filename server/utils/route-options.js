@@ -1,28 +1,11 @@
+const YAML = require("yamljs");
+const path = require("path");
+require("dotenv-flow").config();
+
 var options = {
   explorer: true,
   swaggerOptions: {
-    urls: [
-      {
-        url: "/api/s4/docs.yaml",
-        name: "Accounts",
-      },
-      {
-        url: "/api/s1/docs.yaml",
-        name: "Admins",
-      },
-      {
-        url: "/api/s3/docs.yaml",
-        name: "Chat-logs",
-      },
-      {
-        url: "/api/s2/docs.yaml",
-        name: "Categories",
-      },
-      {
-        url: "/api/s5/docs.yaml",
-        name: "Products",
-      },
-    ],
+    url: process.env.OPENAPI_URL,
   },
 };
 

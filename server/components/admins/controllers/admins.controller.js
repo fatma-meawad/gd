@@ -199,7 +199,7 @@ exports.postAdminsRegister = asyncHandler(async (req, res) => {
   const registrationData = {
     body: req.body,
   };
-
+  console.log("register");
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
       2- the openapi validator should match the types with the contract, so make sure they match

@@ -1,0 +1,1550 @@
+openapi: 3.0.0
+info:
+  title: Galleria Dashboard
+  version: 1.0.0
+  description: Galleria Dashboard API
+  contact:
+    name: fatma-meawad
+servers:
+  - url: '/api'
+    description: local and codespaces
+  - url: 'http://127.0.0.1:4010'
+    description: docker prism 
+  - url: 'http://localhost:5000/prism'
+    description: local 
+ 
+tags:
+  - name: admins
+    description: admin management s1
+  - name: adminlogs
+    description: Logs of admins actions
+  - name: chat-logs
+    description: Messages between admins
+  - name: accounts
+    description: Operations related to business and sellers accounts
+  - name: products
+    description: Product management
+  - name: messages
+    description: Messages between admins
+  - name: categories
+    description: Managing Categories
+
+paths:
+
+  /s1/admins/login:
+    post:
+      tags:
+        - admins
+      summary: >-
+        Login admin with attempt tracking - author: @alberto - tester:
+        @johnhammer, @Alona
+      description: >
+        **Story:** As a registered administrator, I want to log into the system
+        securely, with the system tracking login attempts to prevent
+        unauthorized access.
+
+
+        **Happy Paths:**
+
+        - Given valid credentials, when the admin logs in, they are granted
+        access to the system, and the login attempt is recorded.
+
+
+        **Alternative Paths:**
+
+        - If the admin enters incorrect credentials, the system records the
+        attempt and displays an error message: "Invalid credentials. Please try
+        again."
+
+        - If the admin fails to log in 3 times consecutively, the system blocks
+        the account temporarily and they receive a message: "Your account has
+        been blocked due to multiple failed login attempts. Please reset your
+        password."
+
+        - If the login attempt is successful after one or two attempts, the
+        system resets the attempt counter back to zero.
+      parameters:
+        - name: Prefer
+          in: header
+          required: false
+          schema:
+            type: string
+          examples:
+            SuccessResponse:
+              summary: Success Response
+              value: "code=200, dynamic=true"
+            FailureResponse:
+              summary: Failure Response
+              value: "code=400, dynamic=true"
+            DefaultErrorResponse:
+              summary: Unexpected Response
+              value: "code=500, dynamic=true"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  $ref: '#/components/schemas/AdminData/properties/email'
+                password:
+                  $ref: '#/components/schemas/AdminData/properties/password'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                required:
+                  - admin_id
+                type: object
+                properties:
+                  admin_id:
+                    type: string
+        '400':
+          description: Invalid credentials. Please try again.
+        '423':
+          description: >-
+            Your account has been blocked due to multiple failed login attempts.
+            Please reset your password
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+
+
+  /s1/admins/{id}:
+    put:
+      summary: "Update admin profile author:@Maja tester:@Georgy29"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - full_name
+                - bio
+              properties:
+                full_name:
+                  type: string
+                  example: "Maja Rak"
+                bio:
+                  type: string
+                  example: "Admin with 5 years of experience."
+                profile_photo:
+                  type: string
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessObject"
+        "400":
+          description: Invalid input data
+        "401":
+          description: Unauthorized action
+  /s1/admins/password-reset:
+    get:
+      tags:
+        - admins
+      summary: >-
+        Validate password reset token (author:@Georgy29) (tester @alberto")
+        (reviewer:@Alona) (reviewer:@Jany-M, @PietroLauria)
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: Token to be validated
+      responses:
+        '200':
+          description: Valid token
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessObject'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          userId:
+                            type: string
+                          additionalInfo:
+                            type: string
+              examples:
+                successExample:
+                  summary: Valid token example
+                  value:
+                    status: success
+                    messages:
+                      - Token is valid. Proceed with password reset.
+                    data:
+                      userId: '12345'
+                      additionalInfo: Sample additional data (expiry_date)
+        '400':
+          description: Invalid or expired token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - The provided token is invalid or expired.
+                    - Please request a new password reset.
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
+                    - admins.database.js
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+    put:
+      tags:
+        - admins
+      summary: >-
+        Reset the user's password (with a valid token) (author:@Georgy29)
+        (tester @alberto") (reviewer:@Alona)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_password:
+                  type: string
+                  description: The new password to be set for the user
+                  minLength: 8
+                  maxLength: 64
+      responses:
+        '200':
+          description: Password reset successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessObject'
+              examples:
+                successExample:
+                  summary: Success message for successful password reset
+                  value:
+                    status: success
+                    messages:
+                      - Password reset successfully.
+                      - You can now log in with your new password.
+        '400':
+          description: >-
+            Invalid or expired token, or password does not meet complexity
+            requirements.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              examples:
+                invalidTokenExample:
+                  summary: Invalid token example
+                  value:
+                    status: error
+                    errors:
+                      - The token provided is invalid or expired.
+                      - Please check the token and try again.
+                    locations:
+                      - admins.controller.js
+                      - admins.service.js
+                complexityErrorExample:
+                  summary: Password complexity error example
+                  value:
+                    status: error
+                    errors:
+                      - Password does not meet complexity requirements.
+                      - >-
+                        Ensure the password is at least 8 characters long and
+                        contains a mix of letters, numbers, and symbols.
+                    locations:
+                      - admins.controller.js
+                      - admins.service.js
+                      - admins.database.js
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+  /s1/admins:
+    get:
+      tags:
+        - admins
+      summary: "View All Admins author: @Maja"
+      description: |
+        **Story:** As an administrator, I want to be able to view all admin accounts in the system.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: The page of results to retrieve.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+          description: The number of results per page.
+      responses:
+        "200":
+          description: Successfully retrieved list of admins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AdminData"
+        "401":
+          description: Unauthorized. You must be an admin to view this data.
+        "403":
+          description: Forbidden. You do not have permission to view all admins.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorObject"
+  /s1/admins/register:
+    post:
+      tags:
+        - admins
+      summary: >-
+        Register a new admin - author: @alberto, (tester:@Georgy29,
+        @PietroLauria) reviewer:@Iryna
+      description: >
+        **Story:** As an administrator, I want to register using a verified code
+        provided by the Galleria owners so that I can manage the gallery.
+
+
+        **Happy Paths:**
+
+        - Given a valid code, the system allows the admin to enter their full
+        name, email, phone, password, and optional photo and bio.
+
+        - The system enforces strong password requirements (e.g., minimum
+        length, complexity).
+
+        - The registration date is automatically recorded, and all other
+        administrators are notified of the new registration.
+
+
+        **Alternative Paths:**
+
+        - If an invalid or expired code is entered, the system displays an error
+        message: "Invalid or expired registration code."
+
+        - If the registration code has already been used, the system informs the
+        admin that the code is no longer valid.
+
+        - If there's an issue while creating the account (e.g., server error),
+        the system shows an error message: "Unable to register. Please try again
+        later."
+
+        - If the password doesn't meet the complexity requirements, the system
+        provides specific feedback on what needs to be improved.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminData'
+            examples:
+              validRegistration:
+                summary: Valid registration request
+                value:
+                  full_name: John Smith
+                  email: john.smith@example.com
+                  phone: '+1234567890'
+                  password: SecureP@ss123
+                  activation_code: ABCD1234
+                  address: '123 Admin Street, City'
+                  profile_photo: 'https://example.com/photos/john.jpg'
+                  bio: Senior gallery administrator with 5 years experience
+              invalidEmail:
+                summary: Invalid email format
+                value:
+                  full_name: John Smith
+                  email: invalid-email
+                  phone: '+1234567890'
+                  password: SecureP@ss123
+                  activation_code: ABCD1234
+              invalidPassword:
+                summary: Password doesn't meet requirements
+                value:
+                  full_name: John Smith
+                  email: john.smith@example.com
+                  phone: '+1234567890'
+                  password: weak
+                  activation_code: ABCD1234
+              invalidActivationCode:
+                summary: Invalid activation code format
+                value:
+                  full_name: John Smith
+                  email: john.smith@example.com
+                  phone: '+1234567890'
+                  password: SecureP@ss123
+                  activation_code: '123'
+              missingRequired:
+                summary: Missing required fields
+                value:
+                  full_name: John Smith
+                  email: john.smith@example.com
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessObject'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: The unique identifier of the registered admin
+                          email:
+                            type: string
+                            description: The email address of the registered admin
+                          full_name:
+                            type: string
+                            description: The full name of the registered admin
+                          created_at:
+                            type: string
+                            format: date-time
+                            description: Timestamp when the admin was registered
+                        required:
+                          - id
+                          - email
+                          - full_name
+              example:
+                value:
+                  data:
+                    id: admin-123
+                    full_name: John Smith
+                    email: john.smith@example.com
+                    phone: '+1234567890'
+                  messages:
+                    - Registration successful
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
+                    - admins.database.js
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Invalid or expired registration code
+                    - Password does not meet complexity requirements
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
+                    - admins.database.js
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+  /s2/categories:
+    get:
+      summary: >-
+        Retrieves a list of all categories (author: @Wong Chung Man)
+        (tester:@Jany-M) (reviewer: @Alona, @alberto, @PietroLauria)
+      description: >-
+        As an admin, I would like to retrieve categories, so that I can
+        understand the general overall activity of each registered business.
+      tags:
+        - categories
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Success
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+    post:
+      summary: >-
+        Creates a new category (author: @Wong Chung Man, tester: @Alona, @Iryna,
+        @PietroLauria) (reviewer:@Jany-M, @alberto)
+      description: >-
+        As an admin, I would like to create categories, so that I can understand
+        the general overall activity of each registered business.
+      tags:
+        - categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                photo_url:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                example:
+                  title: Food
+                  photo_url: 'https://url.com/photo.jpg'
+                  description: This is something you can eat.
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Invalid input
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+  '/s2/categories/{id}':
+    put:
+      summary: 'Updates a category by ID (author: @Wong Chung Man) (reviewer:@Iryna)'
+      description: >-
+        As an admin, I would like to update categories, so that I can understand
+        the general overall activity of each registered business.
+      tags:
+        - categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                title:
+                  type: string
+                photo_url:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                example:
+                  id: 1
+                  title: Eletronic appliances
+                  photo_url: 'https://url.com/photo.jpg'
+                  description: This is soemthing electrical.
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Invalid input
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+    delete:
+      summary: 'Deletes a category by ID (author: @Wong Chung Man, tester: @Alona)'
+      description: >-
+        As an admin, I would like to delete categories, so that I can understand
+        the general overall activity of each registered business.
+      tags:
+        - categories
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                example:
+                  id: 1
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Invalid input
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Unauthorized
+        '402':
+          description: Cannot delete element with internal categories or elements
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result: Cannot delete element with internal categories or elements
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+  /s3/messages:
+    post:
+      summary: >-
+        Send a message tester:@PietroLauria (author: @Iryna) (reviewer: @Alona)
+        (tester: @alberto)
+      description: >-
+        As an admin, I want to send messages to other admins in the system so
+        that I can communicate.
+      tags:
+        - chat-logs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sender_id:
+                  type: integer
+                recipient_id:
+                  type: integer
+                thread:
+                  type: string
+                content:
+                  type: string
+              required:
+                - sender_id
+                - recipient_id
+                - thread
+                - content
+            examples:
+              validMessage:
+                value:
+                  id: 1
+                  sender_id: 1
+                  recipient_id: 2
+                  thread: thread name
+                  content: Hello!
+                  time: '2024-11-08T19:18:53Z'
+      responses:
+        '200':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: integer
+                  sender_id:
+                    type: integer
+                  recipient_id:
+                    type: integer
+                  thread:
+                    type: string
+                  content:
+                    type: string
+                  time:
+                    type: string
+                    format: date-time
+              examples:
+                successfulResponse:
+                  value:
+                    success: true
+                    id: 1
+                    sender_id: 1
+                    recipient_id: 2
+                    thread: thread name
+                    content: Hello!
+                    time: '2024-11-08T19:18:53Z'
+        '400':
+          description: Input can't be empty
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+  /s3/adminlogs:
+    get:
+      summary: >-
+        Retrieve admin logs Author: @PietroLauria (tester:@Jany-M) (Reviewer:
+        @alberto)
+      description: >-
+        Fetches admin action logs with optional filters by admin ID, keyword,
+        date range, and sorting options.
+      tags:
+        - adminlogs
+      parameters:
+        - name: admin_id
+          in: query
+          description: ID of the admin to filter logs by.
+          schema:
+            type: integer
+        - name: keyword
+          in: query
+          description: Keyword to search for in log details.
+          schema:
+            type: string
+        - name: date_range
+          in: query
+          schema:
+            type: string
+            pattern: '^\d{4}-\d{2}-\d{2}:\d{4}-\d{2}-\d{2}$'
+          description: 'Date range filter in the format YYYY-MM-DD:YYYY-MM-DD.'
+        - name: sort_by
+          in: query
+          description: Field to sort by.
+          schema:
+            type: string
+            enum:
+              - date
+              - keyword
+              - admin_id
+        - name: order
+          in: query
+          description: 'Order of sorting, either ascending or descending.'
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+      responses:
+        '200':
+          description: Logs retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: Primary key of the log entry.
+                    action_type:
+                      type: string
+                      description: Type of action performed.
+                    admin_id:
+                      type: number
+                      description: ID of the admin who performed the action.
+                    message_id:
+                      type: number
+                      description: 'ID of the associated message, if applicable.'
+                    action_time:
+                      type: string
+                      format: date-time
+                      description: Timestamp of when the action occurred.
+                    details:
+                      type: string
+                      description: Additional information about the action.
+              examples:
+                array_of_logs:
+                  value:
+                    - id: 1
+                      action_type: edit
+                      admin_id: 101
+                      message_id: 201
+                      action_time: '2023-11-10T10:30:00Z'
+                      details: Edited message content.
+                    - id: 2
+                      action_type: create
+                      admin_id: 102
+                      message_id: 202
+                      action_time: '2023-11-10T11:00:00Z'
+                      details: Created new message.
+        '400':
+          description: Invalid query parameters.
+        '404':
+          description: No logs found for the specified criteria.
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+    post:
+      summary: 'Log an admin action Author: @PietroLauria (reviewer:@Jany-M, @alberto)'
+      description: Creates a log entry for an action performed by an admin.
+      tags:
+        - adminlogs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - admin_id
+                - action_type
+              properties:
+                admin_id:
+                  type: number
+                  description: ID of the admin performing the action.
+                action_type:
+                  type: string
+                  description: Type of action performed by the admin.
+                message_id:
+                  type: number
+                  description: 'ID of the associated message, if applicable.'
+                action_time:
+                  type: string
+                  format: date-time
+                  description: Timestamp of the action.
+                details:
+                  type: string
+                  description: Additional details about the action.
+      responses:
+        '200':
+          description: Log created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  log_id:
+                    type: integer
+                    description: ID of the created log entry.
+                  success:
+                    type: boolean
+                    description: Indicates if the log creation was successful.
+        '400':
+          description: 'Missing required fields: admin_id or action_type.'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+  /s4/businesses/:
+    post:
+      summary: >-
+        Create a new business (author:@rbekkum) (tester:@Jany-M)
+        (reviewer:@Alona) (reviewer:@Iryna, @PietroLauria)
+      description: >-
+        Allows admins to create a business account with detailed information
+        about the business and the main owner.
+      tags:
+        - accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: The Western Group
+                image:
+                  type: string
+                  example: 'https://example.com/image.jpg'
+                phone:
+                  type: string
+                  example: 867-5309
+                address:
+                  type: string
+                  example: 101 Elm Street
+                web_address:
+                  type: string
+                  example: 'http://nightmareonelmstreet.com'
+                description:
+                  type: string
+                  example: Yeahhh Baby
+                main_owner_name:
+                  type: string
+                  example: Austin Powers
+                main_owner_email:
+                  type: string
+                  example: apowers@mojo.com
+                main_owner_phone:
+                  type: string
+                  example: 555-108-5555
+              required:
+                - title
+                - image
+                - phone
+                - address
+                - web_address
+                - main_owner_name
+                - main_owner_email
+                - main_owner_phone
+      responses:
+        '201':
+          description: Business created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  new_id:
+                    type: string
+                    example: '12345'
+        '400':
+          description: Invalid data provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              examples:
+                example-400:
+                  summary: Invalid input data
+                  value:
+                    status: error
+                    errors:
+                      - Invalid email format for main_owner_email
+                      - Phone number format is invalid
+                    locations:
+                      - businesses.controller.js
+                      - businesses.services.js
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+    get:
+      summary: >-
+        Get list of businesses (author:@Jany-M) (tester:@rbekkum, @PietroLauria)
+        (reviewer:@alberto)
+      description: >-
+        As an admin, I want to view all existing businesses, so that I can
+        easily see their data and manage them effectively.
+      tags:
+        - accounts
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Number of items per page
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Offset for pagination
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  businesses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        title:
+                          type: string
+                        image:
+                          type: string
+                        phone:
+                          type: string
+                        address:
+                          type: string
+                        web_address:
+                          type: string
+                        description:
+                          type: string
+                        main_owner_name:
+                          type: string
+                        main_owner_email:
+                          type: string
+                          format: email
+                        main_owner_phone:
+                          type: string
+                        created_at:
+                          type: integer
+                        updated_at:
+                          type: integer
+                        is_active:
+                          type: boolean
+                        deactivated_at:
+                          type: integer
+                  pagination_info:
+                    type: object
+                    properties:
+                      limit:
+                        type: integer
+                      offset:
+                        type: integer
+                      total_items:
+                        type: integer
+              examples:
+                businesses-list:
+                  summary: A list of businesses
+                  value:
+                    businesses:
+                      - id: 1
+                        title: Example Business
+                        image: 'http://example.com/image.png'
+                        phone: '+1234567890'
+                        address: 123 Example Street
+                        web_address: 'http://example.com'
+                        description: An example business description
+                        main_owner_name: John Doe
+                        main_owner_email: john.doe@example.com
+                        main_owner_phone: '+1234567890'
+                        created_at: 12345678
+                        updated_at: 12345678
+                        is_active: true
+                        deactivated_at: 12345678
+                    pagination_info:
+                      limit: 1
+                      offset: 0
+                      total_items: 1
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              examples:
+                example-400:
+                  summary: Invalid request parameters
+                  value:
+                    error: Invalid request parameters
+                    details:
+                      - Limit must be a positive integer
+                      - Offset must be a non-negative integer
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              examples:
+                example-401:
+                  summary: Unauthorized access
+                  value:
+                    error: Unauthorized
+        '403':
+          description: Permission denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              examples:
+                example-403:
+                  summary: Permission denied
+                  value:
+                    error: Permission denied
+        '404':
+          description: No businesses found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              examples:
+                example-404:
+                  summary: No businesses found
+                  value:
+                    error: No businesses found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+  /s5/products:
+    get:
+      summary: >-
+        Get all products (author: @Marika) (reviewer:@Jany-M, @alberto)
+        (tester:@PietroLauria)
+      description: >-
+        As an Admin, I would like to view a list of products so that I can see
+        the product catalog in an easy way.
+      tags:
+        - products
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  short_description:
+                    type: string
+              examples:
+                products:
+                  value:
+                    success: true
+                    products:
+                      - id: '1'
+                        name: Product 1
+                        short_description: Short description of product 1
+                      - id: '2'
+                        name: Product 2
+                        short_description: Short description of product 2
+                empty:
+                  value:
+                    success: true
+                    products: []
+        '401':
+          description: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+    post:
+      tags:
+        - products
+      summary: >-
+        Create a new product (author: @Alona) (tester:@Jany-M) (reviewer:@Iryna,
+        @PietroLauria)
+      description: >-
+        As an admin, I would like to add a new product, so that I could manage a
+        product catalogue.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - category_id
+                - name
+                - short_description
+              properties:
+                name:
+                  type: string
+                  minLength: 3
+                  maxLength: 100
+                  example: Wireless RGB Keyboard
+                category_id:
+                  type: integer
+                  example: 54
+                category_name:
+                  type: string
+                  minLength: 3
+                  maxLength: 100
+                  nullable: true
+                  example: Keyboards
+                short_description:
+                  type: string
+                  minLength: 20
+                  maxLength: 1000
+                  example: >-
+                    Experience seamless typing with this wireless RGB keyboard,
+                    featuring customizable backlighting, ergonomic design, and
+                    reliable connectivity for a smooth and vibrant typing
+                    experience.
+                detailed_description:
+                  type: string
+                  maxLength: 10000
+                  nullable: true
+                  example: >-
+                    Upgrade your typing experience with this wireless RGB
+                    keyboard, combining style and functionality. With
+                    customizable RGB lighting, an ergonomic design, and quiet,
+                    responsive keys, it ensures a smooth typing experience
+                    whether you're working or gaming. Benefit from stable
+                    wireless connectivity, extended battery life, and a sleek,
+                    vibrant design that enhances any workspace.
+                product_photos:
+                  type: array
+                  nullable: true
+                  items:
+                    type: string
+                    format: uri
+                    example: 'https://www.youtube.com/photo.jpg'
+                product_url:
+                  type: string
+                  nullable: true
+                  format: uri
+                  example: 'https://youtu.be/0LE0trd740Q'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  category_id:
+                    type: string
+                  category_name:
+                    type: string
+                  short_description:
+                    type: string
+                  detailed_description:
+                    type: string
+                  product_photos:
+                    type: array
+                    items:
+                      type: string
+                  product_url:
+                    type: string
+        '400':
+          description: Please fill in all the required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+  '/s5/products/{product_id}/photos':
+    post:
+      tags:
+        - products
+      summary: 'Add photos to a product (author: @Alona) (tester: @alberto, @Iryna)'
+      description: >-
+        As an admin, I would like to optionally add a gallery of up to 5 photos,
+        which are up to 1 MB each, to a product for quick visual recognition.
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                photos:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+        '401':
+          description: Unauthorized
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+    get:
+      tags:
+        - products
+      summary: 'Get photos of a product (author: @Alona)'
+      parameters:
+        - in: path
+          name: product_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: string
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+components:
+  schemas:
+    AdminData:
+      title: Admin
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the admin
+          readOnly: true
+        full_name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Full name of the administrator
+        email:
+          type: string
+          format: email
+          description: Email address of the administrator
+        phone:
+          type: string
+          pattern: '^\+?[1-9]\d{1,14}$'
+          description: Phone number in international format
+        password:
+          type: string
+          format: password
+          minLength: 8
+          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
+          description: >-
+            Admin password - must be at least 8 characters with mix of letters,
+            numbers and symbols
+          writeOnly: true
+        address:
+          type: string
+          maxLength: 200
+          description: Physical address
+          writeOnly: true
+        activation_code:
+          type: string
+          pattern: '^[A-Z0-9]{8}$'
+          description: 8-character activation code provided by Galleria owners
+          writeOnly: true
+        profile_photo:
+          type: string
+          format: uri
+          description: URL to profile photo
+          writeOnly: true
+        bio:
+          type: string
+          maxLength: 500
+          description: Admin biography or description
+          writeOnly: true
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the admin account was created
+          readOnly: true
+      required:
+        - full_name
+        - email
+        - phone
+        - password
+        - activation_code
+    ErrorObject:
+      type: object
+      properties:
+        status:
+          type: string
+          description: error
+        errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+          example:
+            - invalid
+            - not available
+        locations:
+          type: array
+          items:
+            type: string
+          description: 'Optional: Additional information about the location of each message'
+          example:
+            - db.js
+            - service.js
+    SuccessObject:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            type: string
+          description: Optional tracking locations related to the data
+          example:
+            - tracking location optional
+        messages:
+          type: array
+          items:
+            type: string
+          description: Messages that provide additional information about the response
+          example:
+            - tracking location optional
+      required:
+        - messages
+
+    ActivationCode:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 0
+          readOnly: true
+        code:
+          type: string
+          minLength: 8
+          maxLength: 50
+        type:
+          type: string
+          enum:
+            - activation
+            - reset
+            - extension
+        is_used:
+          type: boolean
+        used_by:
+          type: integer
+          nullable: true
+        expiry_date:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time

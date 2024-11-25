@@ -1,39 +1,52 @@
-export function getCategories() {
+function getCategories() {
   // Implementation here
 }
 
-export function createCategory(title, photo_url, description) {
+function createCategory(title, photo_url, description) {
   // Implementation here
 }
 
-export function editCategory(id, title, photo_url, description) {
+function editCategory(id, title, photo_url, description) {
   // Implementation here
 }
 
-export function deleteCategory(id) {
+function deleteCategory(id) {
   // Implementation here
 }
 
-export function getSubcategories() {
+function getSubcategories() {
   // Implementation here
 }
 
-export function getSubcategoriesByCategoryId(category_id) {
+function getSubcategoriesByCategoryId(category_id) {
   // Implementation here
 }
 
-export function createSubcategory(title, photo_url, description) {
+function createSubcategory(title, photo_url, description) {
   // Implementation here
 }
 
-export function editSubcategory(id, title, photo_url, description) {
+function editSubcategory(id, title, photo_url, description) {
   // Implementation here
 }
 
-export function deleteSubcategory(id) {
+function deleteSubcategory(id) {
   // Implementation here
 }
 
-export function getCategoryLookup() {
+function getCategoryLookup() {
   // Implementation here
 }
+
+module.exports = {
+  getCategoryLookup,
+  deleteSubcategory,
+  editSubcategory,
+  getCategories,
+  createSubcategory,
+  getSubcategoriesByCategoryId,
+  getSubcategories,
+  deleteCategory,
+  editCategory,
+  createCategory,
+};
