@@ -2,7 +2,7 @@
 name:  sprint1-test
 about: Any task that is not directly from the product backlog. It doesn't have to be technical
 title: 'Squad-ID: Sprint1 GET /path/'
-labels: Sprint-1, Test
+
 ---
 
 ---
@@ -10,59 +10,42 @@ labels: Sprint-1, Test
 
 #### Testing
 
-- [ ] Create an issue on github using the template **sprint1-test** 
-   
-- [ ] In the **summary** attribute of your endpoints  author: @your name
-    
-- [ ] Test your end points using the **Swagger Viewer UI**. 
-
-- [ ] Document your examples and results 
-    
-- [ ] Now test three endpoints from your own squad as well and add your name in the summary for them as tester
-    
-- [ ] Finalize Testing, in this issue document your results and notes (check description)
-
-- [ ] Move this issue on the board from testing - enhancing
 
 
-#### Enhancing
+- [ ] Add the issue to the board to `to do` or `in progress`. Add the issue attributes and attach it to sprint 1 iteration. Then create a branch from the issue.
 
+- [ ] Identify the end point you will work with and add the content to the issue. 
 
-- [ ] Pick only **one high priority** endpoint from your work. 
+- [ ]  Add the endpoint to the `kollabe board` [here](https://kollabe.com/room?roomKey=0967b46aaa3d449ea2fe06be909096bd).
 
-- [ ] Add a tag to each end point to reflect your component. We have:
-   
-- [ ] You must have a default response and nny response should have a **content** , with **content type** JSON, not just description.
+### Linting
 
-- [ ] Add your **examples** to your objects in yaml (check Apicurito or Swagger Editor if you want a GUI)
+- [ ]  Start by linting the openapi yaml. Check the [linter tool notes here](https://fuzzy-journey-v7y6oy5.pages.github.io/project/sprint1/openapi.html#the-linter). 
 
-- [ ] Modify input and output and init.sql if needed
-
-- [ ] After modifying, test your endpoints again `npm start` with the same examples as before. 
-
-- [ ] Create a `pull requset` of your modifications and ask for review from squad member. Remember to update.
-
-- [ ] Move your issue to **in-review**
-
-### Deadline for merging this is Wednesday 14th of Nov
-
-### Aligning
-
-- [ ] Move your issue to aligning. 
-
-- [ ] In each squad, test two end points with examples. Leave the examples for them in your comments.
-
-- [ ] add yourself as a tester in their summary (highlight to them if their endpoints are not needed or redudant)
-
-
-- [ ] Choose one enhanced endpoint for other squads and review it. add yourself as a reviewer
+    **tips**
+      1. All Objects in requests or responses (business, sellers, admins, categories), should be added to the **Components/schemas** part. Then reference them using **$ref**
+      1. All paths should have a tag 
+      1. All paths should have a default error 
+      1. All operations should have an operationId that is exactly the same name of its controller 
+      1. Remove creation (created_at) and update (updated_at) timestamps from post operation. Do this on the server and use DB (now()).
+- [ ] You must fix the **errors** in the list related to you.
   
-- [ ] Clean up the common interface files related to your work.
+
+- [ ] Check your endpoint in Swagger UI (http://localhost:5000/swagger/docs) after fixing the yaml. 
+
+- [ ] Improve your sequence diagram based on the changes to your yaml and attach it to the issue. It can be added in the markdown directly or as an image. 
 
 
-        `
+### Improving and Writing Tests
 
+- [ ] Fix any issues in your generated tests.
 
+        1. schema validation tests should pass (because validator checks them)
+        1. Any other checks fail (no code yet)
 
+- [ ] Check all the possible checks you need. This is discussed in the requirements [here](https://fuzzy-journey-v7y6oy5.pages.github.io/project/sprint1).
 
+- [ ]  Create **unit tests** for your **db functions**. Some references are in the task but I am happy to see your approach :)
 
+- [ ]  When ready, move your issue to review and  create a pull request of your work. 
+- [ ]  Ask for review in your Squad channel and another one in the common channel.

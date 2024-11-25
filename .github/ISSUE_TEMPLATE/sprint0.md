@@ -7,7 +7,6 @@ labels: Sprint-0
 
 ---
 
-
 #### Testing
 
 - [ ] Create an issue on github using the template **sprint0** 

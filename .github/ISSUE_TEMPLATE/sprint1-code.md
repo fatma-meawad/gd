@@ -2,67 +2,31 @@
 name:  sprint1-code
 about: Any task that is not directly from the product backlog. It doesn't have to be technical
 title: 'Squad-ID: Sprint1 GET /path/'
-labels: Sprint-1, Code
+labels: Sprint1, Code
 ---
 
 ---
 
+### Implement the logic
 
-#### Testing
+- [ ] Move your issue to `in progress`. Add all attributes as well. Then create another branch.
 
-- [ ] Create an issue on github using the template **sprint1-test** 
-   
-- [ ] In the **summary** attribute of your endpoints  author: @your name
-    
-- [ ] Test your end points using the **Swagger Viewer UI**. 
+- [ ] Consider the **openapi contract** is frozen now. Don't make any changes to it.
 
-- [ ] Document your examples and results 
-    
-- [ ] Now test three endpoints from your own squad as well and add your name in the summary for them as tester
-    
-- [ ] Finalize Testing, in this issue document your results and notes (check description)
+- [ ] Write only the code that you need to get your tests (written or modified in phase 1) **pass**. 
 
-- [ ] Move this issue on the board from testing - enhancing
+### Cleaning your code
 
+- [ ] lint your code and clean up as you go. Use `npm run lint`. Don't worry about cleaning test code, just main logic.
 
-#### Enhancing
+- [ ] If you need something from others and there is a dependency, try to mock it till a couple of days before the final deadline. However, you should aim to have all your work integrated. 
 
-
-- [ ] Pick only **one high priority** endpoint from your work. 
-
-- [ ] Add a tag to each end point to reflect your component. We have:
-   
-- [ ] You must have a default response and nny response should have a **content** , with **content type** JSON, not just description.
-
-- [ ] Add your **examples** to your objects in yaml (check Apicurito or Swagger Editor if you want a GUI)
-
-- [ ] Modify input and output and init.sql if needed
-
-- [ ] After modifying, test your endpoints again `npm start` with the same examples as before. 
-
-- [ ] Create a `pull requset` of your modifications and ask for review from squad member. Remember to update.
-
-- [ ] Move your issue to **in-review**
-
-### Deadline for merging this is Wednesday 14th of Nov
-
-### Aligning
-
-- [ ] Move your issue to aligning. 
-
-- [ ] In each squad, test two end points with examples. Leave the examples for them in your comments.
-
-- [ ] add yourself as a tester in their summary (highlight to them if their endpoints are not needed or redudant)
+- [ ] The pull request review in the second phase requires code review.
+    1.  no redudant code
+    1.  linting is done
+    1.  no schema validation code
+    1.  Squads are not directly importing each other's work (across folders' imports)
 
 
-- [ ] Choose one enhanced endpoint for other squads and review it. add yourself as a reviewer
-  
-- [ ] Clean up the common interface files related to your work.
-
-
-        `
-
-
-
-
-
+- [ ]  When ready, move your issue to review and  create a pull request of your work. 
+- [ ]  Ask for review in your Squad channel and another one in the common channel.
