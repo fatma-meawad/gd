@@ -44,7 +44,7 @@ const swaggerJsDocs = YAML.load(
 app.get("/api", (req, res) => res.send(hintpage));
 app.get("/", (req, res) => res.send(homepage));
 app.use("/tests/report", (req, res) => {
-  res.sendFile(path.join(__dirname, "reports/report.html"));
+  res.sendFile(path.join(__dirname, "reports/test-report.html"));
 });
 
 app.use("/swagger/docs", swaggerUi.serve, swaggerUi.setup(swaggerJsDocs));
