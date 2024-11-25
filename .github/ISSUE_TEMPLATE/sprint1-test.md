@@ -2,8 +2,11 @@
 name:  sprint1-test
 about: Any task that is not directly from the product backlog. It doesn't have to be technical
 title: 'Squad-ID: Sprint1 GET /path/'
-
+labels:
+  - Sprint1
+  - Test
 ---
+
 
 ---
 
