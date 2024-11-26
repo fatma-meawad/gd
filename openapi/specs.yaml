@@ -1164,8 +1164,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
                   products:
                     type: array
                     maxItems: 50
