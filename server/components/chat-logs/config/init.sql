@@ -14,7 +14,11 @@ CREATE TABLE Message (
     recipient_id INTEGER NOT NULL,
     thread VARCHAR(60) NOT NULL,
     content TEXT NOT NULL,
+<<<<<<< HEAD
     time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+=======
+    time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+>>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0
 );
 
 

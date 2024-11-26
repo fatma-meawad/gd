@@ -67,7 +67,11 @@ module.exports.getAdminsPasswordResetDb = async (token) => {
   return {
     messages: ["getAdminsPasswordResetDb not implemented yet"],
     locations: ["admins.database.js"],
+<<<<<<< HEAD
     data: {}, // admin_id, reset_token, ip_adress
+=======
+    data: {} // admin_id, reset_token, ip_adress
+>>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0
   };
 };
 
@@ -92,7 +96,11 @@ module.exports.postAdminsPasswordResetDb = async (options) => {
   return {
     messages: ["postAdminsPasswordResetDb not implemented yet"],
     locations: ["admins.database.js"],
+<<<<<<< HEAD
     data: {}, //email, ip_adress (optional)
+=======
+    data: {} //email, ip_adress (optional)
+>>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0
   };
 };
 

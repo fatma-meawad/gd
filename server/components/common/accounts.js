@@ -30,4 +30,8 @@ export function getDeactivationRecords() {
 /* Jany
 We need deactivateSeller
 getDeactivationRecords needs and ID to be passed, so we can use it for either business or seller
+<<<<<<< HEAD
 */
+=======
+*/
+>>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0

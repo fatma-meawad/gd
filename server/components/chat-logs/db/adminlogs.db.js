@@ -33,6 +33,10 @@ module.exports.getAdminlogsDb = async (options) => {
 };
 
 module.exports.postAdminlogsDb = async (logData) => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0
   // Simulate insertion by returning a hard-coded response
   return {
     log_id: 0, // Simulated new log ID

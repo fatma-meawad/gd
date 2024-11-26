@@ -28,6 +28,7 @@ labels:
     1.  linting is done
     1.  no schema validation code
     1.  Squads are not directly importing each other's work (across folders' imports)
+    1. Delete my old green comments because it makes the code ugly
 
 - [ ]  select the largest endpoint and estimate it as 21 and select the smallest and estimate it as 1 on the `kollabe board` [here](https://kollabe.com/room?roomKey=0967b46aaa3d449ea2fe06be909096bd).
       
