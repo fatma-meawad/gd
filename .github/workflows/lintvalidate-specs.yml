@@ -1,4 +1,4 @@
-name: Lint and Format Check
+name: Lint OpenAPI Specs
 
 on:
   pull_request:
@@ -42,3 +42,19 @@ jobs:
       run: |
         (npm start & sleep 5) || exit 1
         
+  notify_slack:
+    runs-on: ubuntu-latest
+    needs: lint-format-validate
+    if: failure()
+    steps:
+    - name: Send Slack notification
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data '{
+          "text": "Job failed: ${{ github.workflow }}\n
+                   Author: ${{ github.actor }}\n
+                   Action: ${{ github.event_name }}\n
+                   Ref: ${{ github.ref }}\n
+                   Message: Lint, API or OpenAPI validation failed."
+        }' $SLACK_WEBHOOK_URL
