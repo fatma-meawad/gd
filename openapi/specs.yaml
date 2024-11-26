@@ -1177,12 +1177,18 @@ paths:
                   value:
                     success: true
                     products:
-                      - id: '1'
+                      - id: 1
                         name: Product 1
-                        short_description: Short description of product 1
-                      - id: '2'
+                        category_id: 1
+                        short_description: Short description of Product 1
+                        detailed_description: Detailed description of Product 1
+                        product_url: 'https://example.com/product1'
+                      - id: 2
                         name: Product 2
-                        short_description: Short description of product 2
+                        category_id: 2
+                        short_description: Short description of Product 2
+                        detailed_description: Detailed description of Product 2
+                        product_url: 'https://example.com/product2'
                 empty:
                   value:
                     success: true
