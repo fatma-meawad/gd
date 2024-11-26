@@ -1182,46 +1182,52 @@ paths:
               schema:
                 type: object
                 properties:
-                  products:
-                    type: array
-                    maxItems: 50
-                    items:
-                      $ref: "#/components/schemas/ProductData"
-                  page_info:
-                    $ref: "#/components/schemas/PageInfo"
+                  data:
+                    type: object
+                    properties:
+                      products:
+                        type: array
+                        maxItems: 50
+                        items:
+                          $ref: "#/components/schemas/ProductData"
+                      page_info:
+                        $ref: "#/components/schemas/PageInfo"
                     
               examples:
                 products:
+                  summary: A list of products
                   value:
-                    products:
-                      - id: 1
-                        name: Product 1
-                        category_id: 1
-                        short_description: Short description of Product 1
-                        detailed_description: Detailed description of Product 1
-                        product_url: 'https://example.com/product1'
-                      - id: 2
-                        name: Product 2
-                        category_id: 2
-                        short_description: Short description of Product 2
-                        detailed_description: Detailed description of Product 2
-                        product_url: 'https://example.com/product2'
-                    page_info:
-                      start_cursor: 'eyJpZCI6MX0='
-                      end_cursor: 'eyJpZCI6Mn0='
-                      has_next_page: true
-                      has_previous_page: false
-                      total_count: 100
+                    data:
+                      products:
+                        - id: 1
+                          name: Product 1
+                          category_id: 1
+                          short_description: Short description 1
+                          detailed_description: Detailed description 1
+                          product_url: 'https://example.com/product1'
+                        - id: 2
+                          name: Product 2
+                          category_id: 2
+                          short_description: Short description 2
+                          detailed_description: Detailed description 2
+                          product_url: 'https://example.com/product2'
+                      page_info:
+                        start_cursor: 'eyJpZCI6MX0='
+                        end_cursor: 'eyJpZCI6MX0='
+                        has_next_page: true
+                        has_previous_page: false
+                        total_count: 50
                       
                 empty:
                   value:
-                    products: []
-                    page_info:
-                      start_cursor: null
-                      end_cursor: null
-                      has_next_page: false
-                      has_previous_page: false
-                      total_count: 0
+                    data:
+                      products: []
+                      page_info:
+                        start_cursor: null
+                        end_cursor: null
+                        has_next_page: false
+                        has_previous_page: false
+                        total_count: 0
         '401':
           description: Unauthorized
           content:
