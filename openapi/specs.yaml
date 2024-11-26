@@ -1166,12 +1166,12 @@ paths:
                 properties:
                   success:
                     type: boolean
-                  id:
-                    type: string
-                  name:
-                    type: string
-                  short_description:
-                    type: string
+                  products:
+                    type: array
+                    maxItems: 50
+                    items:
+                      $ref: "#/components/schemas/ProductData"
+                    
               examples:
                 products:
                   value:
@@ -1519,3 +1519,40 @@ components:
             - tracking location optional
       required:
         - messages
+    ProductData:
+      title: Product
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the product
+          readOnly: true
+          maxLength: 10
+          nullable: false
+        category_id:
+          type: integer
+          description: ID of the category the product belongs to
+          nullable: false
+        product_name:
+          type: string
+          description: Name of the product
+          maxLength: 100
+          minLength: 3
+          nullable: false
+        short_description:
+          type: string
+          description: Short description of the product
+          maxLength: 1000
+          minLength: 20
+          nullable: false
+        detailed_description:
+          type: string
+          description: Detailed description of the product
+          maxLength: 10000
+          nullable: true
+        product_url:
+          type: string
+          format: uri
+          description: URL to the product page
+          nullable: true
+          maxLength: 1000
