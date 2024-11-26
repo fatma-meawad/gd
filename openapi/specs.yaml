@@ -8,10 +8,8 @@ info:
 servers:
   - url: '/api'
     description: local and codespaces
-  - url: 'http://127.0.0.1:4010'
-    description: docker prism 
-  - url: 'http://localhost:5000/prism'
-    description: local 
+  - url: 'http://localhost:5000/api'
+    description: localhost 
  
 tags:
   - name: admins
@@ -1499,6 +1497,8 @@ components:
           example:
             - db.js
             - service.js
+      required:
+        - errors
     SuccessObject:
       type: object
       properties:
@@ -1518,33 +1518,3 @@ components:
             - tracking location optional
       required:
         - messages
-
-    ActivationCode:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          minimum: 0
-          readOnly: true
-        code:
-          type: string
-          minLength: 8
-          maxLength: 50
-        type:
-          type: string
-          enum:
-            - activation
-            - reset
-            - extension
-        is_used:
-          type: boolean
-        used_by:
-          type: integer
-          nullable: true
-        expiry_date:
-          type: string
-          format: date-time
-        created_at:
-          type: string
-          format: date-time
