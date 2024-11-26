@@ -2,3 +2,4 @@
 **/.env
 .DS_Store
 /reports
+./package-lock.json
