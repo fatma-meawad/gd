@@ -67,11 +67,7 @@ module.exports.getAdminsPasswordResetDb = async (token) => {
   return {
     messages: ["getAdminsPasswordResetDb not implemented yet"],
     locations: ["admins.database.js"],
-<<<<<<< HEAD
     data: {}, // admin_id, reset_token, ip_adress
-=======
-    data: {} // admin_id, reset_token, ip_adress
->>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0
   };
 };
 
@@ -96,15 +92,9 @@ module.exports.postAdminsPasswordResetDb = async (options) => {
   return {
     messages: ["postAdminsPasswordResetDb not implemented yet"],
     locations: ["admins.database.js"],
-<<<<<<< HEAD
-    data: {}, //email, ip_adress (optional)
-=======
-    data: {} //email, ip_adress (optional)
->>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0
-  };
-};
 
-module.exports.postAdminsRegisterDb = async (registrationData) => {
+    data: {}, //email, ip_adress (optional)
+  };
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
   1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
   2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
