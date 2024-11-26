@@ -61,22 +61,6 @@ paths:
 
         - If the login attempt is successful after one or two attempts, the
         system resets the attempt counter back to zero.
-      parameters:
-        - name: Prefer
-          in: header
-          required: false
-          schema:
-            type: string
-          examples:
-            SuccessResponse:
-              summary: Success Response
-              value: "code=200, dynamic=true"
-            FailureResponse:
-              summary: Failure Response
-              value: "code=400, dynamic=true"
-            DefaultErrorResponse:
-              summary: Unexpected Response
-              value: "code=500, dynamic=true"
       requestBody:
         required: true
         content:
