@@ -1147,6 +1147,7 @@ paths:
                 $ref: '#/components/schemas/ErrorObject'
   /s5/products:
     get:
+      operationId: getProducts
       summary: >-
         Get all products (author: @Marika) (reviewer:@Jany-M, @alberto)
         (tester:@PietroLauria)
