@@ -30,5 +30,6 @@ labels:
     1.  Squads are not directly importing each other's work (across folders' imports)
 
 - [ ]  select the largest endpoint and estimate it as 21 and select the smallest and estimate it as 1 on the `kollabe board` [here](https://kollabe.com/room?roomKey=0967b46aaa3d449ea2fe06be909096bd).
+      
 - [ ]  When ready, move your issue to review and  create a pull request for your work. 
 - [ ]  Ask for a  review in your Squad channel and another one in the common channel.
