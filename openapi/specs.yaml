@@ -1175,7 +1175,6 @@ paths:
               examples:
                 products:
                   value:
-                    success: true
                     products:
                       - id: 1
                         name: Product 1
@@ -1191,7 +1190,6 @@ paths:
                         product_url: 'https://example.com/product2'
                 empty:
                   value:
-                    success: true
                     products: []
         '401':
           description: Unauthorized
