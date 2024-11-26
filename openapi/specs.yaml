@@ -1189,6 +1189,16 @@ paths:
                     products: []
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
         default:
           description: Unexpected error
           content:
