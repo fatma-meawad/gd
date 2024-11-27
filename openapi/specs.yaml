@@ -1222,6 +1222,7 @@ paths:
                   example: Wireless RGB Keyboard
                 category_id:
                   type: integer
+                  format: int64
                   example: 54
                 category_name:
                   type: string
