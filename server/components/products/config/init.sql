@@ -13,7 +13,7 @@ ALTER DATABASE products OWNER TO products_user;
 -- Add the attributes you need to implement your feature?
 
 CREATE TABLE Product (
-    id SERIAL PRIMARY KEY
+    id SERIAL PRIMARY KEY,
     product_name VARCHAR(100) NOT NULL CHECK (char_length(product_name) >=3),
     category_id INTEGER REFERENCES Category(id) ON DELETE SET NULL,
     short_description VARCHAR(1000) NOT NULL CHECK (char_length(short_description) >=20),
