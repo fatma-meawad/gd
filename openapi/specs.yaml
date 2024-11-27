@@ -1195,6 +1195,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
     post:
+      operationId: postProducts
       tags:
         - products
       summary: >-
