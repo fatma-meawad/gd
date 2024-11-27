@@ -1174,6 +1174,7 @@ paths:
             type: string
             maxLength: 100
             minLength: 0
+            pattern: '^(?!.*\s).+$'
         - name: authorization
           in: header
           description: An authorization token.
@@ -1622,11 +1623,13 @@ components:
           description: Cursor to access the next page of results
           nullable: true
           maxLength: 100
+          pattern: '^(?!.*\s).+$'
         start_cursor:
           type: string
           description: Cursor to access the previous page of results
           nullable: true
           maxLength: 100
+          pattern: '^(?!.*\s).+$'
         total_count:
           type: integer
           description: Total number of items in the result set
