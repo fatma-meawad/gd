@@ -1223,6 +1223,8 @@ paths:
                 category_id:
                   type: integer
                   format: int64
+                  minimum: 0
+                  maximum: 1000000000
                   example: 54
                 category_name:
                   type: string
