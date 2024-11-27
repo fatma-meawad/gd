@@ -1566,32 +1566,40 @@ components:
       type: object
       properties:
         id:
-          type: string
+          type: number
           description: Unique identifier for the product
           readOnly: true
-          maxLength: 10
           nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
         category_id:
           type: integer
           description: ID of the category the product belongs to
           nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
         product_name:
           type: string
           description: Name of the product
           maxLength: 100
           minLength: 3
           nullable: false
+          format: byte
         short_description:
           type: string
           description: Short description of the product
           maxLength: 1000
           minLength: 20
           nullable: false
+          format: byte
         detailed_description:
           type: string
           description: Detailed description of the product
           maxLength: 10000
           nullable: true
+          format: byte
         product_url:
           type: string
           format: uri
@@ -1610,14 +1618,18 @@ components:
           description: Cursor to access the next page of results
           nullable: true
           maxLength: 100
+          format: byte
         start_cursor:
           type: string
           description: Cursor to access the previous page of results
           nullable: true
           maxLength: 100
+          format: byte
         total_count:
           type: integer
           description: Total number of items in the result set
           nullable: false
           minimum: 0
+          maximum: 2147483647
+          format: int32
         
