@@ -1632,4 +1632,11 @@ components:
           minimum: 0
           maximum: 2147483647
           format: int32
+        page:
+          type: integer
+          description: Current page number
+          nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
         

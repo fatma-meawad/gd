@@ -15,6 +15,7 @@ module.exports.getProductsDb = async (limit, cursor) => {
         end_cursor: null,
         start_cursor: null,
         total_count: mockProducts.length,
+        page: 1,
       }
     }
   };
