@@ -1219,6 +1219,7 @@ paths:
                   type: string
                   minLength: 3
                   maxLength: 100
+                  pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   example: Wireless RGB Keyboard
                 category_id:
                   type: integer
@@ -1231,11 +1232,13 @@ paths:
                   minLength: 3
                   maxLength: 100
                   nullable: true
+                  pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   example: Keyboards
                 short_description:
                   type: string
                   minLength: 20
                   maxLength: 1000
+                  pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   example: >-
                     Experience seamless typing with this wireless RGB keyboard,
                     featuring customizable backlighting, ergonomic design, and
@@ -1245,6 +1248,7 @@ paths:
                   type: string
                   maxLength: 10000
                   nullable: true
+                  pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   example: >-
                     Upgrade your typing experience with this wireless RGB
                     keyboard, combining style and functionality. With
