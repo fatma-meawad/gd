@@ -1286,6 +1286,7 @@ paths:
                     type: string
                   product_photos:
                     type: array
+                    maxItems: 5
                     items:
                       type: string
                   product_url:
