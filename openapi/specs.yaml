@@ -1285,21 +1285,27 @@ paths:
                   id:
                     type: string
                     maxLength: 1000
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   name:
                     type: string
                     maxLength: 100
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   category_id:
                     type: string
                     maxLength: 1000
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   category_name:
                     type: string
                     maxLength: 255
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   short_description:
                     type: string
                     maxLength: 1000
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   detailed_description:
                     type: string
                     maxLength: 10000
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                   product_photos:
                     type: array
                     maxItems: 5
