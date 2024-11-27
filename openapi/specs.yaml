@@ -1328,9 +1328,11 @@ paths:
                 properties:
                   status:
                     type: string
+                    maxLength: 1000
                     example: error
                   message:
                     type: string
+                    maxLength: 1000
         default:
           description: Unexpected error
           content:
