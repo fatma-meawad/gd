@@ -1252,6 +1252,7 @@ paths:
                     vibrant design that enhances any workspace.
                 product_photos:
                   type: array
+                  maxItems: 5
                   nullable: true
                   items:
                     type: string
