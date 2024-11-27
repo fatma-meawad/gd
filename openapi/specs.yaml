@@ -1314,9 +1314,11 @@ paths:
                 properties:
                   status:
                     type: string
+                    maxLength: 1000
                     example: error
                   message:
                     type: string
+                    maxLength: 1000
         '401':
           description: Unauthorized
           content:
