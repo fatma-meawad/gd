@@ -9,9 +9,9 @@ module.exports.getProductsDb = async (limit, cursor) => {
 */
   return {
     data: {
-      products: mockProducts,
+      products: mockProducts.slice(0, limit),
       page_info: {
-        has_next_page: false,
+        has_next_page: mockProducts.length > limit,
         end_cursor: null,
         start_cursor: null,
         total_count: mockProducts.length,
