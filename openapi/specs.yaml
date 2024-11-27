@@ -1280,23 +1280,31 @@ paths:
                     type: boolean
                   id:
                     type: string
+                    maxLength: 1000
                   name:
                     type: string
+                    maxLength: 100
                   category_id:
                     type: string
+                    maxLength: 1000
                   category_name:
                     type: string
+                    maxLength: 255
                   short_description:
                     type: string
+                    maxLength: 1000
                   detailed_description:
                     type: string
+                    maxLength: 10000
                   product_photos:
                     type: array
                     maxItems: 5
                     items:
                       type: string
+                      maxLength: 1000
                   product_url:
                     type: string
+                    maxLength: 1000
         '400':
           description: Please fill in all the required fields
           content:
