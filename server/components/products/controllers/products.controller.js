@@ -16,16 +16,15 @@ exports.getProducts = asyncHandler(async (req, res) => {
       2- use the response schema if any.
   */
 
-
   /**
     Access Control: Verify that the requester is authorized to access the requested data.
    */
   const headers = req.headers;
   if (!headers.auth) {
     throw new AppError({
-      message: "\"auth\" header is missing",
+      message: '"auth" header is missing',
       statusCode: 401,
-      errors: ["\"header\" is missing"],
+      errors: ['"header" is missing'],
       locations: ["products.controller.js"],
     });
   }
