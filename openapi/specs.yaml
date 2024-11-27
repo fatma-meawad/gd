@@ -1173,7 +1173,8 @@ paths:
           schema:
             type: string
             maxLength: 100
-            format: string
+            minLength: 0
+            format: byte
       responses:
         '200':
           description: Success
