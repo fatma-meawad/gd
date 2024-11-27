@@ -3,7 +3,8 @@ const products = require("../services/products.services");
 const AppError = require("../../../utils/error");
 
 exports.getProducts = asyncHandler(async (req, res) => {
-  const options = {};
+  const limit = parseInt(req.query["limit"]) || 20;
+  const cursor = req.query["cursor"] || null;
 
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
@@ -15,7 +16,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await products.getProducts();
+  let result = await products.getProducts(limit, cursor);
 
   res.status(200).send(result);
 });
