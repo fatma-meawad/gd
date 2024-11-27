@@ -1261,24 +1261,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: 401
+                  errors:
+                    - Unauthorized
+                    - Please provide a valid authorization token.
+                  locations:
+                    - products.controller.js
         '422':
           description: Unprocessable Entity
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: 422
+                  errors:
+                    - Invalid limit value. Limit must be a positive integer.
+                    - Invalid cursor value. Cursor must be a base64-encoded string.
+                  locations:
+                    - products.controller.js
         '500':
-          description: Unexpected error
+          description: Server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: 500
+                  errors:
+                    - Internal server error
+                  locations:
+                    - products.controller.js
         default:
           description: Unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: 418
+                  errors:
+                    - I'm a teapot
+                  locations:
+                    - products.controller.js
     post:
       tags:
         - products
