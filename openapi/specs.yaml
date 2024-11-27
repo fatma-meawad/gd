@@ -1183,6 +1183,7 @@ paths:
             type: string
             minLength: 1
             maxLength: 100000
+            pattern: '^[^\n]*$'
       responses:
         '200':
           description: Success
@@ -1226,6 +1227,7 @@ paths:
                         has_next_page: true
                         has_previous_page: false
                         total_count: 50
+                        page: 1
                       
                 empty:
                   value:
@@ -1237,6 +1239,7 @@ paths:
                         has_next_page: false
                         has_previous_page: false
                         total_count: 0
+                        page: 1
         '401':
           description: Unauthorized
           content:
@@ -1594,17 +1597,20 @@ components:
           maxLength: 100
           minLength: 3
           nullable: false
+          pattern: '^[^\n]*$'
         short_description:
           type: string
           description: Short description of the product
           maxLength: 1000
           minLength: 20
           nullable: false
+          pattern: '^[^\n]*$'
         detailed_description:
           type: string
           description: Detailed description of the product
           maxLength: 10000
           nullable: true
+          pattern: '^.*$'
         product_url:
           type: string
           format: uri
