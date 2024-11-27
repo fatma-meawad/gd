@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "id": 1,
     "product_name": "The Starry Night",
     "short_description": "The Starry Night is an oil on canvas by the Dutch post-impressionist painter Vincent van Gogh.",
     "category_id": 1,
@@ -8,7 +8,7 @@
     "product_url": "https://en.wikipedia.org/wiki/The_Starry_Night"
   }, 
   {
-    "id": "2",
+    "id": 2,
     "product_name": "The Persistence of Memory",
     "short_description": "The Persistence of Memory is a 1931 painting by artist Salvador Dalí.",
     "category_id": 1,

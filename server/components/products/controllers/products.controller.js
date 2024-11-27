@@ -21,11 +21,11 @@ exports.getProducts = asyncHandler(async (req, res) => {
     Access Control: Verify that the requester is authorized to access the requested data.
    */
   const headers = req.headers;
-  if (!headers.authorization) {
+  if (!headers.auth) {
     throw new AppError({
-      message: "Authorization header is missing",
+      message: "\"auth\" header is missing",
       statusCode: 401,
-      errors: ["Authorization header is missing"],
+      errors: ["\"header\" is missing"],
       locations: ["products.controller.js"],
     });
   }

@@ -1187,8 +1187,8 @@ paths:
               summary: Example of a valid cursor
               value: 'eyJpZCI6MX0='
         - in: header
-          name: authorization
-          description: An authorization token.
+          name: auth
+          description: An authorization token. Name is shortened due to OpenAPI issues with the name Authorization.
           required: true
           schema:
             type: string
