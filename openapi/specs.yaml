@@ -1259,10 +1259,12 @@ paths:
                   nullable: true
                   items:
                     type: string
+                    maxLength: 1000
                     format: uri
                     example: 'https://www.youtube.com/photo.jpg'
                 product_url:
                   type: string
+                  maxLength: 1000
                   nullable: true
                   format: uri
                   example: 'https://youtu.be/0LE0trd740Q'
