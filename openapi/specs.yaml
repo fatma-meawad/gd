@@ -1175,6 +1175,15 @@ paths:
             maxLength: 100
             minLength: 0
             format: byte
+        - name: authorization
+          in: header
+          description: An authorization token.
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            format: byte
       responses:
         '200':
           description: Success

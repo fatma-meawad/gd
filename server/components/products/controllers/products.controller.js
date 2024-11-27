@@ -11,11 +11,25 @@ exports.getProducts = asyncHandler(async (req, res) => {
       2- the openapi validator should match the types with the contract, so make sure they match
       3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
   */
-
   /**  response:
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
+
+
+  /**
+    Access Control: Verify that the requester is authorized to access the requested data.
+   */
+  const headers = req.headers;
+  if (!headers.authorization) {
+    throw new AppError({
+      message: "Authorization header is missing",
+      statusCode: 401,
+      errors: ["Authorization header is missing"],
+      locations: ["products.controller.js"],
+    });
+  }
+
   let result = await products.getProducts(limit, cursor);
 
   res.status(200).send(result);
