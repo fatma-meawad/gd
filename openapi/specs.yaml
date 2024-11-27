@@ -1174,7 +1174,7 @@ paths:
             type: string
             maxLength: 100
             minLength: 0
-            pattern: '^(?!.*\s).+$'
+            pattern: ^(?!.*\s).+$
         - name: authorization
           in: header
           description: An authorization token.
@@ -1183,7 +1183,7 @@ paths:
             type: string
             minLength: 1
             maxLength: 100000
-            pattern: '^[^\n]*$'
+            pattern: ^[^\n]*$
       responses:
         '200':
           description: Success
@@ -1597,20 +1597,20 @@ components:
           maxLength: 100
           minLength: 3
           nullable: false
-          pattern: '^[^\n]*$'
+          pattern: ^[^\n]*$
         short_description:
           type: string
           description: Short description of the product
           maxLength: 1000
           minLength: 20
           nullable: false
-          pattern: '^[^\n]*$'
+          pattern: ^[^\n]*$
         detailed_description:
           type: string
           description: Detailed description of the product
           maxLength: 10000
           nullable: true
-          pattern: '^.*$'
+          pattern: ^.*$
         product_url:
           type: string
           format: uri
@@ -1629,13 +1629,13 @@ components:
           description: Cursor to access the next page of results
           nullable: true
           maxLength: 100
-          pattern: '^(?!.*\s).+$'
+          pattern: ^(?!.*\s).+$
         start_cursor:
           type: string
           description: Cursor to access the previous page of results
           nullable: true
           maxLength: 100
-          pattern: '^(?!.*\s).+$'
+          pattern: ^(?!.*\s).+$
         total_count:
           type: integer
           description: Total number of items in the result set
