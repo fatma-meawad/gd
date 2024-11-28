@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 const schema = require("../schema.json");
 
->>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0
 module.exports.postMessagesDb = async (
   sender_id,
   recipient_id,
