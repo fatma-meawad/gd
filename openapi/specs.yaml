@@ -333,9 +333,9 @@ paths:
       '400':
         description: Bad Request due to invalid parameters.
         content:
-        application/json:
-        schema:
-        $ref: "#/components/schemas/ErrorObject"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ErrorObject"
       '401':
         description: Unauthorized access.
         content:
@@ -351,9 +351,9 @@ paths:
       '422':
         description: Unprocessable Entity due to validation errors.
         content:
-        application/json:
-        schema:
-        $ref: "#/components/schemas/ErrorObject"
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ErrorObject"
       '500':
         description: Unable to retrieve admin list due to a server error.
         content:
@@ -366,8 +366,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ErrorObject'
-    security:
-      - BearerAuth: []
   /s1/admins/register:
     post:
       tags:
