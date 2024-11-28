@@ -682,6 +682,7 @@ paths:
       description: >-
         As an admin, I want to send messages to other admins in the system so
         that I can communicate.
+      operationId: postMessages
       tags:
         - chat-logs
       requestBody:
