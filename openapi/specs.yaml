@@ -692,18 +692,13 @@ paths:
               type: object
               properties:
                 sender_id:
-                  type: integer
+                  $ref: '#/components/schemas/MessageData/properties/sender_id'
                 recipient_id:
-                  type: integer
+                  $ref: '#/components/schemas/MessageData/properties/recipient_id'
                 thread:
-                  type: string
+                  $ref: '#/components/schemas/MessageData/properties/thread'
                 content:
-                  type: string
-              required:
-                - sender_id
-                - recipient_id
-                - thread
-                - content
+                  $ref: '#/components/schemas/MessageData/properties/content'
             examples:
               validMessage:
                 value:
@@ -722,20 +717,19 @@ paths:
                 type: object
                 properties:
                   success:
-                    type: boolean
+                    $ref: '#/components/schemas/MessageData/properties/success'
                   id:
-                    type: integer
+                    $ref: '#/components/schemas/MessageData/properties/id'
                   sender_id:
-                    type: integer
+                    $ref: '#/components/schemas/MessageData/properties/sender_id'
                   recipient_id:
-                    type: integer
+                    $ref: '#/components/schemas/MessageData/properties/recipient_id'
                   thread:
-                    type: string
+                    $ref: '#/components/schemas/MessageData/properties/thread'
                   content:
-                    type: string
+                    $ref: '#/components/schemas/MessageData/properties/content'
                   time:
-                    type: string
-                    format: date-time
+                    $ref: '#/components/schemas/MessageData/properties/time'
               examples:
                 successfulResponse:
                   value:
@@ -1455,6 +1449,39 @@ components:
         - phone
         - password
         - activation_code
+    MessageData:
+      title: Message
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the message
+          readOnly: true
+        success:
+          type: boolean
+          description: A boolean value indicating whether the operation was successful 
+        sender_id:
+          type: integer
+          description: Sender id of the message
+        recipient_id:
+          type: integer
+          description: Recipient id of the message
+        thread:
+          type: string
+          description: Conversation ID for grouping messages
+        content:
+          type: string
+          description: Message's content
+        time:
+          type: string
+          format: date-time
+          description: A timestamp in ISO 8601 format representing the date and time the message was sent, in UTC
+          readOnly: true
+      required:
+        - sender_id
+        - recipient_id
+        - thread
+        - content
     ErrorObject:
       type: object
       properties:
