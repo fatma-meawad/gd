@@ -311,6 +311,7 @@ paths:
                   type: array
                   items:
                     $ref: "#/components/schemas/AdminData"
+                  maxItems: 100
                 page:
                   type: integer
                   format: int32
@@ -329,6 +330,12 @@ paths:
                   minimum: 0
                   maximum: 1000000
                   description: The total number of administrators.
+      '400':
+        description: Bad Request due to invalid parameters.
+        content:
+        application/json:
+        schema:
+        $ref: "#/components/schemas/ErrorObject"
       '401':
         description: Unauthorized access.
         content:
@@ -341,6 +348,12 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ErrorObject"
+      '422':
+        description: Unprocessable Entity due to validation errors.
+        content:
+        application/json:
+        schema:
+        $ref: "#/components/schemas/ErrorObject"
       '500':
         description: Unable to retrieve admin list due to a server error.
         content:
