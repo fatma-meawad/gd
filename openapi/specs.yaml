@@ -1209,69 +1209,43 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - category_id
-                - name
-                - short_description
-              properties:
-                name:
-                  type: string
-                  minLength: 3
-                  maxLength: 100
-                  pattern: ^[^\n]*$
-                  example: Wireless RGB Keyboard
-                category_id:
-                  type: integer
-                  format: int64
-                  minimum: 0
-                  maximum: 1000000000
-                  example: 54
-                category_name:
-                  type: string
-                  minLength: 3
-                  maxLength: 100
-                  nullable: true
-                  pattern: ^[^\n]*$
-                  example: Keyboards
-                short_description:
-                  type: string
-                  minLength: 20
-                  maxLength: 1000
-                  pattern: ^[^\n]*$
-                  example: >-
-                    Experience seamless typing with this wireless RGB keyboard,
-                    featuring customizable backlighting, ergonomic design, and
-                    reliable connectivity for a smooth and vibrant typing
-                    experience.
-                detailed_description:
-                  type: string
-                  maxLength: 10000
-                  nullable: true
-                  pattern: ^.*$
-                  example: >-
-                    Upgrade your typing experience with this wireless RGB
-                    keyboard, combining style and functionality. With
-                    customizable RGB lighting, an ergonomic design, and quiet,
-                    responsive keys, it ensures a smooth typing experience
-                    whether you're working or gaming. Benefit from stable
-                    wireless connectivity, extended battery life, and a sleek,
-                    vibrant design that enhances any workspace.
-                product_photos:
-                  type: array
-                  maxItems: 5
-                  nullable: true
-                  items:
-                    type: string
-                    maxLength: 1000
-                    format: uri
-                    example: 'https://www.youtube.com/photo.jpg'
-                product_url:
-                  type: string
-                  maxLength: 1000
-                  nullable: true
-                  format: uri
-                  example: 'https://youtu.be/0LE0trd740Q'
+              $ref: '#/components/schemas/ProductData'
+            examples:
+              correctProductData:
+                summary: Valid product data input
+                value:
+                  product_name: RGB keyboard
+                  category_id: 12345
+                  category_name: Keyboards
+                  short_description: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience
+                  detailed_description: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace
+                  product_photos:
+                    - https://example.com/photo1.jpg
+                    - https://example.com/photo2.jpg
+                  product_url: https://youtu.be/0LE0trd740Q
+              wrongCatIdFormat:
+                summary: invalid category_id format
+                value:
+                  product_name: RGB keyboard
+                  category_id: 12345n
+                  category_name: Keyboards
+                  short_description: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience
+                  detailed_description: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace
+                  product_photos:
+                    - https://example.com/photo1.jpg
+                    - https://example.com/photo2.jpg
+                  product_url: https://youtu.be/0LE0trd740Q
+              missingProductName:
+                summary: Missing product name
+                value:
+                  category_id: 12345n
+                  category_name: Keyboards
+                  short_description: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience
+                  detailed_description: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace
+                  product_photos:
+                    - https://example.com/photo1.jpg
+                    - https://example.com/photo2.jpg
+                  product_url: https://youtu.be/0LE0trd740Q
       responses:
         '200':
           description: Success
@@ -1495,6 +1469,88 @@ components:
         - phone
         - password
         - activation_code
+    ProductData:
+      title: Product
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the product
+          readOnly: true
+          nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
+        category_id:
+          type: integer
+          description: ID of the category the product belongs to
+          nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
+        product_name:
+          type: string
+          description: Name of the product
+          maxLength: 100
+          minLength: 3
+          nullable: false
+          pattern: ^[^\n]*$
+        short_description:
+          type: string
+          description: Short description of the product
+          maxLength: 1000
+          minLength: 20
+          nullable: false
+          pattern: ^[^\n]*$
+        detailed_description:
+          type: string
+          description: Detailed description of the product
+          maxLength: 10000
+          nullable: true
+          pattern: ^.*$
+        product_url:
+          type: string
+          format: uri
+          description: URL to the product page
+          nullable: true
+          maxLength: 1000
+      required:
+            - category_id
+            - product_name
+            - short_description
+    PageInfo:
+      title: PageInfo
+      type: object
+      properties:
+        has_next_page:
+          type: boolean
+          description: Indicates if there are more pages available
+        end_cursor:
+          type: string
+          description: Cursor to access the next page of results
+          nullable: true
+          maxLength: 100
+          pattern: ^[^\n]*$
+        start_cursor:
+          type: string
+          description: Cursor to access the previous page of results
+          nullable: true
+          maxLength: 100
+          pattern: ^[^\n]*$
+        total_count:
+          type: integer
+          description: Total number of items in the result set
+          nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
+        page:
+          type: integer
+          description: Current page number
+          nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
     ErrorObject:
       type: object
       properties:
