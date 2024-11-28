@@ -1312,9 +1312,11 @@ paths:
                     items:
                       type: string
                       maxLength: 1000
+                      format: uri
                   product_url:
                     type: string
                     maxLength: 1000
+                    format: uri
         '400':
           description: Please fill in all the required fields
           content:
