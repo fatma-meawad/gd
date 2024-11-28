@@ -1219,7 +1219,7 @@ paths:
                   type: string
                   minLength: 3
                   maxLength: 100
-                  pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                  pattern: ^[^\n]*$
                   example: Wireless RGB Keyboard
                 category_id:
                   type: integer
@@ -1232,13 +1232,13 @@ paths:
                   minLength: 3
                   maxLength: 100
                   nullable: true
-                  pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                  pattern: ^[^\n]*$
                   example: Keyboards
                 short_description:
                   type: string
                   minLength: 20
                   maxLength: 1000
-                  pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                  pattern: ^[^\n]*$
                   example: >-
                     Experience seamless typing with this wireless RGB keyboard,
                     featuring customizable backlighting, ergonomic design, and
@@ -1248,7 +1248,7 @@ paths:
                   type: string
                   maxLength: 10000
                   nullable: true
-                  pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                  pattern: ^.*$
                   example: >-
                     Upgrade your typing experience with this wireless RGB
                     keyboard, combining style and functionality. With
@@ -1285,27 +1285,27 @@ paths:
                   id:
                     type: string
                     maxLength: 1000
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^[^\n]*$
                   name:
                     type: string
                     maxLength: 100
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^[^\n]*$
                   category_id:
                     type: string
                     maxLength: 1000
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^[^\n]*$
                   category_name:
                     type: string
                     maxLength: 255
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^[^\n]*$
                   short_description:
                     type: string
                     maxLength: 1000
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^[^\n]*$
                   detailed_description:
                     type: string
                     maxLength: 10000
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^.*$
                   product_photos:
                     type: array
                     maxItems: 5
@@ -1327,12 +1327,12 @@ paths:
                   status:
                     type: string
                     maxLength: 1000
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^.*$
                     example: error
                   message:
                     type: string
                     maxLength: 1000
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^.*$
         '401':
           description: Unauthorized
           content:
@@ -1343,12 +1343,12 @@ paths:
                   status:
                     type: string
                     maxLength: 1000
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^.*$
                     example: error
                   message:
                     type: string
                     maxLength: 1000
-                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
+                    pattern: ^.*$
         default:
           description: Unexpected error
           content:
