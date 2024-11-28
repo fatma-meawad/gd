@@ -703,12 +703,10 @@ paths:
             examples:
               validMessage:
                 value:
-                  id: 1
                   sender_id: 1
                   recipient_id: 2
                   thread: thread name
                   content: Hello!
-                  time: '2024-11-08T19:18:53Z'
       responses:
         '200':
           description: Message sent successfully
