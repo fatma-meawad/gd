@@ -1327,10 +1327,12 @@ paths:
                   status:
                     type: string
                     maxLength: 1000
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                     example: error
                   message:
                     type: string
                     maxLength: 1000
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
         '401':
           description: Unauthorized
           content:
@@ -1341,10 +1343,12 @@ paths:
                   status:
                     type: string
                     maxLength: 1000
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
                     example: error
                   message:
                     type: string
                     maxLength: 1000
+                    pattern: "^[a-zA-Z0-9 _&,'-.]+$"
         default:
           description: Unexpected error
           content:
