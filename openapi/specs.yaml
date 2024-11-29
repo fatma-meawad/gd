@@ -1254,43 +1254,24 @@ paths:
               schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
-                  id:
-                    type: string
-                    maxLength: 1000
-                    pattern: ^[^\n]*$
-                  name:
-                    type: string
-                    maxLength: 100
-                    pattern: ^[^\n]*$
-                  category_id:
-                    type: string
-                    maxLength: 1000
-                    pattern: ^[^\n]*$
-                  category_name:
-                    type: string
-                    maxLength: 255
-                    pattern: ^[^\n]*$
-                  short_description:
-                    type: string
-                    maxLength: 1000
-                    pattern: ^[^\n]*$
-                  detailed_description:
-                    type: string
-                    maxLength: 10000
-                    pattern: ^.*$
-                  product_photos:
-                    type: array
-                    maxItems: 5
-                    items:
-                      type: string
-                      maxLength: 1000
-                      format: uri
-                  product_url:
-                    type: string
-                    maxLength: 1000
-                    format: uri
+                  successObject:
+                    $ref: '#/components/schemas/SuccessObject'
+                  productObject:
+                    $ref: '#/components/schemas/ProductData'
+              examples:
+                successExample:
+                  summary: Success message for product creation
+                  value:
+                    status: success
+                    messages:
+                      - Product created
+                      - The product can be viewed on the product list
+                    id: 2147483647
+                    category_id: 123456
+                    product_name: "Sample product"
+                    short_description: "Sample description"
+                    detailed_description: "Sample long description"
+                    product_url: "https://youtu.be/0LE0trd740Q"
         '400':
           description: Please fill in all the required fields
           content:
