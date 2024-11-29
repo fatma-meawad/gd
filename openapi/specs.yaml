@@ -1302,6 +1302,8 @@ paths:
                   status: error
                   errors:
                     - Unauthorised
+                  locations:
+                    - products.controller.js
         default:
           description: Unexpected error
           content:
