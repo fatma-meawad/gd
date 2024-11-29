@@ -1254,10 +1254,13 @@ paths:
               schema:
                 type: object
                 properties:
-                  successObject:
-                    $ref: '#/components/schemas/SuccessObject'
-                  productObject:
-                    $ref: '#/components/schemas/ProductData'
+                  data:
+                    type: object
+                    properties:
+                      successObject:
+                        $ref: '#/components/schemas/SuccessObject'
+                      productObject:
+                        $ref: '#/components/schemas/ProductData'
               examples:
                 successExample:
                   summary: Success message for product creation
