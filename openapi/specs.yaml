@@ -1277,21 +1277,20 @@ paths:
                       - 'https://www.youtube.com/photo2.jpg'
                     product_url: "https://youtu.be/0LE0trd740Q"
         '400':
-          description: Please fill in all the required fields
+          description: Please fill in all the required fields wirh data of approppriate format
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    maxLength: 1000
-                    pattern: ^.*$
-                    example: error
-                  message:
-                    type: string
-                    maxLength: 1000
-                    pattern: ^.*$
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Invalid input
+                  locations:
+                    - products.controller.js
+                    - products.db.js
+                    - product.services.js
         '401':
           description: Unauthorized
           content:
