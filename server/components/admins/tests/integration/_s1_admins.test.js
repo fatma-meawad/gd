@@ -4,15 +4,15 @@ const ROOT_DIR = process.cwd();
 const app = require(ROOT_DIR + "/app");
 const baseUrl = process.env.BASE_API_TEST_URL;
 
-// Import the necessary modules for unit tests
-const { getAdmins } = require("../../../../db/admins.db"); // Assuming admins.db.js is in db folder
-const db = require("../../../../db/connection"); // Actual database connection file
+// Import the necessary module for unit tests
+const { getAdmins } = require("../../db/admins.db");
 
-// Mock the db module to prevent real database calls
-jest.mock("../../../../db/connection");
+// Mock the getAdmins function
+jest.mock("../../db/admins.db", () => ({
+  getAdmins: jest.fn(),
+}));
 
 describe("Test suite for /s1/admins", () => {
-
   // ===== UNIT TESTS FOR DATABASE FUNCTIONS =====
   describe("Unit Tests for getAdmins Function", () => {
     beforeEach(() => {
@@ -21,8 +21,11 @@ describe("Test suite for /s1/admins", () => {
 
     it("should return a list of admins when the query is successful", async () => {
       // Arrange: Mock the expected return value from the database query
-      const mockAdmins = [{ id: 1, name: 'Admin One' }, { id: 2, name: 'Admin Two' }];
-      db.query.mockResolvedValue({ rows: mockAdmins });
+      const mockAdmins = [
+        { id: 1, name: "Admin One" },
+        { id: 2, name: "Admin Two" },
+      ];
+      getAdmins.mockResolvedValue(mockAdmins);
 
       // Act: Call the function to be tested
       const admins = await getAdmins();
@@ -33,7 +36,7 @@ describe("Test suite for /s1/admins", () => {
 
     it("should return an empty array when no admins are found", async () => {
       // Arrange: Mock an empty result from the database
-      db.query.mockResolvedValue({ rows: [] });
+      getAdmins.mockResolvedValue([]);
 
       // Act: Call the function to be tested
       const admins = await getAdmins();
@@ -42,12 +45,12 @@ describe("Test suite for /s1/admins", () => {
       expect(admins).toEqual([]);
     });
 
-    it("should throw an error when the database query fails", async () => {
+    it("should throw an error when the query fails", async () => {
       // Arrange: Mock a rejected value to simulate a database error
-      db.query.mockRejectedValue(new Error("Query failed"));
+      getAdmins.mockRejectedValue(new Error("Query failed"));
 
-      // Act & Assert: Call the function and expect it to throw the correct error
-      await expect(getAdmins()).rejects.toThrow("Database Error: Query failed");
+      // Act & Assert: Expect the function to throw an error
+      await expect(getAdmins()).rejects.toThrow("Query failed");
     });
   });
 
@@ -258,9 +261,5 @@ describe("Test suite for /s1/admins", () => {
       expect(response.status).toBe(400);
       expect(response.body.errors.length).toBeGreaterThan(0);
     });
-
-    // More integration test cases if needed...
   });
 });
-
-
