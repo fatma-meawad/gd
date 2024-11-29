@@ -13,47 +13,7 @@ jest.mock("../../db/admins.db", () => ({
 }));
 
 describe("Test suite for /s1/admins", () => {
-  // ===== UNIT TESTS FOR DATABASE FUNCTIONS =====
-  describe("Unit Tests for getAdmins Function", () => {
-    beforeEach(() => {
-      jest.clearAllMocks(); // Clear any previous mocks before each test to avoid side effects
-    });
-
-    it("should return a list of admins when the query is successful", async () => {
-      // Arrange: Mock the expected return value from the database query
-      const mockAdmins = [
-        { id: 1, name: "Admin One" },
-        { id: 2, name: "Admin Two" },
-      ];
-      getAdmins.mockResolvedValue(mockAdmins);
-
-      // Act: Call the function to be tested
-      const admins = await getAdmins();
-
-      // Assert: Verify that the function returns the expected data
-      expect(admins).toEqual(mockAdmins);
-    });
-
-    it("should return an empty array when no admins are found", async () => {
-      // Arrange: Mock an empty result from the database
-      getAdmins.mockResolvedValue([]);
-
-      // Act: Call the function to be tested
-      const admins = await getAdmins();
-
-      // Assert: Verify that the function returns an empty array
-      expect(admins).toEqual([]);
-    });
-
-    it("should throw an error when the query fails", async () => {
-      // Arrange: Mock a rejected value to simulate a database error
-      getAdmins.mockRejectedValue(new Error("Query failed"));
-
-      // Act & Assert: Expect the function to throw an error
-      await expect(getAdmins()).rejects.toThrow("Query failed");
-    });
-  });
-
+ 
   // ===== INTEGRATION TESTS FOR /s1/admins =====
   describe("GET /s1/admins", () => {
     // Test case for valid inputs
@@ -130,7 +90,9 @@ describe("Test suite for /s1/admins", () => {
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors).toContainEqual(
         expect.objectContaining({
-          message: expect.stringContaining("'page' must be greater than or equal to 1"),
+          message: expect.stringContaining(
+            "'page' must be greater than or equal to 1"
+          ),
         })
       );
     });
@@ -150,7 +112,9 @@ describe("Test suite for /s1/admins", () => {
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors).toContainEqual(
         expect.objectContaining({
-          message: expect.stringContaining("'limit' must be greater than or equal to 1"),
+          message: expect.stringContaining(
+            "'limit' must be greater than or equal to 1"
+          ),
         })
       );
     });
@@ -169,7 +133,9 @@ describe("Test suite for /s1/admins", () => {
       expect(response.status).toBe(400);
       expect(response.body.errors).toContainEqual(
         expect.objectContaining({
-          message: expect.stringContaining("'page' must be greater than or equal to 1"),
+          message: expect.stringContaining(
+            "'page' must be greater than or equal to 1"
+          ),
         })
       );
     });
@@ -188,7 +154,9 @@ describe("Test suite for /s1/admins", () => {
       expect(response.status).toBe(400);
       expect(response.body.errors).toContainEqual(
         expect.objectContaining({
-          message: expect.stringContaining("'limit' must be greater than or equal to 1"),
+          message: expect.stringContaining(
+            "'limit' must be greater than or equal to 1"
+          ),
         })
       );
     });
@@ -207,7 +175,9 @@ describe("Test suite for /s1/admins", () => {
       expect(response.status).toBe(400);
       expect(response.body.errors).toContainEqual(
         expect.objectContaining({
-          message: expect.stringContaining("'page' must be less than or equal to 1000"),
+          message: expect.stringContaining(
+            "'page' must be less than or equal to 1000"
+          ),
         })
       );
     });
