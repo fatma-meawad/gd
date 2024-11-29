@@ -701,6 +701,11 @@ paths:
                   $ref: '#/components/schemas/MessageData/properties/thread'
                 content:
                   $ref: '#/components/schemas/MessageData/properties/content'
+              required:
+                - sender_id
+                - recipient_id
+                - thread
+                - content
             examples:
               validMessage:
                 value:
@@ -1476,11 +1481,6 @@ components:
           format: date-time
           description: A timestamp in ISO 8601 format representing the date and time the message was sent, in UTC
           readOnly: true
-      required:
-        - sender_id
-        - recipient_id
-        - thread
-        - content
     ErrorObject:
       type: object
       properties:
