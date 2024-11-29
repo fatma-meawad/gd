@@ -284,13 +284,19 @@ paths:
       - in: query
         name: page
         schema:
-          $ref: "#/components/schemas/Pagination/properties/page"
-        description: The page number to retrieve.
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 1000
+          description: The page number to retrieve.
       - in: query
         name: limit
         schema:
-          $ref: "#/components/schemas/Pagination/properties/limit"
-        description: The number of results per page.
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 100
+          description: The number of results per page.
     responses:
       '200':
         description: Successfully retrieved list of administrators.
@@ -304,11 +310,23 @@ paths:
                   items:
                     $ref: "#/components/schemas/AdminData"
                 page:
-                  $ref: "#/components/schemas/Pagination/properties/page"
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 1000
+                  description: The current page number.
                 limit:
-                  $ref: "#/components/schemas/Pagination/properties/limit"
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 100
+                  description: The number of results per page.
                 total:
-                  $ref: "#/components/schemas/Pagination/properties/total"
+                  type: integer
+                  format: int32
+                  minimum: 0
+                  maximum: 1000000
+                  description: The total number of administrators.
       '400':
         description: Bad Request due to invalid parameters.
         content:
@@ -345,66 +363,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ErrorObject'
-
-components:
-  schemas:
-    Pagination:
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 1000
-          description: The current page number.
-        limit:
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 100
-          description: The number of results per page.
-        total:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 1000000
-          description: The total number of administrators.
-    AdminData:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 999999999
-          description: Unique identifier for the admin.
-        name:
-          type: string
-          maxLength: 100
-          description: Name of the administrator.
-        status:
-          type: string
-          enum: [active, inactive]
-          description: Activation status of the administrator.
-        created_at:
-          type: string
-          format: date-time
-          description: Account creation date.
-        deactivated_at:
-          type: string
-          format: date-time
-          nullable: true
-          description: Deactivation time, if applicable.
-    ErrorObject:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-          description: Error code.
-        message:
-          type: string
-          description: Error message.
   /s1/admins/register:
     post:
       tags:
