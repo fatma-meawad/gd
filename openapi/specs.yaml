@@ -138,6 +138,7 @@ paths:
           description: Unauthorized action
   /s1/admins/password-reset:
     get:
+      operationId: getAdminsPasswordReset
       tags:
         - admins
       summary: >-
@@ -148,6 +149,8 @@ paths:
           name: token
           schema:
             type: string
+            maxLength: 128
+            pattern: '^[A-Za-z0-9]{8,128}$'
           required: true
           description: Token to be validated
       responses:
@@ -164,9 +167,11 @@ paths:
                         type: object
                         properties:
                           userId:
-                            type: string
+                            $ref: '#/components/schemas/AdminData/properties/id'
                           additionalInfo:
                             type: string
+                            maxLength: 128
+                            pattern: '^[A-Za-z0-9\s]*$'
               examples:
                 successExample:
                   summary: Valid token example
@@ -200,6 +205,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
     put:
+      operationId: putAdminsPasswordReset
       tags:
         - admins
       summary: >-
@@ -213,10 +219,7 @@ paths:
               type: object
               properties:
                 new_password:
-                  type: string
-                  description: The new password to be set for the user
-                  minLength: 8
-                  maxLength: 64
+                  $ref: '#/components/schemas/AdminData/properties/password'
       responses:
         '200':
           description: Password reset successful.
