@@ -8,9 +8,7 @@ const baseUrl = process.env.BASE_API_TEST_URL;
 //TODO: Check the requirements in the task to see what other checks are required
 
 describe("Test suite for /s1/admins/register", () => {
-
   describe("Test suite for post /s1/admins/register", () => {
-    
     test("Test case: /s1/admins/register with Request Example: validRegistration", async () => {
       const response = await request(app)
         .post(baseUrl + "/s1/admins/register")

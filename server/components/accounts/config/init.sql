@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 
 CREATE USER account_user WITH PASSWORD 'account_password';
-=======
-CREATE DATABASE Accounts;
->>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0
 
 DROP DATABASE IF EXISTS accounts;
 
@@ -27,14 +23,4 @@ CREATE TABLE SellerAccount (
 
 );
 
--- Add seed data if needed for your tests or add them in the test code
-
-insert into BusinessAccount values (default);
-insert into SellerAccount values (default);
-insert into BusinessAccount values (default);
-insert into SellerAccount values (default);
-insert into BusinessAccount values (default);
-insert into SellerAccount values (default);
-insert into BusinessAccount values (default);
-insert into SellerAccount values (default);
 

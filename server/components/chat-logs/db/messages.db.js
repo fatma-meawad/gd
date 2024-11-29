@@ -1,5 +1,3 @@
-const schema = require("../schema.json");
-
 module.exports.postMessagesDb = async (
   sender_id,
   recipient_id,
