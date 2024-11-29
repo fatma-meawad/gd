@@ -226,7 +226,9 @@ describe("Test suite for /s1/admins", () => {
       expect(response.status).toBe(400);
       expect(response.body.errors).toContainEqual(
         expect.objectContaining({
-          message: expect.stringContaining("'limit' must be less than or equal to 100"),
+          message: expect.stringContaining(
+            "'limit' must be less than or equal to 100"
+          ),
         })
       );
     });
