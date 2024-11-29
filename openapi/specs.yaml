@@ -1296,17 +1296,12 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    maxLength: 1000
-                    pattern: ^.*$
-                    example: error
-                  message:
-                    type: string
-                    maxLength: 1000
-                    pattern: ^.*$
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Unauthorised
         default:
           description: Unexpected error
           content:
