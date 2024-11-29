@@ -720,6 +720,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MessageData'
+                required:
+                  - id
+                  - sender_id
+                  - recipient_id
+                  - thread
+                  - content
+                  - time
               examples:
                 successfulResponse:
                   value:
