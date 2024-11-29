@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-const schema = require("../schema.json");
->>>>>>> aecadb070dc41c418107f9a1c82ffc8061e4c8d0
 const AppError = require("../../../utils/error"); // Assuming error handler is used for consistent error responses
 const mockBusinesses = require("./mock/businesses.json");
 
