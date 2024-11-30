@@ -31,6 +31,7 @@ paths:
 
   /s1/admins/login:
     post:
+      operationId: loginAdmin
       tags:
         - admins
       summary: >-
@@ -72,30 +73,102 @@ paths:
                   $ref: '#/components/schemas/AdminData/properties/email'
                 password:
                   $ref: '#/components/schemas/AdminData/properties/password'
+              required:
+                - email
+                - password
+            examples:
+              validLogin:
+                summary: Valid login request
+                value:
+                  email: admin@example.com
+                  password: SecureP@ss123
+              invalidEmail:
+                summary: Invalid email format
+                value:
+                  email: invalid-email
+                  password: SecureP@ss123
+              invalidPassword:
+                summary: Incorrect password
+                value:
+                  email: admin@example.com
+                  password: wrongpassword
+              blockedAccount:
+                summary: Account blocked due to multiple failed attempts
+                value:
+                  email: blocked.admin@example.com
+                  password: SecureP@ss123
       responses:
         '200':
           description: Login successful
           content:
             application/json:
               schema:
-                required:
-                  - admin_id
-                type: object
-                properties:
-                  admin_id:
-                    type: string
+                allOf:
+                  - $ref: '#/components/schemas/SuccessObject'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          admin_id:
+                            type: string
+                            description: The unique identifier of the logged-in admin
+                          message:
+                            type: string
+                            description: A success message
+                        required:
+                          - admin_id
+              example:
+                value:
+                  data:
+                    admin_id: admin-123
+                  messages:
+                    - Login successful
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
         '400':
-          description: Invalid credentials. Please try again.
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Invalid credentials. Please try again.
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
         '423':
-          description: >-
-            Your account has been blocked due to multiple failed login attempts.
-            Please reset your password
+          description: Account blocked due to failed attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Your account has been blocked due to multiple failed login attempts. Please reset your password.
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
         default:
           description: Unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - An unexpected error occurred. Please contact support.
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
 
 
   /s1/admins/{id}:
