@@ -1446,6 +1446,7 @@ components:
         - phone
         - password
         - activation_code
+      additionalProperties: false
     ErrorObject:
       type: object
       properties:
