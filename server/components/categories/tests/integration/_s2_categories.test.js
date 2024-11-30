@@ -10,7 +10,6 @@ const baseUrl = process.env.BASE_API_TEST_URL;
 describe("Test suite for /s2/categories", () => {
   describe("Test suite for post /s2/categories", () => {
     test("Test case: /s2/categories with Request Example: ValidExample", async () => {
-      console.log("111: ", baseUrl + "/s2/categories")
       const response = await request(app)
         .post(baseUrl + "/s2/categories")
         .set("Accept", "application/json")

@@ -30,8 +30,6 @@ exports.postCategories = asyncHandler(async (req, res) => {
     description: req.body.description,
   };
 
-  console.log("req.headers: ", req.headers)
-
   // Code to simulate 401 error
 
   const headers = req.headers;
@@ -45,7 +43,6 @@ exports.postCategories = asyncHandler(async (req, res) => {
     }
 
     res.status(401).send(result);
-    console.log("TEST")
   }
 
   /**  request:
@@ -60,9 +57,6 @@ exports.postCategories = asyncHandler(async (req, res) => {
   */
   let result = await categories.postCategories(...Object.values(options));
 
-  // Temporary response
-  // result.messages.push("postCategories controller not implemented yet");
-  // result.locations.push("categories.controller.js");
   res.status(200).send(result);
 });
 

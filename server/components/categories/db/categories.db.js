@@ -18,9 +18,6 @@ module.exports.postCategoriesDb = async (title, photo_url, description) => {
   2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
 */
-  console.log("title", title)
-  console.log("photo_url", photo_url)
-  console.log("description", description)
 
   return {
     messages: [{
