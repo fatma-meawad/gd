@@ -314,7 +314,7 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
   /s1/admins/register:
     post:
-      operationId: registerAdmin
+      operationId: postAdminsRegister
       tags:
         - admins
       summary: >-
