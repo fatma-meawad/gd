@@ -105,7 +105,7 @@ module.exports.postAdminsPasswordResetDb = async (options) => {
   */
     return {
     data: {
-      id: "admin-123",
+      id: "123",
       email: admin.email,
       full_name: admin.full_name,
     },
