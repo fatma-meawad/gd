@@ -496,6 +496,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
     post:
+      operationId: postCategories
       summary: >-
         Creates a new category (author: @Wong Chung Man, tester: @Alona, @Iryna,
         @PietroLauria) (reviewer:@Jany-M, @alberto)
