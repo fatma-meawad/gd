@@ -510,36 +510,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  maxLength: 30
-                  pattern: '^.*$'
-                photo_url:
-                  type: string
-                  maxLength: 300
-                  pattern: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
-                description:
-                  type: string
-                  maxLength: 300
-                  pattern: '^.*$'
+              $ref: "#/components/schemas/CategoryRequestData"
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    maxLength: 50
-                    pattern: '^.*$'
-                example:
-                  title: Food
-                  photo_url: 'https://url.com/photo.jpg'
-                  description: This is something you can eat.
+                $ref: "#/components/schemas/CategoryResponseData"
         '400':
           description: Invalid input
           content:
@@ -1509,3 +1487,54 @@ components:
             - tracking location optional
       required:
         - messages
+    CategoryRequestData:
+      title: Category Request
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title for the category
+          maxLength: 30
+          pattern: '^.*$'
+        photo_url:
+          type: string
+          description: Photo URL for the category
+          maxLength: 300
+          pattern: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
+        description:
+          type: string
+          description: Description for the category
+          maxLength: 300
+          pattern: '^.*$'
+      example:
+        title: Food
+        photo_url: 'https://url.com/photo.jpg'
+        description: This is something you can eat.
+    CategoryResponseData:
+      title: Category Response
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the category
+          readOnly: true
+        title:
+          type: string
+          description: Title for the category
+          maxLength: 30
+          pattern: '^.*$'
+        photo_url:
+          type: string
+          description: Photo URL for the category
+          maxLength: 300
+          pattern: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
+        description:
+          type: string
+          description: Description for the category
+          maxLength: 300
+          pattern: '^.*$'
+      example:
+        id: 123
+        title: Food
+        photo_url: 'https://url.com/photo.jpg'
+        description: This is something you can eat.
