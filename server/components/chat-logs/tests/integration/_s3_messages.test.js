@@ -60,7 +60,7 @@ describe("Test suite for /s3/messages", () => {
           time: "2024-11-08T19:18:53Z",
         })
         .set("Content-Type", "application/json");
-    
+
       expect(response.status).toBe(400);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
@@ -78,12 +78,12 @@ describe("Test suite for /s3/messages", () => {
           content: "Hello!",
         })
         .set("Content-Type", "application/json");
-    
+
       expect(response.status).toBe(400);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("data");
       expect(response.body).toHaveProperty("messages");
-    });    
+    });
   });
 });
