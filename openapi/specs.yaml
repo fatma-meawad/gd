@@ -422,11 +422,14 @@ paths:
                             description: The unique identifier of the registered admin
                           email:
                             type: string
+                            format: email
                             maxLength: 254
                             description: The email address of the registered admin
                           full_name:
                             type: string
+                            minLength: 2
                             maxLength: 100
+                            pattern: '^[a-zA-Z\s.-]*$'
                             description: The full name of the registered admin
                         required:
                           - id
@@ -1417,6 +1420,7 @@ components:
           type: string
           minLength: 2
           maxLength: 100
+          pattern: '^[a-zA-Z\s.-]*$'
           description: Full name of the administrator
         email:
           type: string
@@ -1433,7 +1437,7 @@ components:
           format: password
           minLength: 8
           maxLength: 72
-          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
+          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]*$'
           description: >-
             Admin password - must be at least 8 characters with mix of letters,
             numbers and symbols
@@ -1441,6 +1445,7 @@ components:
         address:
           type: string
           maxLength: 200
+          pattern: '^[\\p{L}\\p{N}\\s\\.,#\\-\\/]*$'
           description: Physical address
         activation_code:
           type: string
@@ -1455,6 +1460,7 @@ components:
         bio:
           type: string
           maxLength: 500
+          pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
           description: Admin biography or description
       required:
         - full_name
@@ -1469,11 +1475,16 @@ components:
           type: string
           maxLength: 50
           description: error
+          enum:
+            - error
+            - fail
+            - invalid
         errors:
           type: array
           items:
             type: string
-            maxLength: 500 
+            maxLength: 500
+            pattern: '^[a-zA-Z0-9\s.,!?()-]*$'            
           description: Error messages
           example:
             - invalid
@@ -1483,6 +1494,7 @@ components:
           items:
             type: string
             maxLength: 255
+            pattern: '^[\\w\\-\\.\\\/]+\\.(js|ts|sql|json|yaml|md)$'
           description: 'Optional: Additional information about the location of each message'
           example:
             - db.js
@@ -1497,6 +1509,7 @@ components:
           items:
             type: string
             maxLength: 255
+            pattern: '^[\\w\\-\\.\\\/]+\\.(js|ts|sql|json|yaml|md)$'
           description: Optional tracking locations related to the data
           example:
             - tracking location optional
@@ -1504,7 +1517,8 @@ components:
           type: array
           items:
             type: string
-            maxLength: 500
+            maxLength: 5003
+            pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
           description: Messages that provide additional information about the response
           example:
             - tracking location optional
