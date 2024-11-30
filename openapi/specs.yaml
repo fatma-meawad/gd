@@ -506,6 +506,7 @@ paths:
       tags:
         - categories
       requestBody:
+        description: title, photo_url and description for the POST endpoint
         required: true
         content:
           application/json:
@@ -1516,6 +1517,9 @@ components:
       properties:
         id:
           type: integer
+          format: int64
+          minimum: 1
+          maximum: 999
           description: Unique identifier for the category
           readOnly: true
         title:
@@ -1533,8 +1537,12 @@ components:
           description: Description for the category
           maxLength: 300
           pattern: '^.*$'
+        is_delete:
+          type: boolean
+          description: Boolean value to indicate whether the category is deleted
       example:
         id: 123
         title: Food
         photo_url: 'https://url.com/photo.jpg'
         description: This is something you can eat.
+        is_deleted: false
