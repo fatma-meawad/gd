@@ -417,6 +417,8 @@ paths:
                         properties:
                           id:
                             type: integer
+                            minimum: 1
+                            maximum: 2147483647
                             description: The unique identifier of the registered admin
                           email:
                             type: string
@@ -1405,8 +1407,10 @@ components:
       properties:
         id:
           type: integer
-          description: Unique identifier for the admin
           readOnly: true
+          description: "Unique identifier for the admin"
+          minimum: 1
+          maximum: 2147483647
         full_name:
           type: string
           minLength: 2
