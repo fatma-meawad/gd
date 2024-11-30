@@ -1500,7 +1500,7 @@ components:
           type: string
           description: Photo URL for the category
           maxLength: 300
-          pattern: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
+          pattern: '^.*$'
         description:
           type: string
           description: Description for the category
@@ -1527,7 +1527,7 @@ components:
           type: string
           description: Photo URL for the category
           maxLength: 300
-          pattern: /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/
+          pattern: '^.*$'
         description:
           type: string
           description: Description for the category
