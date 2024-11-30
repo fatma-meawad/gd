@@ -54,7 +54,11 @@ exports.postCategories = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await categories.postCategories(options.title, options.photo_url, options.description);
+  let result = await categories.postCategories(
+    options.title,
+    options.photo_url,
+    options.description
+  );
 
   res.status(200).send(result);
 });
