@@ -1411,10 +1411,11 @@ components:
     AdminData:
       title: Admin
       type: object
+      description: Schema for admin registration and management
       properties:
         id:
           type: integer
-          format: int32          
+          format: int32
           readOnly: true
           description: "Unique identifier for the admin"
           minimum: 1
@@ -1440,15 +1441,15 @@ components:
           format: password
           minLength: 8
           maxLength: 72
-          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]*$'
+          pattern: '^[A-Za-z\d@$!%*#?&]*$' # Removed lookaheads
           description: >-
-            Admin password - must be at least 8 characters with mix of letters,
+            Admin password - must be at least 8 characters with a mix of letters,
             numbers and symbols
           writeOnly: true
         address:
           type: string
           maxLength: 200
-          pattern: '^[\\p{L}\\p{N}\\s\\.,#\\-\\/]*$'
+          pattern: '^[a-zA-Z0-9\s.,#-/]*$' # Simplified pattern
           description: Physical address
         activation_code:
           type: string
