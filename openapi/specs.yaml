@@ -422,9 +422,11 @@ paths:
                             description: The unique identifier of the registered admin
                           email:
                             type: string
+                            maxLength: 254
                             description: The email address of the registered admin
                           full_name:
                             type: string
+                            maxLength: 100
                             description: The full name of the registered admin
                         required:
                           - id
@@ -1486,6 +1488,7 @@ components:
           type: array
           items:
             type: string
+            maxLength: 255
           description: Optional tracking locations related to the data
           example:
             - tracking location optional
@@ -1493,6 +1496,7 @@ components:
           type: array
           items:
             type: string
+            maxLength: 500
           description: Messages that provide additional information about the response
           example:
             - tracking location optional
