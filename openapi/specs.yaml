@@ -314,6 +314,7 @@ paths:
                 $ref: "#/components/schemas/ErrorObject"
   /s1/admins/register:
     post:
+      operationId: registerAdmin
       tags:
         - admins
       summary: >-
@@ -1481,6 +1482,7 @@ components:
             - invalid
         errors:
           type: array
+          maxItems: 50          
           items:
             type: string
             maxLength: 500
@@ -1491,6 +1493,7 @@ components:
             - not available
         locations:
           type: array
+          maxItems: 20            
           items:
             type: string
             maxLength: 255
@@ -1506,6 +1509,7 @@ components:
       properties:
         locations:
           type: array
+          maxItems: 20            
           items:
             type: string
             maxLength: 255
@@ -1515,9 +1519,10 @@ components:
             - tracking location optional
         messages:
           type: array
+          maxItems: 50
           items:
             type: string
-            maxLength: 5003
+            maxLength: 500
             pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
           description: Messages that provide additional information about the response
           example:
