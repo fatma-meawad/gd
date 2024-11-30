@@ -418,6 +418,7 @@ paths:
                         properties:
                           id:
                             type: integer
+                            format: int32
                             minimum: 1
                             maximum: 2147483647
                             description: The unique identifier of the registered admin
@@ -1413,6 +1414,7 @@ components:
       properties:
         id:
           type: integer
+          format: int32          
           readOnly: true
           description: "Unique identifier for the admin"
           minimum: 1
