@@ -411,7 +411,7 @@ paths:
                         type: object
                         properties:
                           id:
-                            type: string
+                            type: integer
                             description: The unique identifier of the registered admin
                           email:
                             type: string
@@ -430,7 +430,7 @@ paths:
               example:
                 value:
                   data:
-                    id: admin-123
+                    id: 123
                     full_name: John Smith
                     email: john.smith@example.com
                     phone: '+1234567890'
@@ -1403,7 +1403,7 @@ components:
       type: object
       properties:
         id:
-          type: string
+          type: integer
           description: Unique identifier for the admin
           readOnly: true
         full_name:
