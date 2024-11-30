@@ -505,6 +505,20 @@ paths:
         the general overall activity of each registered business.
       tags:
         - categories
+      parameters:
+        - in: header
+          name: auth
+          description: Authorization token for getting access to the endpoint (optional)
+          # required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validFormat:
+              summary: Authorization token
+              value: 1234
       requestBody:
         description: title, photo_url and description for the POST endpoint
         required: true
