@@ -34,13 +34,12 @@ exports.postCategories = asyncHandler(async (req, res) => {
 
   const headers = req.headers;
   if (!headers.auth) {
-
     const result = {
       message: '"auth" header is missing',
       status: 401,
-      errors: ['401 unauthorized'],
+      errors: ["401 unauthorized"],
       locations: ["categories.controller.js"],
-    }
+    };
 
     res.status(401).send(result);
   }

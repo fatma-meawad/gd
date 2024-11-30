@@ -20,13 +20,15 @@ module.exports.postCategoriesDb = async (title, photo_url, description) => {
 */
 
   return {
-    messages: [{
-      id: 123,
-      title: title,
-      photo_url: photo_url,
-      description: description,
-      is_deleted: false
-    }],
+    messages: [
+      {
+        id: 123,
+        title: title,
+        photo_url: photo_url,
+        description: description,
+        is_deleted: false,
+      },
+    ],
     locations: ["categories.database.js"],
   };
 };

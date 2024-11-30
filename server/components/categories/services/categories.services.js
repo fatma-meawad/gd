@@ -21,7 +21,11 @@ module.exports.postCategories = async (title, photo_url, description) => {
   // Implement your business logic here...
 
   try {
-    let result = await categories.postCategoriesDb(title, photo_url, description);
+    let result = await categories.postCategoriesDb(
+      title,
+      photo_url,
+      description
+    );
 
     return result;
   } catch (error) {

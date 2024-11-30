@@ -16,9 +16,9 @@ describe("Test suite for /s2/categories", () => {
         .set("auth", "Token")
         .query({})
         .send({
-          "title": "Food",
-          "photo_url": "https://url.com/photo.jpg",
-          "description": "This is something you can eat."
+          title: "Food",
+          photo_url: "https://url.com/photo.jpg",
+          description: "This is something you can eat.",
         })
         .set("Content-Type", "application/json");
 
@@ -40,9 +40,9 @@ describe("Test suite for /s2/categories", () => {
         .set("Accept", "application/json")
         .query({})
         .send({
-          "title": 123,
-          "photo_url": 123,
-          "description": 123
+          title: 123,
+          photo_url: 123,
+          description: 123,
         })
         .set("Content-Type", "application/json");
 
@@ -61,9 +61,9 @@ describe("Test suite for /s2/categories", () => {
         .set("Accept", "application/json")
         .query({})
         .send({
-          "title": "Food",
-          "photo_url": "https://url.com/photo.jpg",
-          "description": "This is something you can eat."
+          title: "Food",
+          photo_url: "https://url.com/photo.jpg",
+          description: "This is something you can eat.",
         })
         .set("Content-Type", "application/json");
 
