@@ -31,6 +31,7 @@ describe("Test suite for /s2/categories", () => {
       expect(response.body.messages[0]).toHaveProperty("title");
       expect(response.body.messages[0]).toHaveProperty("photo_url");
       expect(response.body.messages[0]).toHaveProperty("description");
+      expect(response.body.messages[0]).toHaveProperty("is_deleted");
       //TODO: If you have attributes that must be returned inside data, make sure they are marked required in openapi schema
     });
     test("Test case: /s2/categories with Request Example: InvalidExample - Error 400", async () => {

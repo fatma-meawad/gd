@@ -16,7 +16,7 @@ CREATE TABLE Category (
     id SERIAL PRIMARY KEY,
     name  VARCHAR(255),
     photo_url text,
-    descrption text,
+    description text,
     is_deleted BIT
 );
 

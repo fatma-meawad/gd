@@ -24,7 +24,8 @@ module.exports.postCategoriesDb = async (title, photo_url, description) => {
       id: 123,
       title: title,
       photo_url: photo_url,
-      description: description
+      description: description,
+      is_deleted: false
     }],
     locations: ["categories.database.js"],
   };
