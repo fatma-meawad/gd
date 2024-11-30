@@ -23,8 +23,8 @@ module.exports.postCategories = async (title, photo_url, description) => {
   try {
     let result = await categories.postCategoriesDb(title, photo_url, description);
     //delete this when you actually implement something.
-    result.messages.push("postCategories services not implemented yet");
-    result.locations.push("categories.services.js");
+    // result.messages.push("postCategories services not implemented yet");
+    // result.locations.push("categories.services.js");
 
     return result;
   } catch (error) {
