@@ -514,10 +514,13 @@ paths:
               properties:
                 title:
                   type: string
+                  maxLength: 99
                 photo_url:
                   type: string
+                  maxLength: 99
                 description:
                   type: string
+                  maxLength: 99
       responses:
         '200':
           description: Success
@@ -528,6 +531,7 @@ paths:
                 properties:
                   id:
                     type: string
+                    maxLength: 99
                 example:
                   title: Food
                   photo_url: 'https://url.com/photo.jpg'
@@ -1461,6 +1465,7 @@ components:
       properties:
         status:
           type: string
+          maxLength: 99
           description: error
         errors:
           type: array
@@ -1474,6 +1479,7 @@ components:
           type: array
           items:
             type: string
+            maxLength: 99
           description: 'Optional: Additional information about the location of each message'
           example:
             - db.js
