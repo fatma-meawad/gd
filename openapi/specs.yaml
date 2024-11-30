@@ -352,6 +352,11 @@ paths:
         provides specific feedback on what needs to be improved.
       requestBody:
         required: true
+        description: >
+          Provide the required admin registration details including full name, email,
+          phone number, and password. The activation code must be valid and unused.
+          Optional fields include address, profile photo URL, and bio. Password must
+          meet complexity requirements including minimum length and special characters.
         content:
           application/json:
             schema:
