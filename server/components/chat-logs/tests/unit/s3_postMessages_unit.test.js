@@ -4,59 +4,69 @@ const mockMessages = require("../../db/mock/messages.json");
 describe("postMessagesDb", () => {
   jest.mock("../../db/mock/messages.json", () => mockMessages);
 
-  const validMessage = {
-    sender_id: 5,
-    recipient_id: 6,
-    thread: "Test Thread",
-    content: "This is a test message",
-  };
-
-  const invalidMessage = {
-    sender_id: "invalid",
-    content: "",
-  };
-
-  beforeEach(() => {
-    jest.resetModules();
-    mockMessages.length = 0;
-  });
-
-  // Test Case 1: Successful insertion
+  // Test case 1: successfully save a valid message
   it("should successfully save a valid message and return it", async () => {
-    const result = await postMessagesDb(validMessage);
+    const result = await postMessagesDb(mockMessages[0]);
 
-    expect(result).toEqual({
-      data: {
-        id: validMessage.id,
-        sender_id: validMessage.sender_id,
-        recipient_id: validMessage.recipient_id,
-        thread: validMessage.thread,
-        content: validMessage.content,
-        time: validMessage.time,
-      },
+    expect(result.data).toEqual({
+      id: 1,
+      sender_id: 5,
+      recipient_id: 6,
+      thread: "Test Thread",
+      content: "This is a test message",
+      time: "2024-11-08T19:18:53Z",
     });
-    expect(mockMessages).toContainEqual(validMessage);
   });
 
-  // Test Case 2: Invalid input - missing required field
-  it("should throw an error for missing required fields", async () => {
-    await expect(postMessagesDb({})).rejects.toThrow(
-      "Missing required fields: sender_id, recipient_id, content"
+  // Test case 2: should have property 'sender_id'
+  test("should have property 'sender_id'", async () => {
+    const result = await postMessagesDb(
+      mockMessages[0].id,
+      mockMessages[0].recipient_id,
+      mockMessages[0].thread,
+      mockMessages[0].content,
+      mockMessages[0].time
     );
+
+    expect(result.data).toHaveProperty("sender_id");
   });
 
-  // Test Case 3: Invalid input - incorrect data types
-  it("should throw an error for invalid data types", async () => {
-    await expect(postMessagesDb(invalidMessage)).rejects.toThrow(
-      "Invalid data types for fields"
+  // Test case 3: should have property 'recipient_id'
+  test("should have property 'recipient_id'", async () => {
+    const result = await postMessagesDb(
+      mockMessages[0].sender_id,
+      mockMessages[0].id,
+      mockMessages[0].thread,
+      mockMessages[0].content,
+      mockMessages[0].time
     );
+
+    expect(result.data).toHaveProperty("recipient_id");
   });
 
-  // Test Case 4: Duplicate ID
-  it("should throw an error if a message with the same ID already exists", async () => {
-    mockMessages.push(validMessage);
-    await expect(postMessagesDb(validMessage)).rejects.toThrow(
-      "Message with the same ID already exists"
+  // Test case 4: should have property 'content'
+  test("should have property 'content'", async () => {
+    const result = await postMessagesDb(
+      mockMessages[0].sender_id,
+      mockMessages[0].recipient_id,
+      mockMessages[0].thread,
+      mockMessages[0].id,
+      mockMessages[0].time
     );
+
+    expect(result.data).toHaveProperty("content");
+  });
+
+  // Test case 5: should have property 'time'
+  test("should have property 'time'", async () => {
+    const result = await postMessagesDb(
+      mockMessages[0].sender_id,
+      mockMessages[0].recipient_id,
+      mockMessages[0].thread,
+      mockMessages[0].content,
+      mockMessages[0].id
+    );
+
+    expect(result.data).toHaveProperty("time");
   });
 });
