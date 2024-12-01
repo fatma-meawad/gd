@@ -14,7 +14,7 @@ ALTER DATABASE categories OWNER TO categories_user;
 
 CREATE TABLE Category (
     id SERIAL PRIMARY KEY,
-    name  VARCHAR(255),
+    title  VARCHAR(255),
     photo_url text,
     description text,
     is_deleted BIT

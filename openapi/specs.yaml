@@ -1521,6 +1521,8 @@ components:
           description: Description for the category
           maxLength: 300
           pattern: '^.*$'
+      required:
+        - title
       example:
         title: Food
         photo_url: 'https://url.com/photo.jpg'
