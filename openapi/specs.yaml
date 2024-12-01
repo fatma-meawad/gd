@@ -149,8 +149,8 @@ paths:
           name: token
           schema:
             type: string
-            maxLength: 128
-            pattern: '^[A-Za-z0-9]{8,128}$'
+            maxLength: 8  
+            pattern: '^[A-Za-z0-9]{8}$'
           required: true
           description: Token to be validated
       responses:
@@ -168,10 +168,6 @@ paths:
                         properties:
                           userId:
                             $ref: '#/components/schemas/AdminData/properties/id'
-                          additionalInfo:
-                            type: string
-                            maxLength: 128
-                            pattern: '^[A-Za-z0-9\s]*$'
               examples:
                 successExample:
                   summary: Valid token example
@@ -181,7 +177,6 @@ paths:
                       - Token is valid. Proceed with password reset.
                     data:
                       userId: '12345'
-                      additionalInfo: Sample additional data (expiry_date)
         '400':
           description: Invalid or expired token.
           content:
@@ -192,8 +187,11 @@ paths:
                 value:
                   status: error
                   errors:
-                    - The provided token is invalid or expired.
+                    - Token has expired.
                     - Please request a new password reset.
+                    - Empty value found for query parameter 'token'.
+                    - Token format is invalid.
+                    - Token must NOT have more than 8 characters.
                   locations:
                     - admins.controller.js
                     - admins.service.js
