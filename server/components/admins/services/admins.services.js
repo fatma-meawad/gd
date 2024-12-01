@@ -6,7 +6,7 @@ module.exports.postAdminsLogin = async (credentials) => {
   // Implement your business logic here...
 
   try {
-    let result = await admins.loginAdminDb(credentials);
+    let result = await admins.postAdminsLoginDb(credentials);
 
     // Temporary response
     result.messages.push("loginAdmin service not implemented yet");

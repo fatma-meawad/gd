@@ -17,7 +17,7 @@ exports.postAdminsLogin = asyncHandler(async (req, res) => {
       1- If successful, send back the proper status and response schema.
       2- Handle cases like blocked accounts or invalid credentials appropriately.
   */
-  let result = await admins.loginAdmin(credentials);
+  let result = await admins.postAdminsLogin(credentials);
 
   // Temporary response
   result.messages.push("loginAdmin controller not implemented yet");
