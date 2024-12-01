@@ -507,6 +507,21 @@ paths:
                     - admins.controller.js
                     - admins.service.js
                     - admins.database.js
+        '409':
+          description: Conflict - Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Email already registered
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
+                    - admins.database.js
         default:
           description: Unexpected error
           content:
