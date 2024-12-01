@@ -1466,6 +1466,11 @@ components:
           maxLength: 500
           pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
           description: Admin biography or description
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the admin account was created
+          readOnly: true
       required:
         - full_name
         - email
