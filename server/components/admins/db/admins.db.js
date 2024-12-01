@@ -105,7 +105,7 @@ module.exports.postAdminsRegisterDb = async (admin) => {
 */
   return {
     data: {
-      id: "123",
+      id: 123,
       email: admin.email,
       full_name: admin.full_name,
     },
