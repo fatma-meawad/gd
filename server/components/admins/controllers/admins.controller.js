@@ -127,8 +127,14 @@ exports.postAdminsStatusNotifications = asyncHandler(async (req, res) => {
 });
 
 exports.getAdminsPasswordReset = asyncHandler(async (req, res) => {
-  const options = {};
+  const { token } = req.query;
 
+  if (!token) {
+    return res.status(400).json({
+      status: "error",
+      errors: ["Token is required.", "Empty value found for query parameter 'token'"],
+    });
+  }
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
       2- the openapi validator should match the types with the contract, so make sure they match
@@ -139,7 +145,8 @@ exports.getAdminsPasswordReset = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await admins.getAdminsPasswordReset(...Object.values(options));
+  let result = await admins.getAdminsPasswordReset(token);
+
 
   // Temporary response
   result.messages.push("getAdminsPasswordReset controller not implemented yet");
