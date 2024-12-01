@@ -761,6 +761,7 @@ paths:
 
   /s3/messages/{receiver_id}:
     get:
+      operationId: getMessagesHistoryByAdminId
       summary: Retrieve messages with a specific recipient
       description: >-
         Fetch all messages exchanged with a specific recipient, identified by their ID.
