@@ -5,6 +5,7 @@ describe("postProductsDb", () => {
   jest.mock("/workspaces/galleria-dashboard/server/components/products/db/mock/products.json", () => mockProducts);
 
     const validProduct = {
+        id: 123,
         product_name: "RGB keyboard",
         category_id: 12345,
         category_name: "Keyboards",
@@ -17,6 +18,7 @@ describe("postProductsDb", () => {
         };
 
     const invalidProduct = {
+        id: 123,
         product_name: "RGB keyboard",
         category_id: "12345",
         category_name: "Keyboards",
