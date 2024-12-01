@@ -425,7 +425,7 @@ paths:
                           email:
                             type: string
                             format: email
-                            maxLength: 254
+                            maxLength: 255
                             description: The email address of the registered admin
                           full_name:
                             type: string
@@ -1429,11 +1429,11 @@ components:
         email:
           type: string
           format: email
-          maxLength: 254
+          maxLength: 255
           description: Email address of the administrator
         phone:
           type: string
-          maxLength: 15
+          maxLength: 20
           pattern: '^\+?[1-9]\d{1,14}$'
           description: Phone number in international format
         password:
