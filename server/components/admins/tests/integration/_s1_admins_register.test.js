@@ -231,7 +231,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(409);
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors).toContain("Email already registered");
     });
