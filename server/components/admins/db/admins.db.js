@@ -1,11 +1,15 @@
-module.exports.postAdminsLoginDb = async (options) => {
-  /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
-  1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
-  2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
-  3- you can access the schema.json (imported above) and use objects in it/modify or create them.
-*/
+module.exports.postAdminsLoginDb = async (credentials) => {
+  /**
+    Database query logic for admin login:
+    1- Validate the provided email and password against stored credentials.
+    2- Track login attempts and handle account blocking if needed.
+    3- Return the appropriate data for successful login or errors.
+  */
   return {
-    messages: ["postAdminsLoginDb not implemented yet"],
+    data: {
+      admin_id: 123,
+    },
+    messages: ["loginAdminDb not implemented yet"],
     locations: ["admins.database.js"],
   };
 };

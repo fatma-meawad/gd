@@ -3,24 +3,24 @@ const admins = require("../services/admins.services");
 const AppError = require("../../../utils/error");
 
 exports.postAdminsLogin = asyncHandler(async (req, res) => {
-  const options = {
-    body: req.body,
+  const credentials = {
+    email: req.body.email,
+    password: req.body.password,
   };
 
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
+  /** request:
+      1- Validate email and password fields.
+      2- Ensure they match the OpenAPI contract.
   */
 
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
+  /** response:
+      1- If successful, send back the proper status and response schema.
+      2- Handle cases like blocked accounts or invalid credentials appropriately.
   */
-  let result = await admins.postAdminsLogin(...Object.values(options));
+  let result = await admins.loginAdmin(credentials);
 
   // Temporary response
-  result.messages.push("postAdminsLogin controller not implemented yet");
+  result.messages.push("loginAdmin controller not implemented yet");
   result.locations.push("admins.controller.js");
   res.status(200).send(result);
 });
