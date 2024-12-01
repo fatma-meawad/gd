@@ -1441,7 +1441,7 @@ components:
           format: password
           minLength: 8
           maxLength: 72
-          pattern: '^[A-Za-z\d@$!%*#?&]*$' # Removed lookaheads
+          pattern: '^[A-Za-z\d@$!%*#?&]*$'
           description: >-
             Admin password - must be at least 8 characters with a mix of letters,
             numbers and symbols
@@ -1449,7 +1449,7 @@ components:
         address:
           type: string
           maxLength: 200
-          pattern: '^[a-zA-Z0-9\s.,#-/]*$' # Simplified pattern
+          pattern: '^[a-zA-Z0-9\s.,#-/]*$'
           description: Physical address
         activation_code:
           type: string
