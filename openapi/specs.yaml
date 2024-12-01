@@ -1529,6 +1529,7 @@ components:
           type: array
           items:
             type: string
+            maxLength: 256
           description: Error messages
           example:
             - invalid
