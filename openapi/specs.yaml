@@ -1469,6 +1469,7 @@ components:
         created_at:
           type: string
           format: date-time
+          maxLength: 32
           description: Timestamp when the admin account was created
           readOnly: true
       required:
