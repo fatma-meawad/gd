@@ -802,6 +802,12 @@ paths:
                         thread: General Updates
                         content: "Yes, how can I help you?"
                         time: "2024-12-01T10:05:00Z"
+        '400':
+          description: "Bad Request - Invalid or missing parameters"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
         '404':
           description: No messages found with the specified recipient.
           content:
