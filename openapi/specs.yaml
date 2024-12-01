@@ -403,6 +403,47 @@ paths:
                 value:
                   full_name: John Smith
                   email: john.smith@example.com
+              exceededMaxLength:
+                summary: Field exceeding maximum length
+                value:
+                  full_name: JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ
+                  email: john.smith@example.com
+                  phone: '+1234567890'
+                  password: SecureP@ss123
+                  activation_code: ABCD1234
+              invalidPattern:
+                summary: Invalid field patterns
+                value:
+                  full_name: John123
+                  email: john.smith@example.com
+                  phone: '123456'
+                  password: SecureP@ss123
+                  activation_code: ABCD1234
+              invalidPhotoUrl:
+                summary: Invalid profile photo URL
+                value:
+                  full_name: John Smith
+                  email: john.smith@example.com
+                  phone: '+1234567890'
+                  password: SecureP@ss123
+                  activation_code: ABCD1234
+                  profile_photo: not-a-valid-url
+              duplicateEmail:
+                summary: Already registered email
+                value:
+                  full_name: Different Name
+                  email: existing@example.com
+                  phone: '+1234567891'
+                  password: SecureP@ss123
+                  activation_code: WXYZ5678
+              expiredCode:
+                summary: Expired activation code
+                value:
+                  full_name: John Smith
+                  email: john@example.com
+                  phone: '+1234567890'
+                  password: SecureP@ss123
+                  activation_code: EXPIRED1                  
       responses:
         '201':
           description: Registration successful
