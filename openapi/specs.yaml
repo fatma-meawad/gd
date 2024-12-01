@@ -283,10 +283,12 @@ paths:
     parameters:
       - in: query
         name: page
+        description: The page number for pagination, used to retrieve the corresponding set of admin records.
         schema:
           $ref: "#/components/schemas/PaginationPage"
       - in: query
         name: limit
+        description: The maximum number of admin records to return per page.
         schema:
           $ref: "#/components/schemas/PaginationLimit"
     responses:
@@ -1485,7 +1487,9 @@ components:
           type: string
           format: date-time
           nullable: true
+          maxLength: 30
           description: Deactivation time, if applicable.
+          readOnly: true
       required:
         - full_name
         - email
@@ -1507,6 +1511,7 @@ components:
           type: integer
           format: int32
           minimum: 0
+          maximum: 100
           description: Total number of administrators available.
     ErrorObject:
       type: object
