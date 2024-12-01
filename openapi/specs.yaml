@@ -63,6 +63,7 @@ paths:
         - If the login attempt is successful after one or two attempts, the
         system resets the attempt counter back to zero.
       requestBody:
+        description: Admin login
         required: true
         content:
           application/json:
@@ -112,9 +113,14 @@ paths:
                         properties:
                           admin_id:
                             type: integer
+                            format: int64
+                            minimum: 1
+                            maximum: 1000001
                             description: The unique identifier of the logged-in admin
                           message:
                             type: string
+                            maxLength: 255
+                            enum: ['Login successful']
                             description: A success message
                         required:
                           - admin_id
