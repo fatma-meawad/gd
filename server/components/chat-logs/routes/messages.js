@@ -11,7 +11,7 @@ router.delete("/:thread_id", controller.deleteMessagesByThreadId);
 
 router.patch("/:thread_id", controller.patchMessagesByThreadId);
 
-router.get("/history/:admin_id", controller.getMessagesHistoryByAdminId);
+router.get("/history/:receiver_id", controller.getMessagesHistoryByAdminId);
 
 router.post("/reply/:thread_id", controller.postMessagesReplyByThreadId);
 

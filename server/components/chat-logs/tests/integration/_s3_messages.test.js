@@ -51,3 +51,37 @@ describe("Test suite for /s3/messages", () => {
     });
   });
 });
+
+describe("Test suite for get /s3/messages/:receiver_id", () => {
+  test("Test case: /s3/messages/:receiver_id with valid receiver_id", async () => {
+    const receiverId = 2;
+
+    const response = await request(app)
+      .get(`${baseUrl}/s3/messages/${receiverId}`)
+      .set("Accept", "application/json");
+
+    expect(response.status).toBe(200);
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual(expect.any(Object));
+    expect(response.body).toHaveProperty("data");
+    expect(response.body).toHaveProperty("messages");
+  });
+
+  test("Test case: /s3/messages/:receiver_id with invalid receiver_id", async () => {
+    const receiverId = "invalid_id"; 
+
+    const response = await request(app)
+      .get(`${baseUrl}/s3/messages/${receiverId}`)
+      .set("Accept", "application/json");
+
+    expect(response.status).toBe(400); 
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual(expect.any(Object));
+    expect(response.body).toHaveProperty("messages");
+
+    expect(response.status).toBe(404);
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body).toHaveProperty("error");
+    expect(response.body.error).toBe("No messages found with the specified recipient.");
+  });
+});
