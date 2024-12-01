@@ -685,6 +685,20 @@ paths:
       operationId: postMessages
       tags:
         - chat-logs
+      parameters:
+        - in: header
+          name: auth
+          description: An authorization token
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validFormat:
+              summary: Example of a valid authorization token
+              value: 'Bearer eyJ1c2VySWQiOjEsImVtYWlsIjoiam9obi5kb'
       requestBody:
         description: The request body contains the required fields to send a message, including sender_id, recipient_id, thread, and content.
         required: true
@@ -732,6 +746,12 @@ paths:
                     time: '2024-11-08T19:18:53Z'
         '400':
           description: Input can't be empty
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+        '401':
+          description: Unauthorized
           content:
             application/json:
               schema:
