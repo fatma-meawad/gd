@@ -1477,30 +1477,19 @@ components:
       properties:
         status:
           type: string
-          maxLength: 50
           description: error
-          enum:
-            - error
-            - fail
-            - invalid
         errors:
           type: array
-          maxItems: 50          
           items:
             type: string
-            maxLength: 500
-            pattern: '^[a-zA-Z0-9\s.,!?()-]*$'            
           description: Error messages
           example:
             - invalid
             - not available
         locations:
           type: array
-          maxItems: 20            
           items:
             type: string
-            maxLength: 255
-            pattern: '^[\\w\\-\\.\\\/]+\\.(js|ts|sql|json|yaml|md)$'
           description: 'Optional: Additional information about the location of each message'
           example:
             - db.js
@@ -1512,21 +1501,15 @@ components:
       properties:
         locations:
           type: array
-          maxItems: 20            
           items:
             type: string
-            maxLength: 255
-            pattern: '^[\\w\\-\\.\\\/]+\\.(js|ts|sql|json|yaml|md)$'
           description: Optional tracking locations related to the data
           example:
             - tracking location optional
         messages:
           type: array
-          maxItems: 50
           items:
             type: string
-            maxLength: 500
-            pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
           description: Messages that provide additional information about the response
           example:
             - tracking location optional
