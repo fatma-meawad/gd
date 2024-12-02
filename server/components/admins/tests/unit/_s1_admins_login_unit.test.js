@@ -1,81 +1,84 @@
-const { postAdminsLoginDb } = require('../../db/admins.db');
+const { postAdminsLoginDb } = require("../../db/admins.db");
 
 const mockPool = {
-  query: jest.fn()
+  query: jest.fn(),
 };
 
-jest.mock('../../config/dbconfig.js', () => ({
-    pool: mockPool
-  }));
+jest.mock("../../config/dbconfig.js", () => ({
+  pool: mockPool,
+}));
 
-describe('AdminsDatabase', () => {
+describe("AdminsDatabase", () => {
   beforeEach(() => {
     mockPool.query.mockReset();
   });
 
-  describe('postAdminsLoginDb', () => {
-    
-    test('should successfully log in with valid credentials', async () => {
+  describe("postAdminsLoginDb", () => {
+    test("should successfully log in with valid credentials", async () => {
       const mockCredentials = {
         email: "admin@example.com",
-        password: "SecureP@ss123"
+        password: "SecureP@ss123",
       };
 
       mockPool.query.mockResolvedValue({
-        rows: [{
-          admin_id: 1,
-          email: mockCredentials.email,
-          full_name: "Admin User",
-          hashed_password: "$2b$10$hashedPasswordHere" // Simulating hashed password
-        }]
+        rows: [
+          {
+            admin_id: 1,
+            email: mockCredentials.email,
+            full_name: "Admin User",
+            hashed_password: "$2b$10$hashedPasswordHere", // Simulating hashed password
+          },
+        ],
       });
 
       const result = await postAdminsLoginDb(mockCredentials);
 
-      expect(result.data).toHaveProperty('admin_id');
-      expect(result.data).toHaveProperty('email');
-      expect(result.messages).toContain('Login successful');
+      expect(result.data).toHaveProperty("admin_id");
+      expect(result.data).toHaveProperty("email");
+      expect(result.messages).toContain("Login successful");
     });
 
-    test('should fail with invalid credentials', async () => {
+    test("should fail with invalid credentials", async () => {
       const mockCredentials = {
         email: "admin@example.com",
-        password: "WrongPassword"
+        password: "WrongPassword",
       };
 
       mockPool.query.mockResolvedValue({
-        rows: [{
-          admin_id: 1,
-          email: mockCredentials.email,
-          full_name: "Admin User",
-          hashed_password: "$2b$10$hashedPasswordHere" // Simulating hashed password
-        }]
+        rows: [
+          {
+            admin_id: 1,
+            email: mockCredentials.email,
+            full_name: "Admin User",
+            hashed_password: "$2b$10$hashedPasswordHere", // Simulating hashed password
+          },
+        ],
       });
 
-      await expect(postAdminsLoginDb(mockCredentials))
-        .rejects
-        .toThrow('Invalid credentials. Please try again.');
+      await expect(postAdminsLoginDb(mockCredentials)).rejects.toThrow(
+        "Invalid credentials. Please try again."
+      );
     });
 
-    test('should block account after 3 failed attempts', async () => {
+    test("should block account after 3 failed attempts", async () => {
       const mockCredentials = {
         email: "blocked.admin@example.com",
-        password: "WrongPassword"
+        password: "WrongPassword",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [{ login_attempts: 3 }] }) // Failed attempts
         .mockResolvedValueOnce({ rows: [] }); // Account blocking query
 
-      await expect(postAdminsLoginDb(mockCredentials))
-        .rejects
-        .toThrow('Your account has been blocked due to multiple failed login attempts. Please reset your password.');
+      await expect(postAdminsLoginDb(mockCredentials)).rejects.toThrow(
+        "Your account has been blocked due to multiple failed login attempts. Please reset your password."
+      );
     });
 
-    test('should reset failed attempts after successful login', async () => {
+    test("should reset failed attempts after successful login", async () => {
       const mockCredentials = {
         email: "admin@example.com",
-        password: "SecureP@ss123"
+        password: "SecureP@ss123",
       };
 
       mockPool.query
@@ -85,25 +88,24 @@ describe('AdminsDatabase', () => {
 
       const result = await postAdminsLoginDb(mockCredentials);
 
-      expect(mockPool.query.mock.calls[2][0]).toContain('UPDATE Admins');
-      expect(result.messages).toContain('Login successful');
+      expect(mockPool.query.mock.calls[2][0]).toContain("UPDATE Admins");
+      expect(result.messages).toContain("Login successful");
     });
 
-    test('should rollback transaction on error', async () => {
+    test("should rollback transaction on error", async () => {
       const mockCredentials = {
         email: "admin@example.com",
-        password: "SecureP@ss123"
+        password: "SecureP@ss123",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockRejectedValueOnce(new Error('Database error'))
+        .mockRejectedValueOnce(new Error("Database error"))
         .mockResolvedValueOnce({ rows: [] }); // ROLLBACK
 
-      await expect(postAdminsLoginDb
-        (mockCredentials)).rejects.toThrow();
+      await expect(postAdminsLoginDb(mockCredentials)).rejects.toThrow();
 
-      expect(mockPool.query.mock.calls[2][0]).toContain('ROLLBACK');
+      expect(mockPool.query.mock.calls[2][0]).toContain("ROLLBACK");
     });
   });
 });

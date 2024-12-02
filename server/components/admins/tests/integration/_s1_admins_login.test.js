@@ -4,7 +4,6 @@ const ROOT_DIR = process.cwd();
 const app = require(ROOT_DIR + "/app");
 const baseUrl = process.env.BASE_API_TEST_URL;
 
-
 describe("Test suite for /s1/admins/login", () => {
   describe("POST /s1/admins/login", () => {
     // Happy Path: Valid credentials
@@ -14,7 +13,7 @@ describe("Test suite for /s1/admins/login", () => {
         .set("Accept", "application/json")
         .send({
           email: "admin@example.com",
-          password: "SecureP@ss123"
+          password: "SecureP@ss123",
         })
         .set("Content-Type", "application/json");
 
@@ -33,7 +32,7 @@ describe("Test suite for /s1/admins/login", () => {
         .set("Accept", "application/json")
         .send({
           email: "admin@example.com",
-          password: "wrongpassword"
+          password: "wrongpassword",
         })
         .set("Content-Type", "application/json");
 
@@ -50,7 +49,7 @@ describe("Test suite for /s1/admins/login", () => {
         .set("Accept", "application/json")
         .send({
           email: "blocked.admin@example.com",
-          password: "SecureP@ss123"
+          password: "SecureP@ss123",
         })
         .set("Content-Type", "application/json");
 
@@ -67,7 +66,7 @@ describe("Test suite for /s1/admins/login", () => {
         .set("Accept", "application/json")
         .send({
           email: "invalid-email",
-          password: "SecureP@ss123"
+          password: "SecureP@ss123",
         })
         .set("Content-Type", "application/json");
 
@@ -86,7 +85,7 @@ describe("Test suite for /s1/admins/login", () => {
         .set("Accept", "application/json")
         .send({
           email: "admin@example.com",
-          password: "wrongpassword"
+          password: "wrongpassword",
         })
         .set("Content-Type", "application/json");
 
@@ -95,7 +94,7 @@ describe("Test suite for /s1/admins/login", () => {
         .set("Accept", "application/json")
         .send({
           email: "admin@example.com",
-          password: "SecureP@ss123"
+          password: "SecureP@ss123",
         })
         .set("Content-Type", "application/json");
 
@@ -113,7 +112,7 @@ describe("Test suite for /s1/admins/login", () => {
         .set("Accept", "application/json")
         .send({
           email: "unexpected.error@example.com",
-          password: "SecureP@ss123"
+          password: "SecureP@ss123",
         })
         .set("Content-Type", "application/json");
 
