@@ -1,5 +1,5 @@
 // Import the necessary module for unit tests
-const { getAdminsDb } = require("../../../db/admins.db"); 
+const { getAdminsDb } = require("../../db/admins.db"); 
 
 describe("Unit Tests for getAdminsDb Function", () => {
   it("should return a list of admins when the query is successful", async () => {
