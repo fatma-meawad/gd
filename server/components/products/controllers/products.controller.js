@@ -22,7 +22,14 @@ exports.getProducts = asyncHandler(async (req, res) => {
 
 exports.postProducts = asyncHandler(async (req, res) => {
   const options = {
-    body: req.body,
+    product_name: req.product_name,
+    category_id: req.category_id,
+    category_name: req.category_name,
+    short_description: req.short_description,
+    detailed_description: req.detailed_description,
+    product_photos: req.product_photos,
+    product_url: req.product_url
+
   };
 
   /**  request:
@@ -35,12 +42,35 @@ exports.postProducts = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await products.postProducts(...Object.values(options));
 
-  // Temporary response
-  result.messages.push("postProducts controller not implemented yet");
-  result.locations.push("products.controller.js");
-  res.status(200).send(result);
+  const headers = req.headers;
+  if (!headers.auth)
+  {
+    const result=
+    {
+      message: "Authentification header is missing",
+      status: "401",
+      errors: ["401 unauthorized"],
+      locations: ["products.controller.js"],
+    }
+    res.status(401).send(result);
+  }
+
+  // let result = await products.postProducts(
+  //   options.product_name,
+  //   options.category_id,
+  //   options.category_name,
+  //   options.short_description,
+  //   options.detailed_description,
+  //   options.product_photos,
+  //   options.product_url
+  // options//
+  // );
+
+  // // Temporary response
+  // result.messages.push("postProducts controller not implemented yet");
+  // result.locations.push("products.controller.js");
+  // res.status(200).send(result);
 });
 
 exports.postProductsByProductIdTags = asyncHandler(async (req, res) => {
