@@ -1426,22 +1426,18 @@ components:
           type: string
           maxLength: 200
           description: Physical address
-          writeOnly: true
         activation_code:
           type: string
           pattern: '^[A-Z0-9]{8}$'
           description: 8-character activation code provided by Galleria owners
-          writeOnly: true
         profile_photo:
           type: string
           format: uri
           description: URL to profile photo
-          writeOnly: true
         bio:
           type: string
           maxLength: 500
           description: Admin biography or description
-          writeOnly: true
         created_at:
           type: string
           format: date-time
