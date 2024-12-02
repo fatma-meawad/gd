@@ -271,47 +271,69 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
   /s1/admins:
-    get:
-      tags:
-        - admins
-      summary: "View All Admins author: @Maja"
-      description: |
-        **Story:** As an administrator, I want to be able to view all admin accounts in the system.
-      parameters:
-        - in: query
-          name: page
-          schema:
-            type: integer
-            default: 1
-            minimum: 1
-          description: The page of results to retrieve.
-        - in: query
-          name: limit
-          schema:
-            type: integer
-            default: 10
-            minimum: 1
-            maximum: 100
-          description: The number of results per page.
-      responses:
-        "200":
-          description: Successfully retrieved list of admins
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/AdminData"
-        "401":
-          description: Unauthorized. You must be an admin to view this data.
-        "403":
-          description: Forbidden. You do not have permission to view all admins.
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorObject"
+   get:
+    operationId: getAdmins
+    tags:
+      - admins
+    summary: "Retrieve a paginated list of administrators"
+    description: |
+      **Story:** As an administrator, I want to view a list of all admin accounts, 
+      including their activation status (active or inactive), account creation date, 
+      and deactivation time (if applicable), so I can manage and track the admin team effectively.
+    parameters:
+      - in: query
+        name: page
+        description: The page number for pagination, used to retrieve the corresponding set of admin records.
+        schema:
+          $ref: "#/components/schemas/PaginationPage"
+      - in: query
+        name: limit
+        description: The maximum number of admin records to return per page.
+        schema:
+          $ref: "#/components/schemas/PaginationLimit"
+    responses:
+      '200':
+        description: Successfully retrieved list of administrators.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminsListResponse"
+      '400':
+        description: Bad Request due to invalid parameters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorObject'
+      '401':
+        description: Unauthorized access.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorObject'
+      '404':
+        description: No administrators found.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorObject'
+      '422':
+        description: Unprocessable Entity due to validation errors.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorObject'
+      '500':
+        description: Unable to retrieve admin list due to a server error.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorObject'
+      default:
+        description: Unexpected error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorObject'
   /s1/admins/register:
     post:
       operationId: postAdminsRegister
@@ -562,6 +584,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
     post:
+      operationId: postCategories
       summary: >-
         Creates a new category (author: @Wong Chung Man, tester: @Alona, @Iryna,
         @PietroLauria) (reviewer:@Jany-M, @alberto)
@@ -570,33 +593,34 @@ paths:
         the general overall activity of each registered business.
       tags:
         - categories
+      parameters:
+        - in: header
+          name: auth
+          description: Authorization token for getting access to the endpoint (optional)
+          # required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validFormat:
+              summary: Authorization token
+              value: 1234
       requestBody:
+        description: title, photo_url and description for the POST endpoint
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                photo_url:
-                  type: string
-                description:
-                  type: string
+              $ref: "#/components/schemas/CategoryRequestData"
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                example:
-                  title: Food
-                  photo_url: 'https://url.com/photo.jpg'
-                  description: This is something you can eat.
+                $ref: "#/components/schemas/CategoryResponseData"
         '400':
           description: Invalid input
           content:
@@ -1464,6 +1488,18 @@ paths:
                 $ref: '#/components/schemas/ErrorObject'
 components:
   schemas:
+    PaginationPage:
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 1000
+      description: The page number to retrieve.
+    PaginationLimit:
+      type: integer
+      format: int32
+      minimum: 1
+      maximum: 100
+      description: The number of results per page.
     AdminData:
       title: Admin
       type: object
@@ -1528,17 +1564,43 @@ components:
           maxLength: 32
           description: Timestamp when the admin account was created
           readOnly: true
+        deactivated_at:
+          type: string
+          format: date-time
+          nullable: true
+          maxLength: 30
+          description: Deactivation time, if applicable.
+          readOnly: true
       required:
         - full_name
         - email
         - phone
         - password
         - activation_code
+    AdminsListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/AdminData"
+          maxItems: 100
+        page:
+          $ref: "#/components/schemas/PaginationPage"
+        limit:
+          $ref: "#/components/schemas/PaginationLimit"
+        total:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          description: Total number of administrators available.
     ErrorObject:
       type: object
       properties:
         status:
           type: string
+          maxLength: 50
           description: error
         errors:
           type: array
@@ -1553,6 +1615,7 @@ components:
           type: array
           items:
             type: string
+            maxLength: 150
           description: 'Optional: Additional information about the location of each message'
           example:
             - db.js
@@ -1578,3 +1641,63 @@ components:
             - tracking location optional
       required:
         - messages
+    CategoryRequestData:
+      title: Category Request
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title for the category
+          maxLength: 30
+          pattern: '^.*$'
+        photo_url:
+          type: string
+          description: Photo URL for the category
+          maxLength: 300
+          pattern: '^.*$'
+        description:
+          type: string
+          description: Description for the category
+          maxLength: 300
+          pattern: '^.*$'
+      required:
+        - title
+      example:
+        title: Food
+        photo_url: 'https://url.com/photo.jpg'
+        description: This is something you can eat.
+    CategoryResponseData:
+      title: Category Response
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 999
+          description: Unique identifier for the category
+          readOnly: true
+        title:
+          type: string
+          description: Title for the category
+          maxLength: 30
+          pattern: '^.*$'
+        photo_url:
+          type: string
+          description: Photo URL for the category
+          maxLength: 300
+          pattern: '^.*$'
+        description:
+          type: string
+          description: Description for the category
+          maxLength: 300
+          pattern: '^.*$'
+        is_delete:
+          type: boolean
+          description: Boolean value to indicate whether the category is deleted
+      example:
+        id: 123
+        title: Food
+        photo_url: 'https://url.com/photo.jpg'
+        description: This is something you can eat.
+        is_deleted: false
