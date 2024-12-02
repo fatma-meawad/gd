@@ -3,8 +3,16 @@ const products = require("../services/products.services");
 const AppError = require("../../../utils/error");
 
 exports.getProducts = asyncHandler(async (req, res) => {
-  const limit = parseInt(req.query["limit"]) || 20;
-  const cursor = req.query["cursor"] || null;
+  let limit = 20;
+  let cursor = null;
+  if (req.query) {
+    if (req.query.limit) {
+      limit = req.query.limit;
+    }
+    if (req.query.cursor) {
+      cursor = req.query.cursor;
+    }
+  }
 
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.

@@ -2,11 +2,11 @@
  * unit tests for getProductsDb method
  */
 const { getProductsDb } = require("../../db/products.db");
-const mockProducts = require("../../db/mock/products.json");
+const mockProducts = require("./mock/products.json");
 
 describe("getProductsDb", () => {
   // Mock the require to ensure we're using the test JSON
-  jest.mock("../../db/mock/products.json", () => mockProducts);
+  jest.mock("./mock/products.json", () => mockProducts);
 
   // Test case 1: Default behavior - return all products when limit is not specified
   it("should return all products when no limit is specified", async () => {
