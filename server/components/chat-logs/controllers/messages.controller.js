@@ -3,8 +3,6 @@ const messages = require("../services/messages.services");
 const AppError = require("../../../utils/error");
 
 exports.postMessages = asyncHandler(async (req, res) => {
-  console.log("Controller reached!");
-
   const options = {
     sender_id: req.body.sender_id,
     recipient_id: req.body.recipient_id,
