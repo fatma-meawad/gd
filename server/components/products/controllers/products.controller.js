@@ -68,9 +68,9 @@ exports.postProducts = asyncHandler(async (req, res) => {
   // );
 
   // // Temporary response
-  // result.messages.push("postProducts controller not implemented yet");
-  // result.locations.push("products.controller.js");
-  // res.status(200).send(result);
+  result.messages.push("postProducts controller not implemented yet");
+  result.locations.push("products.controller.js");
+  res.status(200).send(result);
 });
 
 exports.postProductsByProductIdTags = asyncHandler(async (req, res) => {
