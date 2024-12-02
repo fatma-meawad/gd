@@ -17,14 +17,15 @@ module.exports.getCategories = async () => {
   }
 };
 
-module.exports.postCategories = async (title, photo_url, string) => {
+module.exports.postCategories = async (title, photo_url, description) => {
   // Implement your business logic here...
 
   try {
-    let result = await categories.postCategoriesDb(title, photo_url, string);
-    //delete this when you actually implement something.
-    result.messages.push("postCategories services not implemented yet");
-    result.locations.push("categories.services.js");
+    let result = await categories.postCategoriesDb(
+      title,
+      photo_url,
+      description
+    );
 
     return result;
   } catch (error) {
