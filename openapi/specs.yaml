@@ -1283,19 +1283,6 @@ paths:
                     - Invalid cursor value. Cursor must be a base64-encoded string.
                   locations:
                     - products.controller.js
-        '500':
-          description: Server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorObject'
-              example:
-                value:
-                  status: 500
-                  errors:
-                    - Internal server error
-                  locations:
-                    - products.controller.js
         default:
           description: Unexpected error
           content:
