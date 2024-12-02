@@ -272,7 +272,7 @@ paths:
                 $ref: '#/components/schemas/ErrorObject'
   /s1/admins:
    get:
-    operationId: getAdminsList
+    operationId: getAdmins
     tags:
       - admins
     summary: "Retrieve a paginated list of administrators"
