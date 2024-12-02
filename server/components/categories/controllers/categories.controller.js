@@ -25,8 +25,24 @@ exports.getCategories = asyncHandler(async (req, res) => {
 
 exports.postCategories = asyncHandler(async (req, res) => {
   const options = {
-    body: req.body,
+    title: req.body.title,
+    photo_url: req.body.photo_url,
+    description: req.body.description,
   };
+
+  // Code to simulate 401 error
+
+  const headers = req.headers;
+  if (!headers.auth) {
+    const result = {
+      message: '"auth" header is missing',
+      status: 401,
+      errors: ["401 unauthorized"],
+      locations: ["categories.controller.js"],
+    };
+
+    res.status(401).send(result);
+  }
 
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
@@ -38,11 +54,12 @@ exports.postCategories = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await categories.postCategories(...Object.values(options));
+  let result = await categories.postCategories(
+    options.title,
+    options.photo_url,
+    options.description
+  );
 
-  // Temporary response
-  result.messages.push("postCategories controller not implemented yet");
-  result.locations.push("categories.controller.js");
   res.status(200).send(result);
 });
 

@@ -496,6 +496,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
     post:
+      operationId: postCategories
       summary: >-
         Creates a new category (author: @Wong Chung Man, tester: @Alona, @Iryna,
         @PietroLauria) (reviewer:@Jany-M, @alberto)
@@ -504,33 +505,34 @@ paths:
         the general overall activity of each registered business.
       tags:
         - categories
+      parameters:
+        - in: header
+          name: auth
+          description: Authorization token for getting access to the endpoint (optional)
+          # required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validFormat:
+              summary: Authorization token
+              value: 1234
       requestBody:
+        description: title, photo_url and description for the POST endpoint
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                photo_url:
-                  type: string
-                description:
-                  type: string
+              $ref: "#/components/schemas/CategoryRequestData"
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                example:
-                  title: Food
-                  photo_url: 'https://url.com/photo.jpg'
-                  description: This is something you can eat.
+                $ref: "#/components/schemas/CategoryResponseData"
         '400':
           description: Invalid input
           content:
@@ -1552,6 +1554,7 @@ components:
       properties:
         status:
           type: string
+          maxLength: 50
           description: error
         errors:
           type: array
@@ -1565,6 +1568,7 @@ components:
           type: array
           items:
             type: string
+            maxLength: 150
           description: 'Optional: Additional information about the location of each message'
           example:
             - db.js
@@ -1590,3 +1594,63 @@ components:
             - tracking location optional
       required:
         - messages
+    CategoryRequestData:
+      title: Category Request
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title for the category
+          maxLength: 30
+          pattern: '^.*$'
+        photo_url:
+          type: string
+          description: Photo URL for the category
+          maxLength: 300
+          pattern: '^.*$'
+        description:
+          type: string
+          description: Description for the category
+          maxLength: 300
+          pattern: '^.*$'
+      required:
+        - title
+      example:
+        title: Food
+        photo_url: 'https://url.com/photo.jpg'
+        description: This is something you can eat.
+    CategoryResponseData:
+      title: Category Response
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 999
+          description: Unique identifier for the category
+          readOnly: true
+        title:
+          type: string
+          description: Title for the category
+          maxLength: 30
+          pattern: '^.*$'
+        photo_url:
+          type: string
+          description: Photo URL for the category
+          maxLength: 300
+          pattern: '^.*$'
+        description:
+          type: string
+          description: Description for the category
+          maxLength: 300
+          pattern: '^.*$'
+        is_delete:
+          type: boolean
+          description: Boolean value to indicate whether the category is deleted
+      example:
+        id: 123
+        title: Food
+        photo_url: 'https://url.com/photo.jpg'
+        description: This is something you can eat.
+        is_deleted: false
