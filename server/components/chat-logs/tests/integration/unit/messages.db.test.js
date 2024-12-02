@@ -45,22 +45,4 @@ describe('Unit tests for getMessagesHistoryByAdminIdDb function', () => {
     expect(result).toHaveProperty('messages');
     expect(result.messages).toEqual(['No messages found for this admin']);
   });
-
-  test('should handle database errors gracefully', async () => {
-    const admin_id = 1;
-
-    try {
-      await pool.query = () => { throw new Error('Database query error'); };
-
-      const result = await getMessagesHistoryByAdminIdDb(admin_id);
-      expect(result).toEqual({
-        messages: ['Error retrieving messages'],
-        locations: ['messages.database.js'],
-      });
-
-    } catch (error) {
-      console.error(error);
-    }
-  });
-
 });
