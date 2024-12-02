@@ -1,10 +1,10 @@
-const { postAdminsLoginDb } = require('../../../db/admins.db');
+const { postAdminsLoginDb } = require('../../db/admins.db');
 
 const mockPool = {
   query: jest.fn()
 };
 
-jest.mock('../../../config/dbconfig.js', () => ({
+jest.mock('../../config/dbconfig.js', () => ({
     pool: mockPool
   }));
 
