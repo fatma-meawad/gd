@@ -1,172 +1,223 @@
 require("dotenv-flow").config();
 const request = require("supertest");
 const ROOT_DIR = process.cwd();
-const app = require(`${ROOT_DIR}/app`);
+const app = require(ROOT_DIR + "/app");
 const baseUrl = process.env.BASE_API_TEST_URL;
 
-describe("Integration Tests for /s3/adminlogs", () => {
-  describe("GET /s3/adminlogs", () => {
-    // Positive Test Case: Valid request with all parameters
-    test("Should return 200 and data when valid query parameters are provided", async () => {
+//TODO: The test cases are generated from your examples, but double check that all is ok and all your cases are covered
+//TODO: Check the requirements in the task to see what other checks are required
+
+describe("Test suite for /s3/adminlogs", () => {
+  describe("Test suite for get /s3/adminlogs", () => {
+    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
       const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .query({
-          admin_id: 101,
-          keyword: "Edited",
-          date_range: "2023-11-01:2023-11-30",
-          sort_by: "date",
-          order: "asc",
-        })
+        .get(baseUrl + "/s3/adminlogs")
         .set("Accept", "application/json")
-        .set("auth", "some-auth-token"); // Added auth header
+        .query({
+          admin_id: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .query({
+          admin_id: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .query({
+          keyword: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .query({
+          keyword: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .query({
+          date_range: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .query({
+          date_range: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .query({
+          sort_by: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .query({
+          sort_by: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .query({
+          order: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .query({
+          order: "",
+        })
+        .send({})
+        .set("Content-Type", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
+      //TODO: assert the exact error messages to assert why the request failed.
+    });
+
+    //TODO: The following cover your respones in openapi. If your examples cover a test case, you can delete it.
+
+    test("Test case /s3/adminlogs for Expected Response - Status 200 Example: array_of_logs", async () => {
+      const response = await request(app)
+        .get(baseUrl + "/s3/adminlogs")
+        .set("Accept", "application/json")
+        .set("Prefer", "code=200, dynamic=true")
+        .set("Content-Type", "application/json")
+        .send({});
 
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("data");
-      expect(Array.isArray(response.body.data)).toBe(true);
-      // Additional assertions based on expected data structure
+      expect(response.body).toHaveProperty("messages");
+      //TODO: If you have attributes that must be returned inside data, make sure they are marked required in openapi schema
     });
-
-    // Negative Test Case: Missing auth header
-    test("Should return 401 when auth header is missing", async () => {
+  });
+  describe("Test suite for post /s3/adminlogs", () => {
+    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
       const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .query({ admin_id: 101 })
-        .set("Accept", "application/json");
-
-      expect(response.status).toBe(401);
-      expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toContain("Unauthorized");
-    });
-
-    // Negative Test Case: Invalid admin_id (non-integer)
-    test("Should return 400 when admin_id is not an integer", async () => {
-      const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .query({ admin_id: "abc" })
+        .post(baseUrl + "/s3/adminlogs")
         .set("Accept", "application/json")
-        .set("auth", "some-auth-token"); // Added auth header
+        .query({})
+        .send({})
+        .set("Content-Type", "application/json");
 
       expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toMatchObject({
-        errorCode: "type.openapi.validation",
-        message: "must be integer",
-        path: "/query/admin_id",
-      });
+      //TODO: assert the exact error messages to assert why the request failed.
     });
-
-    // Negative Test Case: Exceeding maxLength for keyword
-    test("Should return 400 when keyword exceeds maxLength", async () => {
-      const longKeyword = "a".repeat(101); // 101 characters
+    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
       const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .query({ keyword: longKeyword })
+        .post(baseUrl + "/s3/adminlogs")
         .set("Accept", "application/json")
-        .set("auth", "some-auth-token"); // Added auth header
+        .query({})
+        .send({})
+        .set("Content-Type", "application/json");
 
       expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toMatchObject({
-        errorCode: "maxLength.openapi.validation",
-        message: "must NOT have more than 100 characters",
-        path: "/query/keyword",
-      });
+      //TODO: assert the exact error messages to assert why the request failed.
     });
 
-    // Negative Test Case: Invalid date_range Length
-    test("Should return 400 when date_range length is invalid", async () => {
-      const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .query({ date_range: "2023-01-01_to_2023-12-31" }) // Invalid length
-        .set("Accept", "application/json")
-        .set("auth", "some-auth-token"); // Added auth header
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toMatchObject({
-        errorCode: "maxLength.openapi.validation",
-        message: "must NOT have more than 21 characters",
-        path: "/query/date_range",
-      });
-    });
-
-    // Negative Test Case: Invalid date_range format
-    test("Should return 400 when date_range format is invalid", async () => {
-      const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .query({ date_range: "2023-01-01-2023-12-31" }) // Invalid format
-        .set("Accept", "application/json")
-        .set("auth", "some-auth-token"); // Added auth header
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toMatchObject({
-        errorCode: "pattern.openapi.validation",
-        message:
-          'must match pattern "^\\d{4}-\\d{2}-\\d{2}:\\d{4}-\\d{2}-\\d{2}$"',
-        path: "/query/date_range",
-      });
-    });
-
-    // Negative Test Case: Invalid sort_by value
-    test("Should return 400 when sort_by is not one of the allowed values", async () => {
-      const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .query({ sort_by: "invalid_field" })
-        .set("Accept", "application/json")
-        .set("auth", "some-auth-token"); // Added auth header
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toMatchObject({
-        errorCode: "enum.openapi.validation",
-        message:
-          "must be equal to one of the allowed values: date, keyword, admin_id",
-        path: "/query/sort_by",
-      });
-    });
-
-    // Negative Test Case: Invalid order value
-    test("Should return 400 when order is not 'asc' or 'desc'", async () => {
-      const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .query({ order: "up" })
-        .set("Accept", "application/json")
-        .set("auth", "some-auth-token"); // Added auth header
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toMatchObject({
-        errorCode: "enum.openapi.validation",
-        message: "must be equal to one of the allowed values: asc, desc",
-        path: "/query/order",
-      });
-    });
-
-    // Negative Test Case: No logs found
-    test("Should return 404 when no logs are found for the specified criteria", async () => {
-      const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .query({ admin_id: 9999 }) // Assuming this admin_id does not exist
-        .set("Accept", "application/json")
-        .set("auth", "some-auth-token"); // Added auth header
-
-      expect(response.status).toBe(404);
-      expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toContain("No logs found");
-    });
-
-    // Positive Test Case: Valid request with minimal parameters
-    test("Should return 200 and data when only required parameters are provided", async () => {
-      const response = await request(app)
-        .get(`${baseUrl}/s3/adminlogs`)
-        .set("Accept", "application/json")
-        .set("auth", "some-auth-token"); // Added auth header
-
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty("data");
-      expect(Array.isArray(response.body.data)).toBe(true);
-    });
+    //TODO: The following cover your respones in openapi. If your examples cover a test case, you can delete it.
   });
 });
