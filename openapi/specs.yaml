@@ -1112,8 +1112,8 @@ paths:
             pattern: '^Bearer\s[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_.+/=]*$'
           examples:
             validAuth:
-              summary: Example of a valid authorization token
-              value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+              summary: Example of a valid JWT authorization token
+              value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U'
         - name: limit
           in: query
           required: false
