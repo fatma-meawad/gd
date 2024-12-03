@@ -84,4 +84,46 @@ describe("Test suite for get /s3/messages/:receiver_id", () => {
     expect(response.body).toHaveProperty("error");
     expect(response.body.error).toBe("No messages found with the specified recipient.");
   });
+
+  test("Test case: /s3/messages/:receiver_id with no messages for that receiver_id", async () => {
+    const receiverId = 9999; // assuming this ID has no messages
+
+    const response = await request(app)
+      .get(`${baseUrl}/s3/messages/${receiverId}`)
+      .set("Accept", "application/json");
+
+    expect(response.status).toBe(200);
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual(expect.any(Object));
+    expect(response.body).toHaveProperty("data");
+    expect(response.body.data).toEqual([]);
+    expect(response.body).toHaveProperty("messages");
+  });
+
+  test("Test case: /s3/messages/:receiver_id with invalid receiver_id", async () => {
+    const receiverId = "invalid_id"; // Invalid ID type
+
+    const response = await request(app)
+      .get(`${baseUrl}/s3/messages/${receiverId}`)
+      .set("Accept", "application/json");
+
+    expect(response.status).toBe(400); // Invalid ID should return 400
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual(expect.any(Object));
+    expect(response.body).toHaveProperty("messages");
+    expect(response.body.messages).toBe("Invalid receiver ID format");
+  });
+
+  test("Test case: /s3/messages/:receiver_id with no receiver_id", async () => {
+    const response = await request(app)
+      .get(`${baseUrl}/s3/messages/`) // Missing receiver_id
+      .set("Accept", "application/json");
+
+    expect(response.status).toBe(400); // No receiver_id should return 400
+    expect(response.headers["content-type"]).toMatch(/json/);
+    expect(response.body).toEqual(expect.any(Object));
+    expect(response.body).toHaveProperty("messages");
+    expect(response.body.messages).toBe("Receiver ID is required");
+  });
+
 });
