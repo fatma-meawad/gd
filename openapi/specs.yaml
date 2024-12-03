@@ -1101,6 +1101,18 @@ paths:
       tags:
         - accounts
       parameters:
+        - name: auth
+          in: header
+          description: Authorization token
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 600
+          examples:
+            validAuth:
+              summary: Example of a valid authorization token
+              value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
         - name: limit
           in: query
           required: false
@@ -1126,81 +1138,15 @@ paths:
             application/json:
               schema:
                 type: object
+                required: ['businesses', 'pagination_info']
                 properties:
                   businesses:
                     type: array
                     maxItems: 50
                     items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          format: int32
-                          minimum: 1
-                          maximum: 2147483647
-                        title:
-                          type: string
-                          maxLength: 100
-                          pattern: '^[a-zA-Z0-9\s.-]*$'
-                        image:
-                          type: string
-                          format: uri
-                          maxLength: 2048
-                        phone:
-                          type: string
-                          maxLength: 20
-                          pattern: '^\+?[1-9]\d{1,14}$'
-                        address:
-                          type: string
-                          maxLength: 255
-                          pattern: '^[a-zA-Z0-9\s,.-]*$'
-                        web_address:
-                          type: string
-                          format: uri
-                          maxLength: 2048
-                        description:
-                          type: string
-                          maxLength: 500
-                          pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
-                        main_owner_name:
-                          type: string
-                          maxLength: 100
-                          pattern: '^[a-zA-Z\s.-]*$'
-                        main_owner_email:
-                          type: string
-                          format: email
-                          maxLength: 255
-                        main_owner_phone:
-                          type: string
-                          maxLength: 20
-                          pattern: '^\+?[1-9]\d{1,14}$'
-                        created_at:
-                          type: string
-                          format: date-time
-                          maxLength: 30
-                        updated_at:
-                          type: string
-                          format: date-time
-                          maxLength: 30
-                        deactivated_at:
-                          type: string
-                          format: date-time
-                          maxLength: 30
-                        is_active:
-                          type: boolean
+                      $ref: '#/components/schemas/BusinessData'
                   pagination_info:
-                    type: object
-                    properties:
-                      limit:
-                        type: integer
-                        format: int32
-                        minimum: 1
-                        maximum: 2147483647
-                      offset:
-                        type: integer
-                        format: int32
-                        minimum: 1
-                        maximum: 2147483647
+                    $ref: '#/components/schemas/PaginationInfo'
               examples:
                 businesses-list:
                   summary: A list of businesses
@@ -1223,7 +1169,6 @@ paths:
                     pagination_info:
                       limit: 1
                       offset: 0
-                      total_items: 1
         '400':
           description: Invalid request parameters
           content:
@@ -1965,4 +1910,80 @@ components:
           minimum: 0
           maximum: 2147483647
           format: int32
-        
+    BusinessData:
+      title: Business
+      description: Schema for Business
+      type: object
+      required: ['id', 'title', 'main_owner_email', 'created_at', 'is_active']
+      properties:
+        id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        title:
+          type: string
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9\s.-]*$'
+        image:
+          type: string
+          format: uri
+          maxLength: 2048
+        phone:
+          type: string
+          maxLength: 20
+          pattern: '^\+?[1-9]\d{1,14}$'
+        address:
+          type: string
+          maxLength: 255
+          pattern: '^[a-zA-Z0-9\s,.-]*$'
+        web_address:
+          type: string
+          format: uri
+          maxLength: 2048
+        description:
+          type: string
+          maxLength: 500
+          pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
+        main_owner_name:
+          type: string
+          maxLength: 100
+          pattern: '^[a-zA-Z\s.-]*$'
+        main_owner_email:
+          type: string
+          format: email
+          maxLength: 255
+        main_owner_phone:
+          type: string
+          maxLength: 20
+          pattern: '^\+?[1-9]\d{1,14}$'
+        created_at:
+          type: string
+          format: date-time
+          maxLength: 30
+        updated_at:
+          type: string
+          format: date-time
+          maxLength: 30
+        deactivated_at:
+          type: string
+          format: date-time
+          maxLength: 30
+        is_active:
+          type: boolean 
+    PaginationInfo:
+      title: Business Pagination
+      description: Schema for Business Pagination
+      type: object
+      required: ['limit', 'offset']
+      properties:
+        limit:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        offset:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
