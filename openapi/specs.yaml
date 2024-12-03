@@ -1137,6 +1137,7 @@ paths:
                         title:
                           type: string
                           maxLength: 100
+                          pattern: '^[a-zA-Z0-9\s.-]*$'
                         image:
                           type: string
                           format: uri
@@ -1144,9 +1145,11 @@ paths:
                         phone:
                           type: string
                           maxLength: 20
+                          pattern: '^\+?[1-9]\d{1,14}$'
                         address:
                           type: string
                           maxLength: 255
+                          pattern: '^[a-zA-Z0-9\s,.-]*$'
                         web_address:
                           type: string
                           format: uri
@@ -1154,9 +1157,11 @@ paths:
                         description:
                           type: string
                           maxLength: 500
+                          pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
                         main_owner_name:
                           type: string
                           maxLength: 100
+                          pattern: '^[a-zA-Z\s.-]*$'
                         main_owner_email:
                           type: string
                           format: email
@@ -1164,6 +1169,7 @@ paths:
                         main_owner_phone:
                           type: string
                           maxLength: 20
+                          pattern: '^\+?[1-9]\d{1,14}$'
                         created_at:
                           type: string
                           format: date-time
