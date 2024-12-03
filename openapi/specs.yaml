@@ -1103,14 +1103,18 @@ paths:
           schema:
             type: integer
             format: int32
-          description: Number of items per page
+            minimum: 1
+            maximum: 50
+          description: Number of items per page.
         - name: offset
           in: query
           required: false
           schema:
             type: integer
             format: int32
-          description: Offset for pagination
+            minimum: 0
+            maximum: 1000
+          description: Offset for pagination. The number of items to skip before starting to collect the result set.
       responses:
         '200':
           description: Success
@@ -1127,6 +1131,9 @@ paths:
                       properties:
                         id:
                           type: integer
+                          format: int32
+                          minimum: 1
+                          maximum: 2147483647
                         title:
                           type: string
                         image:
@@ -1148,21 +1155,37 @@ paths:
                           type: string
                         created_at:
                           type: integer
+                          format: int32
+                          minimum: 1
+                          maximum: 2147483647
                         updated_at:
                           type: integer
-                        is_active:
-                          type: boolean
+                          format: int32
+                          minimum: 1
+                          maximum: 2147483647
                         deactivated_at:
                           type: integer
+                          format: int32
+                          minimum: 1
+                          maximum: 2147483647
+                        is_active:
+                          type: boolean
                   pagination_info:
                     type: object
                     properties:
                       limit:
                         type: integer
+                        format: int32
+                        minimum: 1
+                        maximum: 2147483647
                       offset:
                         type: integer
+                        format: int32
+                        minimum: 1
+                        maximum: 2147483647
                       total_items:
                         type: integer
+                        format: int32
               examples:
                 businesses-list:
                   summary: A list of businesses
