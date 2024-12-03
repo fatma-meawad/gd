@@ -1,4 +1,4 @@
-const { getMessagesHistoryByAdminIdDb } = require('../../../../messages.db');
+const { getMessagesHistoryByAdminIdDb } = require('/workspaces/galleria-dashboard/server/components/chat-logs/db/messages.db');
 
 const pool = new Pool({
   user: 'chatlogs_user',
