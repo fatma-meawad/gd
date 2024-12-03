@@ -13,7 +13,6 @@ jest.mock("../../db/admins.db", () => ({
 }));
 
 describe("Test suite for /s1/admins", () => {
- 
   // ===== INTEGRATION TESTS FOR /s1/admins =====
   describe("GET /s1/admins", () => {
     // Test case for valid inputs
@@ -107,7 +106,7 @@ describe("Test suite for /s1/admins", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "minimum.openapi.validation",
         message: "must be >= 1",
-        path: "/query/page"
+        path: "/query/page",
       });
     });
 
@@ -126,7 +125,7 @@ describe("Test suite for /s1/admins", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "minimum.openapi.validation",
         message: "must be >= 1",
-        path: "/query/limit"
+        path: "/query/limit",
       });
     });
 
@@ -145,7 +144,7 @@ describe("Test suite for /s1/admins", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "minimum.openapi.validation",
         message: "must be >= 1",
-        path: "/query/page"
+        path: "/query/page",
       });
     });
 
@@ -164,7 +163,7 @@ describe("Test suite for /s1/admins", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "minimum.openapi.validation",
         message: "must be >= 1",
-        path: "/query/limit"
+        path: "/query/limit",
       });
     });
 
@@ -183,7 +182,7 @@ describe("Test suite for /s1/admins", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "maximum.openapi.validation",
         message: "must be <= 1000",
-        path: "/query/page"
+        path: "/query/page",
       });
     });
 
@@ -202,7 +201,7 @@ describe("Test suite for /s1/admins", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "maximum.openapi.validation",
         message: "must be <= 100",
-        path: "/query/limit"
+        path: "/query/limit",
       });
     });
 
@@ -221,7 +220,7 @@ describe("Test suite for /s1/admins", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "maximum.openapi.validation",
         message: expect.stringMatching(/must be <= (100|1000)/),
-        path: expect.stringMatching(/\/query\/(page|limit)/)
+        path: expect.stringMatching(/\/query\/(page|limit)/),
       });
     });
   });

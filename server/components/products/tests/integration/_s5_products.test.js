@@ -15,6 +15,7 @@ describe("Test suite for /s5/products", () => {
         .set("Accept", "application/json")
         .set("Prefer", "code=200, dynamic=true")
         .set("Content-Type", "application/json")
+        .set("auth", "Bearer token")
         .send({});
 
       expect(response.status).toBe(200);
@@ -31,6 +32,7 @@ describe("Test suite for /s5/products", () => {
         .set("Accept", "application/json")
         .set("Prefer", "code=200, dynamic=true")
         .set("Content-Type", "application/json")
+        .set("auth", "Bearer token")
         .send({});
 
       expect(response.status).toBe(200);
