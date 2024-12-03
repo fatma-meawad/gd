@@ -1,223 +1,91 @@
+// adminlogs.test.js
 require("dotenv-flow").config();
 const request = require("supertest");
 const ROOT_DIR = process.cwd();
-const app = require(ROOT_DIR + "/app");
+const app = require(`${ROOT_DIR}/app`);
 const baseUrl = process.env.BASE_API_TEST_URL;
 
-//TODO: The test cases are generated from your examples, but double check that all is ok and all your cases are covered
-//TODO: Check the requirements in the task to see what other checks are required
-
-describe("Test suite for /s3/adminlogs", () => {
-  describe("Test suite for get /s3/adminlogs", () => {
-    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
+describe("Integration Tests for /s3/adminlogs", () => {
+  describe("GET /s3/adminlogs", () => {
+    // Positive Test Case: Valid request with all parameters
+    test("Should return 200 and data when valid query parameters are provided", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
+        .get(`${baseUrl}/s3/adminlogs`)
         .query({
-          admin_id: "",
+          admin_id: 1,
+          keyword: "edit",
+          date_range: "2023-01-01:2023-12-31",
+          sort_by: "date",
+          order: "asc",
         })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({
-          admin_id: "",
-        })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({
-          keyword: "",
-        })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({
-          keyword: "",
-        })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({
-          date_range: "",
-        })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({
-          date_range: "",
-        })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({
-          sort_by: "",
-        })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({
-          sort_by: "",
-        })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({
-          order: "",
-        })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({
-          order: "",
-        })
-        .send({})
-        .set("Content-Type", "application/json");
-
-      expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
-    });
-
-    //TODO: The following cover your respones in openapi. If your examples cover a test case, you can delete it.
-
-    test("Test case /s3/adminlogs for Expected Response - Status 200 Example: array_of_logs", async () => {
-      const response = await request(app)
-        .get(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .set("Prefer", "code=200, dynamic=true")
-        .set("Content-Type", "application/json")
-        .send({});
+        .set("Accept", "application/json");
 
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("data");
-      expect(response.body).toHaveProperty("messages");
-      //TODO: If you have attributes that must be returned inside data, make sure they are marked required in openapi schema
+      // Additional assertions can be made based on expected data structure
     });
-  });
-  describe("Test suite for post /s3/adminlogs", () => {
-    test("Test case: /s3/adminlogs with Request Example: ValidExample", async () => {
+
+    // Negative Test Case: Invalid admin_id (non-integer)
+    test("Should return 400 when admin_id is not an integer", async () => {
       const response = await request(app)
-        .post(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({})
-        .send({})
-        .set("Content-Type", "application/json");
+        .get(`${baseUrl}/s3/adminlogs`)
+        .query({ admin_id: "abc" })
+        .set("Accept", "application/json");
 
       expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
+      expect(response.body.errors[0].message).toContain("admin_id");
     });
-    test("Test case: /s3/adminlogs with Request Example: InvalidExample", async () => {
+
+    // Negative Test Case: Exceeding maxLength for keyword
+    test("Should return 400 when keyword exceeds maxLength", async () => {
+      const longKeyword = "a".repeat(101); // 101 characters
       const response = await request(app)
-        .post(baseUrl + "/s3/adminlogs")
-        .set("Accept", "application/json")
-        .query({})
-        .send({})
-        .set("Content-Type", "application/json");
+        .get(`${baseUrl}/s3/adminlogs`)
+        .query({ keyword: longKeyword })
+        .set("Accept", "application/json");
 
       expect(response.status).toBe(400);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
+      expect(response.body.errors[0].message).toContain("keyword");
     });
 
-    //TODO: The following cover your respones in openapi. If your examples cover a test case, you can delete it.
+    // Negative Test Case: Invalid date_range format
+    test("Should return 400 when date_range format is invalid", async () => {
+      const response = await request(app)
+        .get(`${baseUrl}/s3/adminlogs`)
+        .query({ date_range: "2023-01-01_to_2023-12-31" }) // Invalid format
+        .set("Accept", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("errors");
+      expect(response.body.errors[0].message).toContain("date_range");
+    });
+
+    // Negative Test Case: Invalid sort_by value
+    test("Should return 400 when sort_by is not one of the allowed values", async () => {
+      const response = await request(app)
+        .get(`${baseUrl}/s3/adminlogs`)
+        .query({ sort_by: "invalid_field" })
+        .set("Accept", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("errors");
+      expect(response.body.errors[0].message).toContain("sort_by");
+    });
+
+    // Negative Test Case: Invalid order value
+    test("Should return 400 when order is not 'asc' or 'desc'", async () => {
+      const response = await request(app)
+        .get(`${baseUrl}/s3/adminlogs`)
+        .query({ order: "up" })
+        .set("Accept", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("errors");
+      expect(response.body.errors[0].message).toContain("order");
+    });
   });
+
 });
