@@ -7,11 +7,11 @@ const baseUrl = process.env.BASE_API_TEST_URL;
 //TODO: The test cases are generated from your examples, but double check that all is ok and all your cases are covered
 //TODO: Check the requirements in the task to see what other checks are required
 
-describe("Test suite for /s4/businesses/", () => {
-  describe("Test suite for post /s4/businesses/", () => {
-    test("Test case: /s4/businesses/ with Request Example: ValidExample", async () => {
+describe("Test suite for /s4/businesses", () => {
+  describe("Test suite for post /s4/businesses", () => {
+    test("Test case: /s4/businesses with Request Example: ValidExample", async () => {
       const response = await request(app)
-        .post(baseUrl + "/s4/businesses/")
+        .post(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .query({})
         .send({})
@@ -23,9 +23,9 @@ describe("Test suite for /s4/businesses/", () => {
       expect(response.body).toHaveProperty("errors");
       //TODO: assert the exact error messages to assert why the request failed.
     });
-    test("Test case: /s4/businesses/ with Request Example: InvalidExample", async () => {
+    test("Test case: /s4/businesses with Request Example: InvalidExample", async () => {
       const response = await request(app)
-        .post(baseUrl + "/s4/businesses/")
+        .post(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .query({})
         .send({})
@@ -40,9 +40,9 @@ describe("Test suite for /s4/businesses/", () => {
 
     //TODO: The following cover your respones in openapi. If your examples cover a test case, you can delete it.
 
-    test("Test case /s4/businesses/ for Expected Response - Status 400 Example: example-400", async () => {
+    test("Test case /s4/businesses for Expected Response - Status 400 Example: example-400", async () => {
       const response = await request(app)
-        .post(baseUrl + "/s4/businesses/")
+        .post(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .set("Prefer", "code=400, dynamic=true")
         .set("Content-Type", "application/json")
@@ -55,10 +55,10 @@ describe("Test suite for /s4/businesses/", () => {
       //TODO: assert the exact error messages to assert why the request failed.
     });
   });
-  describe("Test suite for get /s4/businesses/", () => {
-    test("Test case: /s4/businesses/ with Request Example: ValidExample", async () => {
+  describe("Test suite for get /s4/businesses", () => {
+    test("Test case: /s4/businesses with Request Example: ValidExample", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s4/businesses/")
+        .get(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .query({
           limit: "",
@@ -72,9 +72,9 @@ describe("Test suite for /s4/businesses/", () => {
       expect(response.body).toHaveProperty("errors");
       //TODO: assert the exact error messages to assert why the request failed.
     });
-    test("Test case: /s4/businesses/ with Request Example: InvalidExample", async () => {
+    test("Test case: /s4/businesses with Request Example: InvalidExample", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s4/businesses/")
+        .get(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .query({
           limit: "",
@@ -88,9 +88,9 @@ describe("Test suite for /s4/businesses/", () => {
       expect(response.body).toHaveProperty("errors");
       //TODO: assert the exact error messages to assert why the request failed.
     });
-    test("Test case: /s4/businesses/ with Request Example: ValidExample", async () => {
+    test("Test case: /s4/businesses with Request Example: ValidExample", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s4/businesses/")
+        .get(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .query({
           offset: "",
@@ -104,9 +104,9 @@ describe("Test suite for /s4/businesses/", () => {
       expect(response.body).toHaveProperty("errors");
       //TODO: assert the exact error messages to assert why the request failed.
     });
-    test("Test case: /s4/businesses/ with Request Example: InvalidExample", async () => {
+    test("Test case: /s4/businesses with Request Example: InvalidExample", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s4/businesses/")
+        .get(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .query({
           offset: "",
@@ -123,9 +123,9 @@ describe("Test suite for /s4/businesses/", () => {
 
     //TODO: The following cover your respones in openapi. If your examples cover a test case, you can delete it.
 
-    test("Test case /s4/businesses/ for Expected Response - Status 200 Example: businesses-list", async () => {
+    test("Test case /s4/businesses for Expected Response - Status 200 Example: businesses-list", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s4/businesses/")
+        .get(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .set("Prefer", "code=200, dynamic=true")
         .set("Content-Type", "application/json")
@@ -139,9 +139,9 @@ describe("Test suite for /s4/businesses/", () => {
       //TODO: If you have attributes that must be returned inside data, make sure they are marked required in openapi schema
     });
 
-    test("Test case /s4/businesses/ for Expected Response - Status 400 Example: example-400", async () => {
+    test("Test case /s4/businesses for Expected Response - Status 400 Example: example-400", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s4/businesses/")
+        .get(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .set("Prefer", "code=400, dynamic=true")
         .set("Content-Type", "application/json")
@@ -154,9 +154,9 @@ describe("Test suite for /s4/businesses/", () => {
       //TODO: assert the exact error messages to assert why the request failed.
     });
 
-    test("Test case /s4/businesses/ for Expected Response - Status 401 Example: example-401", async () => {
+    test("Test case /s4/businesses for Expected Response - Status 401 Example: example-401", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s4/businesses/")
+        .get(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .set("Prefer", "code=401, dynamic=true")
         .set("Content-Type", "application/json")
@@ -169,9 +169,9 @@ describe("Test suite for /s4/businesses/", () => {
       //TODO: assert the exact error messages to assert why the request failed.
     });
 
-    test("Test case /s4/businesses/ for Expected Response - Status 403 Example: example-403", async () => {
+    test("Test case /s4/businesses for Expected Response - Status 403 Example: example-403", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s4/businesses/")
+        .get(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .set("Prefer", "code=403, dynamic=true")
         .set("Content-Type", "application/json")
@@ -184,9 +184,9 @@ describe("Test suite for /s4/businesses/", () => {
       //TODO: assert the exact error messages to assert why the request failed.
     });
 
-    test("Test case /s4/businesses/ for Expected Response - Status 404 Example: example-404", async () => {
+    test("Test case /s4/businesses for Expected Response - Status 404 Example: example-404", async () => {
       const response = await request(app)
-        .get(baseUrl + "/s4/businesses/")
+        .get(baseUrl + "/s4/businesses")
         .set("Accept", "application/json")
         .set("Prefer", "code=404, dynamic=true")
         .set("Content-Type", "application/json")
