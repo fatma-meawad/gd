@@ -1237,6 +1237,7 @@ paths:
                 $ref: '#/components/schemas/ErrorObject'
   /s5/products:
     get:
+      operationId: getProducts
       summary: >-
         Get all products (author: @Marika) (reviewer:@Jany-M, @alberto)
         (tester:@PietroLauria)
@@ -1245,6 +1246,49 @@ paths:
         the product catalog in an easy way.
       tags:
         - products
+      parameters:
+        - in: query
+          name: limit
+          description: The maximum number of results to return.
+          schema:
+            type: integer
+            format: int32
+            default: 20
+            minimum: 1
+            maximum: 100
+          examples:
+            validLimit:
+              summary: Example of a valid limit
+              value: 30
+            invalidLimit:
+              summary: Example of an invalid limit
+              value: -5
+        - in: query
+          name: cursor
+          description: |
+            Use the cursor from the response to access more results.
+          schema:
+            type: string
+            maxLength: 100
+            minLength: 0
+            pattern: '^.*$'
+          examples:
+            validCursor:
+              summary: Example of a valid cursor
+              value: 'eyJpZCI6MX0='
+        - in: header
+          name: auth
+          description: An authorization token. Name is shortened due to OpenAPI issues with the name Authorization.
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validFormat:
+              summary: Example of a valid authorization token
+              value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
       responses:
         '200':
           description: Success
@@ -1253,37 +1297,95 @@ paths:
               schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
-                  id:
-                    type: string
-                  name:
-                    type: string
-                  short_description:
-                    type: string
+                  data:
+                    type: object
+                    properties:
+                      products:
+                        type: array
+                        maxItems: 50
+                        items:
+                          $ref: "#/components/schemas/ProductData"
+                      page_info:
+                        $ref: "#/components/schemas/PageInfo"
+                    
               examples:
                 products:
+                  summary: A list of products
                   value:
-                    success: true
-                    products:
-                      - id: '1'
-                        name: Product 1
-                        short_description: Short description of product 1
-                      - id: '2'
-                        name: Product 2
-                        short_description: Short description of product 2
+                    data:
+                      products:
+                        - id: 1
+                          name: Product 1
+                          category_id: 1
+                          short_description: Short description 1
+                          detailed_description: Detailed description 1
+                          product_url: 'https://example.com/product1'
+                        - id: 2
+                          name: Product 2
+                          category_id: 2
+                          short_description: Short description 2
+                          detailed_description: Detailed description 2
+                          product_url: 'https://example.com/product2'
+                      page_info:
+                        start_cursor: 'eyJpZCI6MX0='
+                        end_cursor: 'eyJpZCI6MX0='
+                        has_next_page: true
+                        has_previous_page: false
+                        total_count: 50
+                        page: 1
+                      
                 empty:
                   value:
-                    success: true
-                    products: []
+                    data:
+                      products: []
+                      page_info:
+                        start_cursor: null
+                        end_cursor: null
+                        has_next_page: false
+                        has_previous_page: false
+                        total_count: 0
+                        page: 1
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: 401
+                  errors:
+                    - Unauthorized
+                    - Please provide a valid authorization token.
+                  locations:
+                    - products.controller.js
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: 422
+                  errors:
+                    - Invalid limit value. Limit must be a positive integer.
+                    - Invalid cursor value. Cursor must be a base64-encoded string.
+                  locations:
+                    - products.controller.js
         default:
           description: Unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: 418
+                  errors:
+                    - I'm a teapot
+                  locations:
+                    - products.controller.js
     post:
       tags:
         - products
@@ -1700,4 +1802,83 @@ components:
         title: Food
         photo_url: 'https://url.com/photo.jpg'
         description: This is something you can eat.
-        is_deleted: false
+        is_deleted: false    
+    ProductData:
+      title: Product
+      type: object
+      properties:
+        id:
+          type: number
+          description: Unique identifier for the product
+          readOnly: true
+          nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
+        category_id:
+          type: integer
+          description: ID of the category the product belongs to
+          nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
+        product_name:
+          type: string
+          description: Name of the product
+          maxLength: 100
+          minLength: 3
+          nullable: false
+          pattern: ^[^\n]*$
+        short_description:
+          type: string
+          description: Short description of the product
+          maxLength: 1000
+          minLength: 20
+          nullable: false
+          pattern: ^[^\n]*$
+        detailed_description:
+          type: string
+          description: Detailed description of the product
+          maxLength: 10000
+          nullable: true
+          pattern: ^.*$
+        product_url:
+          type: string
+          format: uri
+          description: URL to the product page
+          nullable: true
+          maxLength: 1000
+    PageInfo:
+      title: PageInfo
+      type: object
+      properties:
+        has_next_page:
+          type: boolean
+          description: Indicates if there are more pages available
+        end_cursor:
+          type: string
+          description: Cursor to access the next page of results
+          nullable: true
+          maxLength: 100
+          pattern: ^[^\n]*$
+        start_cursor:
+          type: string
+          description: Cursor to access the previous page of results
+          nullable: true
+          maxLength: 100
+          pattern: ^[^\n]*$
+        total_count:
+          type: integer
+          description: Total number of items in the result set
+          nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
+        page:
+          type: integer
+          description: Current page number
+          nullable: false
+          minimum: 0
+          maximum: 2147483647
+          format: int32
+        
