@@ -1,3 +1,5 @@
+const pool = require("../config/dbconfig");
+
 module.exports.postMessagesDb = async (
   sender_id,
   recipient_id,
