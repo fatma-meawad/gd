@@ -1,4 +1,6 @@
 const schema = require("../schema.json");
+const pool = require("../config/dbconfig");
+
 
 module.exports.getProductsDb = async (limit, cursor) => {
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();

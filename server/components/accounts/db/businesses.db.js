@@ -1,5 +1,6 @@
 const AppError = require("../../../utils/error"); // Assuming error handler is used for consistent error responses
 const mockBusinesses = require("./mock/businesses.json");
+const pool = require("../config/dbconfig");
 
 module.exports.postBusinessesDb = async (businessData) => {
   try {

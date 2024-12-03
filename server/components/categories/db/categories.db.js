@@ -1,3 +1,5 @@
+const pool = require("../config/dbconfig");
+
 const schema = require("../schema.json");
 
 module.exports.getCategoriesDb = async (options) => {

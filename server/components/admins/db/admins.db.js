@@ -1,3 +1,5 @@
+const pool = require("../config/dbconfig");
+
 module.exports.postAdminsLoginDb = async (options) => {
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
   1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully

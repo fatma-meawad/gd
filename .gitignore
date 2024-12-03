@@ -4,3 +4,4 @@
 *.rest
 .DS_store
 .42c/
+server/logs.md
