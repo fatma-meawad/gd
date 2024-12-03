@@ -999,7 +999,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
-  /s4/businesses/:
+  /s4/businesses:
     post:
       summary: >-
         Create a new business (author:@rbekkum) (tester:@Jany-M)
