@@ -4,8 +4,24 @@ const AppError = require("../../../utils/error");
 
 exports.postMessages = asyncHandler(async (req, res) => {
   const options = {
-    body: req.body,
+    sender_id: req.body.sender_id,
+    recipient_id: req.body.recipient_id,
+    thread: req.body.thread,
+    content: req.body.content,
   };
+
+  if (
+    !req.headers.auth ||
+    req.headers.auth.trim() === "" ||
+    req.headers.auth == "123"
+  ) {
+    return res.status(401).json({
+      message: '"auth" header is invalid',
+      status: "401",
+      errors: ["401 unauthorized"],
+      locations: ["messages.controller.js"],
+    });
+  }
 
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
@@ -17,11 +33,14 @@ exports.postMessages = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await messages.postMessages(...Object.values(options));
+  let result = await messages.postMessages(
+    options.sender_id,
+    options.recipient_id,
+    options.thread,
+    options.content
+  );
 
-  // Temporary response
-  result.messages.push("postMessages controller not implemented yet");
-  result.locations.push("messages.controller.js");
+  // // Temporary response
   res.status(200).send(result);
 });
 
