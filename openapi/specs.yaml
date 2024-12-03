@@ -1817,6 +1817,13 @@ components:
           minimum: 0
           maximum: 2147483647
           format: int32
+        category_name:
+          type: string
+          description: Name of the category
+          maxLength: 100
+          minLength: 3
+          nullable: true
+          pattern: ^[^\n]*$
         product_name:
           type: string
           description: Name of the product
@@ -1831,6 +1838,15 @@ components:
           minLength: 20
           nullable: false
           pattern: ^[^\n]*$
+        product_photos:
+          type: array
+          nullable: true
+          maxItems: 5
+          items:
+            type: string
+            maxLength: 1000
+            format: uri
+            example: 'https://www.youtube.com/photo.jpg'
         detailed_description:
           type: string
           description: Detailed description of the product
@@ -1843,6 +1859,10 @@ components:
           description: URL to the product page
           nullable: true
           maxLength: 1000
+      required:
+      - category_id
+      - product_name
+      - short_description
     PageInfo:
       title: PageInfo
       type: object
