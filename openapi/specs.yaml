@@ -1119,6 +1119,7 @@ paths:
                 properties:
                   businesses:
                     type: array
+                    maxItems: 50
                     items:
                       type: object
                       properties:
