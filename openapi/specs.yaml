@@ -1460,6 +1460,46 @@ components:
       minimum: 1
       maximum: 100
       description: The number of results per page.
+    AdminLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+          description: Primary key of the log entry.
+          readOnly: true
+        action_type:
+          type: string
+          maxLength: 100
+          pattern: '^.{0,100}$'
+          description: Type of action performed.
+        admin_id:
+          type: number
+          description: ID of the admin who performed the action.
+        message_id:
+          type: number
+          description: 'ID of the associated message, if applicable.'
+        action_time:
+          type: string
+          format: date-time
+          maxLength: 20
+          description: Timestamp of when the action occurred.
+          readOnly: true
+        details:
+          type: string
+          maxLength: 300
+          pattern: '^.{0,300}$'
+          description: Additional information about the action.
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/ErrorObject'
     AdminData:
       title: Admin
       type: object
@@ -1661,43 +1701,3 @@ components:
         photo_url: 'https://url.com/photo.jpg'
         description: This is something you can eat.
         is_deleted: false    
-    AdminLog:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 2147483647
-          description: Primary key of the log entry.
-          readOnly: true
-        action_type:
-          type: string
-          maxLength: 100
-          pattern: '^.{0,100}$'
-          description: Type of action performed.
-        admin_id:
-          type: number
-          description: ID of the admin who performed the action.
-        message_id:
-          type: number
-          description: 'ID of the associated message, if applicable.'
-        action_time:
-          type: string
-          format: date-time
-          maxLength: 20
-          description: Timestamp of when the action occurred.
-          readOnly: true
-        details:
-          type: string
-          maxLength: 300
-          pattern: '^.{0,300}$'
-          description: Additional information about the action.
-    ErrorResponse:
-      type: object
-      properties:
-        errors:
-          type: array
-          maxItems: 1000
-          items:
-            $ref: '#/components/schemas/ErrorObject'
