@@ -1102,12 +1102,14 @@ paths:
           required: false
           schema:
             type: integer
+            format: int32
           description: Number of items per page
         - name: offset
           in: query
           required: false
           schema:
             type: integer
+            format: int32
           description: Offset for pagination
       responses:
         '200':
