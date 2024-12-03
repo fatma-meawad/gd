@@ -3,3 +3,4 @@
 **/request.http
 *.rest
 .DS_store
+.42c/
