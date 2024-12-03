@@ -1087,6 +1087,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
     get:
+      operationId: getBusinesses
       summary: >-
         Get list of businesses (author:@Jany-M) (tester:@rbekkum, @PietroLauria)
         (reviewer:@alberto)
