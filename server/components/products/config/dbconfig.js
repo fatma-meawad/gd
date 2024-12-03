@@ -7,7 +7,6 @@ const database =
     ? process.env.POSTGRES_PRODUCT_DB_TEST
     : process.env.POSTGRES_PRODUCT_DB;
 
-
 const user =
   process.env.NODE_ENV === "test"
     ? process.env.POSTGRES_PRODUCT_USER_TEST

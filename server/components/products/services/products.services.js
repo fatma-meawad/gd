@@ -2,13 +2,12 @@ const products = require("../db/products.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
-module.exports.getProducts = async () => {
+module.exports.getProducts = async (limit = 20, cursor = null) => {
   // Implement your business logic here...
 
   try {
-    let result = await products.getProductsDb();
-    result.success = true;
-    return result;
+    let result = await products.getProductsDb(limit, cursor);
+    return { ...result, messages: [] };
   } catch (error) {
     throw new AppError(error);
   }
