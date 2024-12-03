@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "sender_id": 5,
+        "recipient_id": 6,
+        "thread": "Test Thread",
+        "content": "This is a test message",
+        "time": "2024-11-08T19:18:53Z"
+    },
+    {
+        "id": 1,
+        "sender_id": 1,
+        "recipient_id": 2,
+        "thread": "thread name",
+        "content": "Hello!",
+        "time": "2024-11-08T19:18:53Z"
+    },
+    {
+        "id": 2,
+        "sender_id": 2,
+        "recipient_id": 1,
+        "thread": "thread name",
+        "content": "Hi!",
+        "time": "2024-11-08T20:52:53Z"
+    }
+]
