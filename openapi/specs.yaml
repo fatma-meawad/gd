@@ -1109,6 +1109,7 @@ paths:
             type: string
             minLength: 1
             maxLength: 600
+            pattern: '^Bearer\s[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_.+/=]*$'
           examples:
             validAuth:
               summary: Example of a valid authorization token
