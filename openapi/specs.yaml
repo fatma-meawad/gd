@@ -1136,38 +1136,46 @@ paths:
                           maximum: 2147483647
                         title:
                           type: string
+                          maxLength: 100
                         image:
                           type: string
+                          format: uri
+                          maxLength: 2048
                         phone:
                           type: string
+                          maxLength: 20
                         address:
                           type: string
+                          maxLength: 255
                         web_address:
                           type: string
+                          format: uri
+                          maxLength: 2048
                         description:
                           type: string
+                          maxLength: 500
                         main_owner_name:
                           type: string
+                          maxLength: 100
                         main_owner_email:
                           type: string
                           format: email
+                          maxLength: 255
                         main_owner_phone:
                           type: string
+                          maxLength: 20
                         created_at:
-                          type: integer
-                          format: int32
-                          minimum: 1
-                          maximum: 2147483647
+                          type: string
+                          format: date-time
+                          maxLength: 30
                         updated_at:
-                          type: integer
-                          format: int32
-                          minimum: 1
-                          maximum: 2147483647
+                          type: string
+                          format: date-time
+                          maxLength: 30
                         deactivated_at:
-                          type: integer
-                          format: int32
-                          minimum: 1
-                          maximum: 2147483647
+                          type: string
+                          format: date-time
+                          maxLength: 30
                         is_active:
                           type: boolean
                   pagination_info:
