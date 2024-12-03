@@ -3,19 +3,41 @@ const products = require("../services/products.services");
 const AppError = require("../../../utils/error");
 
 exports.getProducts = asyncHandler(async (req, res) => {
-  const options = {};
+  let limit = 20;
+  let cursor = null;
+  if (req.query) {
+    if (req.query.limit) {
+      limit = req.query.limit;
+    }
+    if (req.query.cursor) {
+      cursor = req.query.cursor;
+    }
+  }
 
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
       2- the openapi validator should match the types with the contract, so make sure they match
       3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
   */
-
   /**  response:
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await products.getProducts();
+
+  /**
+    Access Control: Verify that the requester is authorized to access the requested data.
+   */
+  const headers = req.headers;
+  if (!headers.auth) {
+    throw new AppError({
+      message: '"auth" header is missing',
+      statusCode: 401,
+      errors: ['"header" is missing'],
+      locations: ["products.controller.js"],
+    });
+  }
+
+  let result = await products.getProducts(limit, cursor);
 
   res.status(200).send(result);
 });

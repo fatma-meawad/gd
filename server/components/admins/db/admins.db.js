@@ -114,4 +114,4 @@ module.exports.postAdminsRegisterDb = async (admin) => {
     messages: ["postAdminsRegisterDb not implemented yet"],
     locations: ["admins.database.js"],
   };
-}
+};

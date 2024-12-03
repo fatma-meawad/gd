@@ -61,7 +61,7 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "format.openapi.validation",
         message: 'must match format "email"',
-        path: "/body/email"
+        path: "/body/email",
       });
     });
 
@@ -87,7 +87,7 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "minLength.openapi.validation",
         message: "must NOT have fewer than 8 characters",
-        path: "/body/password"
+        path: "/body/password",
       });
     });
 
@@ -113,7 +113,7 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "pattern.openapi.validation",
         message: 'must match pattern "^[A-Z0-9]{8}$"',
-        path: "/body/activation_code"
+        path: "/body/activation_code",
       });
     });
 
@@ -136,7 +136,7 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "required.openapi.validation",
         message: "must have required property 'phone'",
-        path: "/body/phone"
+        path: "/body/phone",
       });
     });
 
@@ -161,7 +161,7 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "maxLength.openapi.validation",
         message: "must NOT have more than 100 characters",
-        path: "/body/full_name"
+        path: "/body/full_name",
       });
     });
 
@@ -186,7 +186,7 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "pattern.openapi.validation",
         message: 'must match pattern "^[a-zA-Z\\s.-]*$"',
-        path: "/body/full_name"
+        path: "/body/full_name",
       });
     });
 
@@ -212,7 +212,7 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "format.openapi.validation",
         message: 'must match format "uri"',
-        path: "/body/profile_photo"
+        path: "/body/profile_photo",
       });
     });
 
@@ -227,7 +227,7 @@ describe("Test suite for /s1/admins/register", () => {
           email: "existing@example.com",
           phone: "+1234567891",
           password: "SecureP@ss123",
-          activation_code: "WXYZ5678"
+          activation_code: "WXYZ5678",
         })
         .set("Content-Type", "application/json");
 
@@ -246,13 +246,15 @@ describe("Test suite for /s1/admins/register", () => {
           email: "john@example.com",
           phone: "+1234567890",
           password: "SecureP@ss123",
-          activation_code: "EXPIRED1"
+          activation_code: "EXPIRED1",
         })
         .set("Content-Type", "application/json");
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors).toContain("Invalid or expired registration code");
+      expect(response.body.errors).toContain(
+        "Invalid or expired registration code"
+      );
     });
 
     test("Test case: /s1/admins/register verify default values", async () => {
