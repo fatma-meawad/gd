@@ -1360,6 +1360,7 @@ paths:
                   locations:
                     - products.controller.js
     post:
+      operationId: postProducts
       tags:
         - products
       summary: >-
@@ -1373,59 +1374,43 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - category_id
-                - name
-                - short_description
-              properties:
-                name:
-                  type: string
-                  minLength: 3
-                  maxLength: 100
-                  example: Wireless RGB Keyboard
-                category_id:
-                  type: integer
-                  example: 54
-                category_name:
-                  type: string
-                  minLength: 3
-                  maxLength: 100
-                  nullable: true
-                  example: Keyboards
-                short_description:
-                  type: string
-                  minLength: 20
-                  maxLength: 1000
-                  example: >-
-                    Experience seamless typing with this wireless RGB keyboard,
-                    featuring customizable backlighting, ergonomic design, and
-                    reliable connectivity for a smooth and vibrant typing
-                    experience.
-                detailed_description:
-                  type: string
-                  maxLength: 10000
-                  nullable: true
-                  example: >-
-                    Upgrade your typing experience with this wireless RGB
-                    keyboard, combining style and functionality. With
-                    customizable RGB lighting, an ergonomic design, and quiet,
-                    responsive keys, it ensures a smooth typing experience
-                    whether you're working or gaming. Benefit from stable
-                    wireless connectivity, extended battery life, and a sleek,
-                    vibrant design that enhances any workspace.
-                product_photos:
-                  type: array
-                  nullable: true
-                  items:
-                    type: string
-                    format: uri
-                    example: 'https://www.youtube.com/photo.jpg'
-                product_url:
-                  type: string
-                  nullable: true
-                  format: uri
-                  example: 'https://youtu.be/0LE0trd740Q'
+              $ref: '#/components/schemas/ProductData'
+            examples:
+              correctProductData:
+                summary: Valid product data input
+                value:
+                  product_name: RGB keyboard
+                  category_id: 12345
+                  category_name: Keyboards
+                  short_description: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience
+                  detailed_description: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace
+                  product_photos:
+                    - https://example.com/photo1.jpg
+                    - https://example.com/photo2.jpg
+                  product_url: https://youtu.be/0LE0trd740Q
+              wrongCatIdFormat:
+                summary: invalid category_id format
+                value:
+                  product_name: RGB keyboard
+                  category_id: 12345n
+                  category_name: Keyboards
+                  short_description: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience
+                  detailed_description: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace
+                  product_photos:
+                    - https://example.com/photo1.jpg
+                    - https://example.com/photo2.jpg
+                  product_url: https://youtu.be/0LE0trd740Q
+              missingProductName:
+                summary: Missing product name
+                value:
+                  category_id: 12345n
+                  category_name: Keyboards
+                  short_description: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience
+                  detailed_description: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace
+                  product_photos:
+                    - https://example.com/photo1.jpg
+                    - https://example.com/photo2.jpg
+                  product_url: https://youtu.be/0LE0trd740Q
       responses:
         '200':
           description: Success
@@ -1434,50 +1419,59 @@ paths:
               schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
-                  id:
-                    type: string
-                  name:
-                    type: string
-                  category_id:
-                    type: string
-                  category_name:
-                    type: string
-                  short_description:
-                    type: string
-                  detailed_description:
-                    type: string
-                  product_photos:
-                    type: array
-                    items:
-                      type: string
-                  product_url:
-                    type: string
+                  data:
+                    type: object
+                    properties:
+                      successObject:
+                        $ref: '#/components/schemas/SuccessObject'
+                      productObject:
+                        $ref: '#/components/schemas/ProductData'
+              examples:
+                successExample:
+                  summary: Success message for product creation
+                  value:
+                    status: success
+                    messages:
+                      - Product created
+                      - The product can be viewed on the product list
+                    id: 2147483647
+                    category_id: 123456
+                    category_name: "Sample category"
+                    product_name: "Sample product"
+                    short_description: "Sample description"
+                    detailed_description: "Sample long description"
+                    product_photos:
+                      - 'https://www.youtube.com/photo.jpg'
+                      - 'https://www.youtube.com/photo2.jpg'
+                    product_url: "https://youtu.be/0LE0trd740Q"
         '400':
-          description: Please fill in all the required fields
+          description: Please fill in all the required fields wirh data of approppriate format
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Invalid input
+                  locations:
+                    - products.controller.js
+                    - products.db.js
+                    - product.services.js
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Unauthorised
+                  locations:
+                    - products.controller.js
         default:
           description: Unexpected error
           content:
@@ -1692,6 +1686,7 @@ components:
         - phone
         - password
         - activation_code
+
     MessageData:
       title: Message
       type: object
@@ -1877,6 +1872,13 @@ components:
           minimum: 0
           maximum: 2147483647
           format: int32
+        category_name:
+          type: string
+          description: Name of the category
+          maxLength: 100
+          minLength: 3
+          nullable: true
+          pattern: ^[^\n]*$
         product_name:
           type: string
           description: Name of the product
@@ -1891,6 +1893,15 @@ components:
           minLength: 20
           nullable: false
           pattern: ^[^\n]*$
+        product_photos:
+          type: array
+          nullable: true
+          maxItems: 5
+          items:
+            type: string
+            maxLength: 1000
+            format: uri
+            example: 'https://www.youtube.com/photo.jpg'
         detailed_description:
           type: string
           description: Detailed description of the product
@@ -1903,6 +1914,10 @@ components:
           description: URL to the product page
           nullable: true
           maxLength: 1000
+      required:
+      - category_id
+      - product_name
+      - short_description
     PageInfo:
       title: PageInfo
       type: object
