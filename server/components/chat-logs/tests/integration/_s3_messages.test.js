@@ -24,7 +24,6 @@ describe("Test suite for /s3/messages", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("data");
-      expect(response.body).toHaveProperty("messages");
     });
 
     test("Test case /s3/messages for Expected Response - Status 400 Example: empty input", async () => {

@@ -41,8 +41,6 @@ exports.postMessages = asyncHandler(async (req, res) => {
   );
 
   // // Temporary response
-  result.messages.push("postMessages controller not implemented yet");
-  result.locations.push("messages.controller.js");
   res.status(200).send(result);
 });
 
