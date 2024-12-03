@@ -1,4 +1,3 @@
-// adminlogs.test.js
 require("dotenv-flow").config();
 const request = require("supertest");
 const ROOT_DIR = process.cwd();
@@ -12,9 +11,9 @@ describe("Integration Tests for /s3/adminlogs", () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
         .query({
-          admin_id: 1,
-          keyword: "edit",
-          date_range: "2023-01-01:2023-12-31",
+          admin_id: 101,
+          keyword: "Edited",
+          date_range: "2023-11-01:2023-11-30",
           sort_by: "date",
           order: "asc",
         })
@@ -23,7 +22,8 @@ describe("Integration Tests for /s3/adminlogs", () => {
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toHaveProperty("data");
-      // Additional assertions can be made based on expected data structure
+      expect(Array.isArray(response.body.data)).toBe(true);
+      // Additional assertions based on expected data structure
     });
 
     // Negative Test Case: Invalid admin_id (non-integer)
@@ -35,7 +35,11 @@ describe("Integration Tests for /s3/adminlogs", () => {
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0].message).toContain("admin_id");
+      expect(response.body.errors[0]).toMatchObject({
+        errorCode: "type.openapi.validation",
+        message: "must be integer",
+        path: "/query/admin_id",
+      });
     });
 
     // Negative Test Case: Exceeding maxLength for keyword
@@ -48,7 +52,11 @@ describe("Integration Tests for /s3/adminlogs", () => {
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0].message).toContain("keyword");
+      expect(response.body.errors[0]).toMatchObject({
+        errorCode: "maxLength.openapi.validation",
+        message: "must NOT have more than 100 characters",
+        path: "/query/keyword",
+      });
     });
 
     // Negative Test Case: Invalid date_range format
@@ -60,7 +68,11 @@ describe("Integration Tests for /s3/adminlogs", () => {
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0].message).toContain("date_range");
+      expect(response.body.errors[0]).toMatchObject({
+        errorCode: "pattern.openapi.validation",
+        message: 'must match pattern "^\\d{4}-\\d{2}-\\d{2}:\\d{4}-\\d{2}-\\d{2}$"',
+        path: "/query/date_range",
+      });
     });
 
     // Negative Test Case: Invalid sort_by value
@@ -72,7 +84,11 @@ describe("Integration Tests for /s3/adminlogs", () => {
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0].message).toContain("sort_by");
+      expect(response.body.errors[0]).toMatchObject({
+        errorCode: "enum.openapi.validation",
+        message: 'must be equal to one of the allowed values',
+        path: "/query/sort_by",
+      });
     });
 
     // Negative Test Case: Invalid order value
@@ -84,8 +100,36 @@ describe("Integration Tests for /s3/adminlogs", () => {
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0].message).toContain("order");
+      expect(response.body.errors[0]).toMatchObject({
+        errorCode: "enum.openapi.validation",
+        message: 'must be equal to one of the allowed values',
+        path: "/query/order",
+      });
+    });
+
+    // Negative Test Case: No logs found
+    test("Should return 404 when no logs are found for the specified criteria", async () => {
+      const response = await request(app)
+        .get(`${baseUrl}/s3/adminlogs`)
+        .query({
+          admin_id: 9999, // Assuming this admin_id does not exist
+        })
+        .set("Accept", "application/json");
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty("errors");
+      expect(response.body.errors[0]).toContain("No logs found");
+    });
+
+    // Positive Test Case: Valid request with minimal parameters
+    test("Should return 200 and data when only required parameters are provided", async () => {
+      const response = await request(app)
+        .get(`${baseUrl}/s3/adminlogs`)
+        .set("Accept", "application/json");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("data");
+      expect(Array.isArray(response.body.data)).toBe(true);
     });
   });
-
 });
