@@ -785,7 +785,8 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/SuccessObject'
+                      $ref: '#/components/schemas/ChatLogSuccessObject'
+                    maxItems: 500
               examples:
                 exampleMessages:
                   value:
@@ -1561,3 +1562,19 @@ components:
             - tracking location optional
       required:
         - messages
+    ChatLogSuccessObject:
+      type: object
+      properties:
+        id:
+          type: integer
+        sender_id:
+          type: integer
+        recipient_id:
+          type: integer
+        thread:
+          type: string
+        content:
+          type: string
+        time:
+          type: string
+          format: date-time

@@ -52,8 +52,8 @@ module.exports.patchMessagesByThreadIdDb = async (options) => {
   };
 };
 
-module.exports.getMessagesHistoryByAdminIdDb = async (admin_id) => {
-  try {
+module.exports.getMessagesHistoryByAdminIdDb = async (receiver_id) => {
+  /*try {
     const query = `
       SELECT 
         m.id AS message_id,
@@ -91,7 +91,12 @@ module.exports.getMessagesHistoryByAdminIdDb = async (admin_id) => {
       messages: ['Error retrieving messages'],
       locations: ['messages.database.js'],
     };
-  }
+  }*/
+
+  return {
+    messages: ["postMessagesReplyByThreadIdDb not implemented yet"],
+    locations: ["messages.database.js"],
+  };
 };
 
 module.exports.postMessagesReplyByThreadIdDb = async (options) => {
