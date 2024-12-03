@@ -1183,9 +1183,6 @@ paths:
                         format: int32
                         minimum: 1
                         maximum: 2147483647
-                      total_items:
-                        type: integer
-                        format: int32
               examples:
                 businesses-list:
                   summary: A list of businesses
