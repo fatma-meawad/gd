@@ -1,5 +1,7 @@
 const schema = require("../schema.json");
 const mockProducts = require("./mock/products.json");
+const pool = require("../config/dbconfig");
+
 
 module.exports.getProductsDb = async () => {
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();

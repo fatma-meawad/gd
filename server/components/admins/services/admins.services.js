@@ -130,11 +130,11 @@ module.exports.postAdminsPasswordReset = async (email) => {
   }
 };
 
-module.exports.postAdminsRegister = async (registrationData) => {
+module.exports.postAdminsRegister = async (admin) => {
   // Implement your business logic here...
 
   try {
-    let result = await admins.postAdminsRegisterDb(registrationData);
+    let result = await admins.postAdminsRegisterDb(admin);
     //delete this when you actually implement something.
     result.messages.push("postAdminsRegister services not implemented yet");
     result.locations.push("admins.services.js");
