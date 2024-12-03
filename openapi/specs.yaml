@@ -336,6 +336,7 @@ paths:
               $ref: '#/components/schemas/ErrorObject'
   /s1/admins/register:
     post:
+      operationId: postAdminsRegister
       tags:
         - admins
       summary: >-
@@ -374,6 +375,11 @@ paths:
         provides specific feedback on what needs to be improved.
       requestBody:
         required: true
+        description: >
+          Provide the required admin registration details including full name, email,
+          phone number, and password. The activation code must be valid and unused.
+          Optional fields include address, profile photo URL, and bio. Password must
+          meet complexity requirements including minimum length and special characters.
         content:
           application/json:
             schema:
@@ -419,6 +425,47 @@ paths:
                 value:
                   full_name: John Smith
                   email: john.smith@example.com
+              exceededMaxLength:
+                summary: Field exceeding maximum length
+                value:
+                  full_name: JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ
+                  email: john.smith@example.com
+                  phone: '+1234567890'
+                  password: SecureP@ss123
+                  activation_code: ABCD1234
+              invalidPattern:
+                summary: Invalid field patterns
+                value:
+                  full_name: John123
+                  email: john.smith@example.com
+                  phone: '123456'
+                  password: SecureP@ss123
+                  activation_code: ABCD1234
+              invalidPhotoUrl:
+                summary: Invalid profile photo URL
+                value:
+                  full_name: John Smith
+                  email: john.smith@example.com
+                  phone: '+1234567890'
+                  password: SecureP@ss123
+                  activation_code: ABCD1234
+                  profile_photo: not-a-valid-url
+              duplicateEmail:
+                summary: Already registered email
+                value:
+                  full_name: Different Name
+                  email: existing@example.com
+                  phone: '+1234567891'
+                  password: SecureP@ss123
+                  activation_code: WXYZ5678
+              expiredCode:
+                summary: Expired activation code
+                value:
+                  full_name: John Smith
+                  email: john@example.com
+                  phone: '+1234567890'
+                  password: SecureP@ss123
+                  activation_code: EXPIRED1                  
       responses:
         '201':
           description: Registration successful
@@ -433,18 +480,22 @@ paths:
                         type: object
                         properties:
                           id:
-                            type: string
+                            type: integer
+                            format: int32
+                            minimum: 1
+                            maximum: 2147483647
                             description: The unique identifier of the registered admin
                           email:
                             type: string
+                            format: email
+                            maxLength: 255
                             description: The email address of the registered admin
                           full_name:
                             type: string
+                            minLength: 2
+                            maxLength: 100
+                            pattern: '^[a-zA-Z\s.-]*$'
                             description: The full name of the registered admin
-                          created_at:
-                            type: string
-                            format: date-time
-                            description: Timestamp when the admin was registered
                         required:
                           - id
                           - email
@@ -452,7 +503,7 @@ paths:
               example:
                 value:
                   data:
-                    id: admin-123
+                    id: 123
                     full_name: John Smith
                     email: john.smith@example.com
                     phone: '+1234567890'
@@ -474,6 +525,21 @@ paths:
                   errors:
                     - Invalid or expired registration code
                     - Password does not meet complexity requirements
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
+                    - admins.database.js
+        '409':
+          description: Conflict - Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Email already registered
                   locations:
                     - admins.controller.js
                     - admins.service.js
@@ -1437,52 +1503,65 @@ components:
     AdminData:
       title: Admin
       type: object
+      description: Schema for admin registration and management
       properties:
         id:
-          type: string
-          description: Unique identifier for the admin
+          type: integer
+          format: int32
           readOnly: true
+          description: "Unique identifier for the admin"
+          minimum: 1
+          maximum: 2147483647
         full_name:
           type: string
           minLength: 2
           maxLength: 100
+          pattern: '^[a-zA-Z\s.-]*$'
           description: Full name of the administrator
         email:
           type: string
           format: email
+          maxLength: 255
           description: Email address of the administrator
         phone:
           type: string
+          maxLength: 20
           pattern: '^\+?[1-9]\d{1,14}$'
           description: Phone number in international format
         password:
           type: string
           format: password
           minLength: 8
-          pattern: '^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$'
+          maxLength: 72
+          pattern: '^[A-Za-z\d@$!%*#?&]*$'
           description: >-
-            Admin password - must be at least 8 characters with mix of letters,
+            Admin password - must be at least 8 characters with a mix of letters,
             numbers and symbols
           writeOnly: true
         address:
           type: string
           maxLength: 200
+          pattern: '^[a-zA-Z0-9\s.,#-/]*$'
           description: Physical address
         activation_code:
           type: string
           pattern: '^[A-Z0-9]{8}$'
+          maxLength: 8
           description: 8-character activation code provided by Galleria owners
         profile_photo:
           type: string
           format: uri
+          maxLength: 2048
           description: URL to profile photo
         bio:
           type: string
           maxLength: 500
+          pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
           description: Admin biography or description
         created_at:
           type: string
           format: date-time
+          maxLength: 32
           description: Timestamp when the admin account was created
           readOnly: true
         deactivated_at:
@@ -1527,6 +1606,7 @@ components:
           type: array
           items:
             type: string
+            maxLength: 256
           description: Error messages
           example:
             - invalid
