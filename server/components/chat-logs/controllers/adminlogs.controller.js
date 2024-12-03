@@ -15,7 +15,7 @@ function formatErrorResponse(statusCode, errorMessages, locations = []) {
   };
 }
 
-// GET /adminlogs
+// adminlogs GET /adminlogs
 exports.getAdminlogs = asyncHandler(async (req, res) => {
   const options = {
     admin_id: req.query.admin_id ? parseInt(req.query.admin_id, 10) : undefined,
