@@ -899,6 +899,19 @@ paths:
             enum:
               - asc
               - desc
+        - in: header
+          name: auth
+          description: An authorization token. Name is shortened due to OpenAPI issues with the name Authorization.
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validFormat:
+              summary: Example of a valid authorization token
+              value: 'Bearer ahriuytiOiJIUzI1NiIsInR5cCI6IkpLAIR5'
       responses:
         '200':
           description: Logs retrieved successfully.
@@ -1647,7 +1660,7 @@ components:
         title: Food
         photo_url: 'https://url.com/photo.jpg'
         description: This is something you can eat.
-        is_deleted: false
+        is_deleted: false    
     AdminLog:
       type: object
       properties:
