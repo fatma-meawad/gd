@@ -197,14 +197,14 @@ exports.postAdminsPasswordReset = asyncHandler(async (req, res) => {
 
 exports.postAdminsRegister = asyncHandler(async (req, res) => {
   const admin = {
-      full_name: req.body.full_name,
-      email: req.body.email,
-      phone: req.body.phone,
-      activation_code: req.body.activation_code,
-      password: req.body.password,
-      address: req.body.address,
-      profile_photo: req.body.profile_photo,
-      bio: req.body.bio
+    full_name: req.body.full_name,
+    email: req.body.email,
+    phone: req.body.phone,
+    activation_code: req.body.activation_code,
+    password: req.body.password,
+    address: req.body.address,
+    profile_photo: req.body.profile_photo,
+    bio: req.body.bio,
   };
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
