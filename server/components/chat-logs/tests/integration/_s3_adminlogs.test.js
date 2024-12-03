@@ -59,11 +59,27 @@ describe("Integration Tests for /s3/adminlogs", () => {
       });
     });
 
-    // Negative Test Case: Invalid date_range format
+    // Negative Test Case: Invalid date_range Length
     test("Should return 400 when date_range format is invalid", async () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
         .query({ date_range: "2023-01-01_to_2023-12-31" }) // Invalid format
+        .set("Accept", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("errors");
+      expect(response.body.errors[0]).toMatchObject({
+        errorCode: "maxLength.openapi.validation",
+        message: 'must NOT have more than 21 characters',
+        path: "/query/date_range",
+      });
+    });
+
+    // Negative Test Case: Invalid date_range format
+    test("Should return 400 when date_range format is invalid", async () => {
+      const response = await request(app)
+        .get(`${baseUrl}/s3/adminlogs`)
+        .query({ date_range: "2023-01-01-2023-12-31" }) // Invalid format
         .set("Accept", "application/json");
 
       expect(response.status).toBe(400);
@@ -86,7 +102,7 @@ describe("Integration Tests for /s3/adminlogs", () => {
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "enum.openapi.validation",
-        message: 'must be equal to one of the allowed values',
+        message: 'must be equal to one of the allowed values: date, keyword, admin_id',
         path: "/query/sort_by",
       });
     });
@@ -102,7 +118,7 @@ describe("Integration Tests for /s3/adminlogs", () => {
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "enum.openapi.validation",
-        message: 'must be equal to one of the allowed values',
+        message: 'must be equal to one of the allowed values: asc, desc',
         path: "/query/order",
       });
     });
