@@ -146,8 +146,8 @@ describe("Unit Tests for getAdminlogsDb Function", () => {
     });
 
     const logs = await getAdminlogsDb(options);
-    expect(logs.data[0].action_time).toBe("2023-11-10T10:30:00Z");
-    expect(logs.data[1].action_time).toBe("2023-11-11T11:00:00Z");
+    expect(logs[0].action_time).toBe("2023-11-10T10:30:00Z");
+    expect(logs[1].action_time).toBe("2023-11-11T11:00:00Z");
     expect(mockPool.query).toHaveBeenCalledWith(
       expect.stringContaining("ORDER BY action_time asc"),
       []

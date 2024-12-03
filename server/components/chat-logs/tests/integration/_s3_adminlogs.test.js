@@ -17,7 +17,8 @@ describe("Integration Tests for /s3/adminlogs", () => {
           sort_by: "date",
           order: "asc",
         })
-        .set("Accept", "application/json");
+        .set("Accept", "application/json")
+        .set("auth", "some-auth-token"); // Added auth header
 
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
@@ -26,12 +27,25 @@ describe("Integration Tests for /s3/adminlogs", () => {
       // Additional assertions based on expected data structure
     });
 
+    // Negative Test Case: Missing auth header
+    test("Should return 401 when auth header is missing", async () => {
+      const response = await request(app)
+        .get(`${baseUrl}/s3/adminlogs`)
+        .query({ admin_id: 101 })
+        .set("Accept", "application/json");
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("errors");
+      expect(response.body.errors[0]).toContain("Unauthorized");
+    });
+
     // Negative Test Case: Invalid admin_id (non-integer)
     test("Should return 400 when admin_id is not an integer", async () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
         .query({ admin_id: "abc" })
-        .set("Accept", "application/json");
+        .set("Accept", "application/json")
+        .set("auth", "some-auth-token"); // Added auth header
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
@@ -48,7 +62,8 @@ describe("Integration Tests for /s3/adminlogs", () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
         .query({ keyword: longKeyword })
-        .set("Accept", "application/json");
+        .set("Accept", "application/json")
+        .set("auth", "some-auth-token"); // Added auth header
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
@@ -60,17 +75,18 @@ describe("Integration Tests for /s3/adminlogs", () => {
     });
 
     // Negative Test Case: Invalid date_range Length
-    test("Should return 400 when date_range format is invalid", async () => {
+    test("Should return 400 when date_range length is invalid", async () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
-        .query({ date_range: "2023-01-01_to_2023-12-31" }) // Invalid format
-        .set("Accept", "application/json");
+        .query({ date_range: "2023-01-01_to_2023-12-31" }) // Invalid length
+        .set("Accept", "application/json")
+        .set("auth", "some-auth-token"); // Added auth header
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "maxLength.openapi.validation",
-        message: 'must NOT have more than 21 characters',
+        message: "must NOT have more than 21 characters",
         path: "/query/date_range",
       });
     });
@@ -80,13 +96,15 @@ describe("Integration Tests for /s3/adminlogs", () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
         .query({ date_range: "2023-01-01-2023-12-31" }) // Invalid format
-        .set("Accept", "application/json");
+        .set("Accept", "application/json")
+        .set("auth", "some-auth-token"); // Added auth header
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "pattern.openapi.validation",
-        message: 'must match pattern "^\\d{4}-\\d{2}-\\d{2}:\\d{4}-\\d{2}-\\d{2}$"',
+        message:
+          'must match pattern "^\\d{4}-\\d{2}-\\d{2}:\\d{4}-\\d{2}-\\d{2}$"',
         path: "/query/date_range",
       });
     });
@@ -96,13 +114,15 @@ describe("Integration Tests for /s3/adminlogs", () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
         .query({ sort_by: "invalid_field" })
-        .set("Accept", "application/json");
+        .set("Accept", "application/json")
+        .set("auth", "some-auth-token"); // Added auth header
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "enum.openapi.validation",
-        message: 'must be equal to one of the allowed values: date, keyword, admin_id',
+        message:
+          "must be equal to one of the allowed values: date, keyword, admin_id",
         path: "/query/sort_by",
       });
     });
@@ -112,13 +132,14 @@ describe("Integration Tests for /s3/adminlogs", () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
         .query({ order: "up" })
-        .set("Accept", "application/json");
+        .set("Accept", "application/json")
+        .set("auth", "some-auth-token"); // Added auth header
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "enum.openapi.validation",
-        message: 'must be equal to one of the allowed values: asc, desc',
+        message: "must be equal to one of the allowed values: asc, desc",
         path: "/query/order",
       });
     });
@@ -127,10 +148,9 @@ describe("Integration Tests for /s3/adminlogs", () => {
     test("Should return 404 when no logs are found for the specified criteria", async () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
-        .query({
-          admin_id: 9999, // Assuming this admin_id does not exist
-        })
-        .set("Accept", "application/json");
+        .query({ admin_id: 9999 }) // Assuming this admin_id does not exist
+        .set("Accept", "application/json")
+        .set("auth", "some-auth-token"); // Added auth header
 
       expect(response.status).toBe(404);
       expect(response.body).toHaveProperty("errors");
@@ -141,7 +161,8 @@ describe("Integration Tests for /s3/adminlogs", () => {
     test("Should return 200 and data when only required parameters are provided", async () => {
       const response = await request(app)
         .get(`${baseUrl}/s3/adminlogs`)
-        .set("Accept", "application/json");
+        .set("Accept", "application/json")
+        .set("auth", "some-auth-token"); // Added auth header
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty("data");
