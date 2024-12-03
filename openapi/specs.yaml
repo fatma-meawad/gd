@@ -1156,17 +1156,17 @@ paths:
                       - id: 1
                         title: Example Business
                         image: 'http://example.com/image.png'
-                        phone: '+1234567890'
+                        phone: '+1234567890123'
                         address: 123 Example Street
                         web_address: 'http://example.com'
                         description: An example business description
                         main_owner_name: John Doe
                         main_owner_email: john.doe@example.com
-                        main_owner_phone: '+1234567890'
-                        created_at: 12345678
-                        updated_at: 12345678
+                        main_owner_phone: '+1234567890123'
+                        created_at: "2024-10-01T12:00:00Z"
+                        updated_at: "2024-10-01T12:00:00Z"
                         is_active: true
-                        deactivated_at: 12345678
+                        deactivated_at: "2024-11-01T12:00:00Z"
                     pagination_info:
                       limit: 1
                       offset: 0
@@ -1970,6 +1970,7 @@ components:
           type: string
           format: date-time
           maxLength: 30
+          nullable: true
         is_active:
           type: boolean 
     PaginationInfo:
