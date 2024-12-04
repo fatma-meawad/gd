@@ -1051,7 +1051,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /s4/businesses/:
+  /s4/businesses:
     post:
       summary: >-
         Create a new business (author:@rbekkum) (tester:@Jany-M)
@@ -1139,6 +1139,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
     get:
+      operationId: getBusinesses
       summary: >-
         Get list of businesses (author:@Jany-M) (tester:@rbekkum, @PietroLauria)
         (reviewer:@alberto)
@@ -1148,18 +1149,37 @@ paths:
       tags:
         - accounts
       parameters:
+        - name: auth
+          in: header
+          description: Authorization token
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 600
+            pattern: '^Bearer\s[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_.+/=]*$'
+          examples:
+            validAuth:
+              summary: Example of a valid JWT authorization token
+              value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U'
         - name: limit
           in: query
           required: false
           schema:
             type: integer
-          description: Number of items per page
+            format: int32
+            minimum: 1
+            maximum: 50
+          description: Number of items per page.
         - name: offset
           in: query
           required: false
           schema:
             type: integer
-          description: Offset for pagination
+            format: int32
+            minimum: 0
+            maximum: 1000
+          description: Offset for pagination. The number of items to skip before starting to collect the result set.
       responses:
         '200':
           description: Success
@@ -1167,50 +1187,15 @@ paths:
             application/json:
               schema:
                 type: object
+                required: ['businesses', 'pagination_info']
                 properties:
                   businesses:
                     type: array
+                    maxItems: 50
                     items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        title:
-                          type: string
-                        image:
-                          type: string
-                        phone:
-                          type: string
-                        address:
-                          type: string
-                        web_address:
-                          type: string
-                        description:
-                          type: string
-                        main_owner_name:
-                          type: string
-                        main_owner_email:
-                          type: string
-                          format: email
-                        main_owner_phone:
-                          type: string
-                        created_at:
-                          type: integer
-                        updated_at:
-                          type: integer
-                        is_active:
-                          type: boolean
-                        deactivated_at:
-                          type: integer
+                      $ref: '#/components/schemas/BusinessData'
                   pagination_info:
-                    type: object
-                    properties:
-                      limit:
-                        type: integer
-                      offset:
-                        type: integer
-                      total_items:
-                        type: integer
+                    $ref: '#/components/schemas/PaginationInfo'
               examples:
                 businesses-list:
                   summary: A list of businesses
@@ -1219,21 +1204,20 @@ paths:
                       - id: 1
                         title: Example Business
                         image: 'http://example.com/image.png'
-                        phone: '+1234567890'
+                        phone: '+1234567890123'
                         address: 123 Example Street
                         web_address: 'http://example.com'
                         description: An example business description
                         main_owner_name: John Doe
                         main_owner_email: john.doe@example.com
-                        main_owner_phone: '+1234567890'
-                        created_at: 12345678
-                        updated_at: 12345678
+                        main_owner_phone: '+1234567890123'
+                        created_at: "2024-10-01T12:00:00Z"
+                        updated_at: "2024-10-01T12:00:00Z"
                         is_active: true
-                        deactivated_at: 12345678
+                        deactivated_at: "2024-11-01T12:00:00Z"
                     pagination_info:
                       limit: 1
                       offset: 0
-                      total_items: 1
         '400':
           description: Invalid request parameters
           content:
@@ -2030,3 +2014,81 @@ components:
           minimum: 0
           maximum: 2147483647
           format: int32
+    BusinessData:
+      title: Business
+      description: Schema for Business
+      type: object
+      required: ['id', 'title', 'main_owner_email', 'created_at', 'is_active']
+      properties:
+        id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        title:
+          type: string
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9\s.-]*$'
+        image:
+          type: string
+          format: uri
+          maxLength: 2048
+        phone:
+          type: string
+          maxLength: 20
+          pattern: '^\+?[1-9]\d{1,14}$'
+        address:
+          type: string
+          maxLength: 255
+          pattern: '^[a-zA-Z0-9\s,.-]*$'
+        web_address:
+          type: string
+          format: uri
+          maxLength: 2048
+        description:
+          type: string
+          maxLength: 500
+          pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
+        main_owner_name:
+          type: string
+          maxLength: 100
+          pattern: '^[a-zA-Z\s.-]*$'
+        main_owner_email:
+          type: string
+          format: email
+          maxLength: 255
+        main_owner_phone:
+          type: string
+          maxLength: 20
+          pattern: '^\+?[1-9]\d{1,14}$'
+        created_at:
+          type: string
+          format: date-time
+          maxLength: 30
+        updated_at:
+          type: string
+          format: date-time
+          maxLength: 30
+        deactivated_at:
+          type: string
+          format: date-time
+          maxLength: 30
+          nullable: true
+        is_active:
+          type: boolean 
+    PaginationInfo:
+      title: Business Pagination
+      description: Schema for Business Pagination
+      type: object
+      required: ['limit', 'offset']
+      properties:
+        limit:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        offset:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
