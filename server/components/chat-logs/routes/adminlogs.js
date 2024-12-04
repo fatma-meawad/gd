@@ -5,8 +5,6 @@ const { handleError } = require("../../../middleware/errorhandler");
 
 router.get("/", controller.getAdminlogs);
 
-router.post("/", controller.postAdminlogs);
-
 router.use(handleError);
 
 module.exports = router;
