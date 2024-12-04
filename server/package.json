@@ -8,7 +8,7 @@
     "stop-db": "docker-compose  -f utils/db/docker-compose.yml  down -v",
     "start": "cross-env NODE_ENV=production npm run start-db &&  node index | pino-pretty",
     "dev": "cross-env NODE_ENV=development  nodemon | pino-pretty",
-    "test": "cross-env NODE_ENV=test && npm run start-db &&  jest --verbose --runInBand | pino-pretty >reports/logs.md && npm run stop-db",
+    "test": "cross-env NODE_ENV=test && npm run start-db &&  jest --verbose --runInBand | pino-pretty >logs.md && npm run stop-db",
     "test:accounts": "cross-env NODE_ENV=test && npm run start-db &&  jest -- components/accounts --verbose --runInBand  && npm run stop-db",
     "test:admins": "cross-env NODE_ENV=test && npm run start-db &&  jest -- components/admins --verbose  && npm run stop-db",
     "test:categories": "cross-env NODE_ENV=test && npm run start-db &&  jest -- components/categories --verbose --runInBand  && npm run stop-db",

@@ -1,3 +1,5 @@
+const pool = require("../config/dbconfig");
+
 const schema = require("../schema.json");
 
 module.exports.getCategoriesDb = async (options) => {
@@ -18,8 +20,17 @@ module.exports.postCategoriesDb = async (title, photo_url, description) => {
   2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
 */
+
   return {
-    messages: ["postCategoriesDb not implemented yet"],
+    messages: [
+      {
+        // id: 123,
+        // title: title,
+        // photo_url: photo_url,
+        // description: description,
+        // is_deleted: false,
+      },
+    ],
     locations: ["categories.database.js"],
   };
 };

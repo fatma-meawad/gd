@@ -196,10 +196,16 @@ exports.postAdminsPasswordReset = asyncHandler(async (req, res) => {
 });
 
 exports.postAdminsRegister = asyncHandler(async (req, res) => {
-  const registrationData = {
-    body: req.body,
+  const admin = {
+    full_name: req.body.full_name,
+    email: req.body.email,
+    phone: req.body.phone,
+    activation_code: req.body.activation_code,
+    password: req.body.password,
+    address: req.body.address,
+    profile_photo: req.body.profile_photo,
+    bio: req.body.bio,
   };
-  console.log("register");
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
       2- the openapi validator should match the types with the contract, so make sure they match
@@ -210,9 +216,7 @@ exports.postAdminsRegister = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await admins.postAdminsRegister(
-    ...Object.values(registrationData)
-  );
+  let result = await admins.postAdminsRegister(admin);
 
   // Temporary response
   result.messages.push("postAdminsRegister controller not implemented yet");
