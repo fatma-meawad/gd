@@ -105,7 +105,7 @@ module.exports.getMessagesHistoryByAdminIdDb = async (receiver_id) => {
   }*/
 
   return {
-    messages: ["postMessagesReplyByThreadIdDb not implemented yet"],
+    messages: ["getMessagesHistoryByAdminIdDb not implemented yet"],
     locations: ["messages.database.js"],
   };
 };
