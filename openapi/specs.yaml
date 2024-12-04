@@ -931,6 +931,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
+
+  /s3/messages/{receiver_id}:
+    get:
+      operationId: getMessagesHistoryByAdminId
+      summary: Retrieve messages with a specific recipient
+      description: >-
+        Fetch all messages exchanged with a specific recipient, identified by their ID.
+      tags:
+        - chat-logs
+      parameters:
+        - name: receiver_id
+          in: path
+          required: true
+          description: ID of the recipient admin.
+          schema:
+            type: integer
+            minimum: 1      
+            maximum: 1000000
+      responses:
+        '200':
+          description: Messages retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MessageData'
+                    maxItems: 500
+              examples:
+                exampleMessages:
+                  value:
+                    data:
+                      - id: 1
+                        sender_id: 1
+                        recipient_id: 2
+                        thread: General Updates
+                        content: "Hello, are you available?"
+                        time: "2024-12-01T10:00:00Z"
+                      - id: 2
+                        sender_id: 2
+                        recipient_id: 1
+                        thread: General Updates
+                        content: "Yes, how can I help you?"
+                        time: "2024-12-01T10:05:00Z"
+        '400':
+          description: "Bad Request - Invalid or missing parameters"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+        '404':
+          description: No messages found with the specified recipient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+
   /s3/adminlogs:
     get:
       operationId: getadminlogs
