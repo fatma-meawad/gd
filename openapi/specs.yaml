@@ -854,6 +854,7 @@ paths:
                 $ref: '#/components/schemas/ErrorObject'
   /s3/adminlogs:
     get:
+      operationId: getadminlogs
       summary: >-
         Retrieve admin logs Author: @PietroLauria (tester:@Jany-M) (Reviewer:
         @alberto)
@@ -868,17 +869,23 @@ paths:
           description: ID of the admin to filter logs by.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 2147483647
         - name: keyword
           in: query
           description: Keyword to search for in log details.
           schema:
             type: string
+            maxLength: 100
+            pattern: '^.{0,100}$'
         - name: date_range
           in: query
+          description: 'Date range filter in the format YYYY-MM-DD:YYYY-MM-DD.'
           schema:
             type: string
+            maxLength: 21
             pattern: '^\d{4}-\d{2}-\d{2}:\d{4}-\d{2}-\d{2}$'
-          description: 'Date range filter in the format YYYY-MM-DD:YYYY-MM-DD.'
         - name: sort_by
           in: query
           description: Field to sort by.
@@ -896,113 +903,75 @@ paths:
             enum:
               - asc
               - desc
+        - name: auth
+          in: header
+          description: Authorization token; for this assessment, we only check if it exists.
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validAuth:
+              summary: Example of an auth token
+              value: 'some-auth-token'      
       responses:
         '200':
           description: Logs retrieved successfully.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      description: Primary key of the log entry.
-                    action_type:
-                      type: string
-                      description: Type of action performed.
-                    admin_id:
-                      type: number
-                      description: ID of the admin who performed the action.
-                    message_id:
-                      type: number
-                      description: 'ID of the associated message, if applicable.'
-                    action_time:
-                      type: string
-                      format: date-time
-                      description: Timestamp of when the action occurred.
-                    details:
-                      type: string
-                      description: Additional information about the action.
+                type: object
+                properties:
+                  data:
+                    type: array
+                    maxItems: 1000
+                    items:
+                      $ref: '#/components/schemas/AdminLog'
               examples:
                 array_of_logs:
                   value:
-                    - id: 1
-                      action_type: edit
-                      admin_id: 101
-                      message_id: 201
-                      action_time: '2023-11-10T10:30:00Z'
-                      details: Edited message content.
-                    - id: 2
-                      action_type: create
-                      admin_id: 102
-                      message_id: 202
-                      action_time: '2023-11-10T11:00:00Z'
-                      details: Created new message.
+                    data:
+                      - id: 1
+                        action_type: edit
+                        admin_id: 101
+                        message_id: 201
+                        action_time: '2023-11-10T10:30:00Z'
+                        details: Edited message content.
+                      - id: 2
+                        action_type: create
+                        admin_id: 102
+                        message_id: 202
+                        action_time: '2023-11-10T11:00:00Z'
+                        details: Created new message.
         '400':
           description: Invalid query parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - missing `auth` header.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                errors:
+                  - 'Unauthorized: missing `auth` header.'
         '404':
           description: No logs found for the specified criteria.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         default:
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorObject'
-    post:
-      summary: 'Log an admin action Author: @PietroLauria (reviewer:@Jany-M, @alberto)'
-      description: Creates a log entry for an action performed by an admin.
-      tags:
-        - adminlogs
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - admin_id
-                - action_type
-              properties:
-                admin_id:
-                  type: number
-                  description: ID of the admin performing the action.
-                action_type:
-                  type: string
-                  description: Type of action performed by the admin.
-                message_id:
-                  type: number
-                  description: 'ID of the associated message, if applicable.'
-                action_time:
-                  type: string
-                  format: date-time
-                  description: Timestamp of the action.
-                details:
-                  type: string
-                  description: Additional details about the action.
-      responses:
-        '200':
-          description: Log created successfully.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  log_id:
-                    type: integer
-                    description: ID of the created log entry.
-                  success:
-                    type: boolean
-                    description: Indicates if the log creation was successful.
-        '400':
-          description: 'Missing required fields: admin_id or action_type.'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorObject'
+                $ref: '#/components/schemas/ErrorResponse'
   /s4/businesses/:
     post:
       summary: >-
@@ -1600,6 +1569,46 @@ components:
       minimum: 1
       maximum: 100
       description: The number of results per page.
+    AdminLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+          description: Primary key of the log entry.
+          readOnly: true
+        action_type:
+          type: string
+          maxLength: 100
+          pattern: '^.{0,100}$'
+          description: Type of action performed.
+        admin_id:
+          type: number
+          description: ID of the admin who performed the action.
+        message_id:
+          type: number
+          description: 'ID of the associated message, if applicable.'
+        action_time:
+          type: string
+          format: date-time
+          maxLength: 20
+          description: Timestamp of when the action occurred.
+          readOnly: true
+        details:
+          type: string
+          maxLength: 300
+          pattern: '^.{0,300}$'
+          description: Additional information about the action.
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/ErrorObject'
     AdminData:
       title: Admin
       type: object
@@ -1942,4 +1951,3 @@ components:
           minimum: 0
           maximum: 2147483647
           format: int32
-        
