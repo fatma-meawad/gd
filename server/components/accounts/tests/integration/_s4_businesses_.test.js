@@ -8,7 +8,6 @@ const baseUrl = process.env.BASE_API_TEST_URL;
 //TODO: Check the requirements in the task to see what other checks are required
 
 describe("Test suite for /s4/businesses", () => {
-
   // POST /businesses
   describe("Test suite for post /s4/businesses", () => {
     test("Test case: /s4/businesses with Request Example: ValidExample", async () => {
@@ -56,7 +55,7 @@ describe("Test suite for /s4/businesses", () => {
       expect(response.body).toHaveProperty("errors");
       //TODO: assert the exact error messages to assert why the request failed.
     });
-  }); 
+  });
 
   // GET /businesses
   /* This test suite validates the GET /businesses endpoint against the OpenAPI specification:
@@ -65,24 +64,25 @@ describe("Test suite for /s4/businesses", () => {
    * - Ensures proper JWT token validation
    * - Validates response schema against BusinessData component definition
    * - Tests both required and optional fields with their patterns
-  */
+   */
   describe("Test suite for GET /s4/businesses", () => {
     // Valid JWT token for testing, matching the pattern in specs.yaml
-    const validAuthToken = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U';
-  
+    const validAuthToken =
+      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U";
+
     // Happy Path Tests
     test("Test case: Successful retrieval with default pagination", async () => {
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
         .set("Accept", "application/json");
-  
+
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("businesses");
       expect(response.body).toHaveProperty("pagination_info");
-      
+
       // Validate required fields from BusinessData schema
       const business = response.body.businesses[0];
       expect(business).toHaveProperty("id");
@@ -90,12 +90,12 @@ describe("Test suite for /s4/businesses", () => {
       expect(business).toHaveProperty("main_owner_email");
       expect(business).toHaveProperty("created_at");
       expect(business).toHaveProperty("is_active");
-  
+
       // Validate pagination_info structure
       expect(response.body.pagination_info).toHaveProperty("limit");
       expect(response.body.pagination_info).toHaveProperty("offset");
     });
-  
+
     // Pagination Tests
     test("Test case: Valid pagination parameters", async () => {
       const response = await request(app)
@@ -103,7 +103,7 @@ describe("Test suite for /s4/businesses", () => {
         .set("auth", validAuthToken)
         .query({ limit: 10, offset: 0 })
         .set("Accept", "application/json");
-  
+
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
@@ -116,27 +116,27 @@ describe("Test suite for /s4/businesses", () => {
         .set("auth", validAuthToken)
         .query({ limit: 50 }) // Maximum from specs
         .set("Accept", "application/json");
-    
+
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body.businesses.length).toBeLessThanOrEqual(50);
     });
-    
+
     test("Test case: Maximum allowed offset", async () => {
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
         .query({ offset: 1000 }) // Maximum from specs
         .set("Accept", "application/json");
-    
-        expect(response.status).toBe(404);
-        expect(response.headers["content-type"]).toMatch(/json/);
+
+      expect(response.status).toBe(404);
+      expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
-        expect(response.body).toHaveProperty("errors");
-        expect(response.body.errors).toContain("No businesses found");
+      expect(response.body).toHaveProperty("errors");
+      expect(response.body.errors).toContain("No businesses found");
     });
-  
+
     // Invalid Pagination Tests
     test("Test case: Invalid limit parameter", async () => {
       const response = await request(app)
@@ -144,7 +144,7 @@ describe("Test suite for /s4/businesses", () => {
         .set("auth", validAuthToken)
         .query({ limit: -1 })
         .set("Accept", "application/json");
-    
+
       expect(response.status).toBe(400);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
@@ -159,14 +159,14 @@ describe("Test suite for /s4/businesses", () => {
         ])
       );
     });
-  
+
     test("Test case: Invalid offset parameter", async () => {
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
         .query({ offset: -1 })
         .set("Accept", "application/json");
-    
+
       expect(response.status).toBe(400);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
@@ -181,7 +181,7 @@ describe("Test suite for /s4/businesses", () => {
         ])
       );
     });
-  
+
     // Authorization Tests
     /*
     test("Test case: Missing authorization token", async () => {
@@ -221,7 +221,7 @@ describe("Test suite for /s4/businesses", () => {
       expect(response.body.error).toBe("Unauthorized");
     });
     */
-  
+
     // Permission Tests
     /*
     test("Test case: Permission denied", async () => {
@@ -236,7 +236,7 @@ describe("Test suite for /s4/businesses", () => {
       expect(response.body.error).toBe("Permission denied");
     });
     */
-  
+
     // Not Found Tests
     test("Test case: No businesses found", async () => {
       // This test fails for now, for lack of logic, but it's setup to correctly expect a 404
@@ -244,7 +244,7 @@ describe("Test suite for /s4/businesses", () => {
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
         .set("Accept", "application/json");
-  
+
       expect(response.status).toBe(404);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
@@ -259,45 +259,47 @@ describe("Test suite for /s4/businesses", () => {
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
         .set("Accept", "application/json");
-    
+
       expect(response.status).toBe(404);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors).toContain("No businesses found");
     });
-  
+
     // Example Response Validation
     test("Test case: Response matches businesses-list example with complete schema validation", async () => {
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
         .set("Accept", "application/json");
-    
+
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
-      
+
       // First validate the overall response structure
       expect(response.body).toMatchObject({
         businesses: expect.any(Array),
         pagination_info: {
           limit: expect.any(Number),
-          offset: expect.any(Number)
-        }
+          offset: expect.any(Number),
+        },
       });
-    
+
       // Then validate each business in the array
-      response.body.businesses.forEach(business => {
+      response.body.businesses.forEach((business) => {
         // BusinessData schema defines required fields ['id', 'title', 'main_owner_email', 'created_at', 'is_active'] - which I chose arbitrarily for GET, as depending where we use the data, we wont need everything every time probably - while other fields are currently optional. This test validates both required and optional fields according to their patterns defined in the OpenAPI specification
         expect(business).toMatchObject({
           id: expect.any(Number),
           title: expect.stringMatching(/^[a-zA-Z0-9\s.-]*$/),
           main_owner_email: expect.stringMatching(/^[^@]+@[^@]+\.[^@]+$/),
-          created_at: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/),
-          is_active: expect.any(Boolean)
+          created_at: expect.stringMatching(
+            /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
+          ),
+          is_active: expect.any(Boolean),
         });
-    
+
         // Then validate optional fields when they exist
         if (business.phone) {
           expect(business.phone).toMatch(/^\+?[1-9]\d{1,14}$/);
@@ -321,14 +323,16 @@ describe("Test suite for /s4/businesses", () => {
           expect(business.image).toMatch(/^https?:\/\/.+/);
         }
         if (business.updated_at) {
-          expect(business.updated_at).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
+          expect(business.updated_at).toMatch(
+            /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
+          );
         }
         if (business.deactivated_at) {
-          expect(business.deactivated_at).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/);
+          expect(business.deactivated_at).toMatch(
+            /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
+          );
         }
       });
     });
-
   });
-
 });

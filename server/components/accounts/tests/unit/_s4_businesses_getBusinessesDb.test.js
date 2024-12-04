@@ -7,7 +7,10 @@ describe("getBusinessesDb", () => {
 
   // Test case 1: Default behavior - return all businesses when limit is not specified
   it("should return all businesses when no limit is specified", async () => {
-    const result = await getBusinessesDb({ limit: mockBusinesses.length, offset: 0 });
+    const result = await getBusinessesDb({
+      limit: mockBusinesses.length,
+      offset: 0,
+    });
 
     expect(result).toEqual({
       businesses: mockBusinesses,
@@ -40,26 +43,26 @@ describe("getBusinessesDb", () => {
   });
 
   // Test case 4: Verify pagination info
-it("should return correct pagination info", async () => {
-	const limit = 1;
-	const offset = 2;
-	const result = await getBusinessesDb({ limit, offset });
-  
-	// We now test pagination info without total_items
-	expect(result.pagination_info).toEqual({
-	  limit,
-	  offset
-	});
-  
-	// Instead of relying on total_items, we can add tests that help verify pagination behavior
-	const nextPage = await getBusinessesDb({ limit, offset: offset + limit });
-	
-	// If we got fewer items than requested, we know we're at the end
-	const isLastPage = nextPage.businesses.length < limit;
-	
-	// If we're not at the last page, we should get exactly 'limit' items
-	if (!isLastPage) {
-	  expect(nextPage.businesses).toHaveLength(limit);
-	}
+  it("should return correct pagination info", async () => {
+    const limit = 1;
+    const offset = 2;
+    const result = await getBusinessesDb({ limit, offset });
+
+    // We now test pagination info without total_items
+    expect(result.pagination_info).toEqual({
+      limit,
+      offset,
+    });
+
+    // Instead of relying on total_items, we can add tests that help verify pagination behavior
+    const nextPage = await getBusinessesDb({ limit, offset: offset + limit });
+
+    // If we got fewer items than requested, we know we're at the end
+    const isLastPage = nextPage.businesses.length < limit;
+
+    // If we're not at the last page, we should get exactly 'limit' items
+    if (!isLastPage) {
+      expect(nextPage.businesses).toHaveLength(limit);
+    }
   });
 });
