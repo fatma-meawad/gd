@@ -124,7 +124,7 @@ exports.patchMessagesByThreadId = asyncHandler(async (req, res) => {
 
 exports.getMessagesHistoryByAdminId = asyncHandler(async (req, res) => {
   const options = {
-    admin_id: req.params["admin_id"],
+    receiver_id: req.params["receiver_id"],
   };
 
   /**  request:
