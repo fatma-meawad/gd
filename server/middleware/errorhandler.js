@@ -3,16 +3,15 @@ const { StatusCodes } = require("http-status-codes");
 function isOpenApi(err) {
   if (!Array.isArray(err.errors)) return false;
 
-  return err.errors.some((error) => 
-    error.errorCode && error.errorCode.includes("openapi.")
+  return err.errors.some(
+    (error) => error.errorCode && error.errorCode.includes("openapi.")
   );
 }
 
 const handleError = (err, req, res, next) => {
-  console.log(err);
   const status =
     err.statusCode || err.status || StatusCodes.INTERNAL_SERVER_ERROR;
-    
+
   const isOpenApiValidationError = isOpenApi(err);
 
   const sendObject = { ...Object(err) };

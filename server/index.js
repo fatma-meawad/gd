@@ -3,7 +3,7 @@ require("dotenv").config({ path: __dirname + "/.env" });
 const http = require("http");
 const { clogger } = require("./utils/logger");
 const app = require("./app");
-const DEFAULT_PORT=5000;
+const DEFAULT_PORT = 5000;
 
 const server = http.createServer(app);
 

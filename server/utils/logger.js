@@ -10,7 +10,7 @@ if (!isTestEnv) {
   clogger = pino();
 
   logger = pinoHttp({
-    customLogLevel: function (req, res, err) {
+    customLogLevel: function (_req, _res, _err) {
       return "silent";
     },
   });
