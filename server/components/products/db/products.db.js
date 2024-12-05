@@ -9,14 +9,16 @@ module.exports.getProductsDb = async (limit, cursor) => {
 */
 
   try {
-    // const result = await pool.query(
-    //   `SELECT * FROM product`
-    // );
+    const result = await pool.query(
+      `SELECT * FROM product`
+    );
   
-    // console.log(result.rows);
+    // console.log('rows', result.rows);
   
     return {
-      data: {},
+      data: {
+        products: result.rows,
+      },
       messages: ["getProductsDb not implemented yet"],
       locations: ["products.database.js"],
     };
