@@ -1,4 +1,4 @@
-const { getAdminsPasswordResetDb } = require("../../../db/admins.db");
+const { getAdminsPasswordResetDb } = require("../../db/admins.db");
 
 const mockPool = {
   query: jest.fn(),
