@@ -11,7 +11,8 @@ const { DEFAULT_PRODUCTS_LIMIT } = require("./utils");
 module.exports.getProductsDb = async (limit = DEFAULT_PRODUCTS_LIMIT, cursor) => {
   try {
     const result = await pool.query(
-      `SELECT * FROM product`
+      `SELECT * FROM product LIMIT $1`,
+      [limit]
     );
 
     // TODO: fetch photos
