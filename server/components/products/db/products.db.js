@@ -1,25 +1,34 @@
 const schema = require("../schema.json");
 const pool = require("../config/dbconfig");
+const { DEFAULT_PRODUCTS_LIMIT } = require("./utils");
 
-module.exports.getProductsDb = async (limit, cursor) => {
+/**
+ * 
+ * @param {number | undefined} limit The number of products to return
+ * @param {string | undefined} cursor The cursor to start from. If not present, start from the beginning
+ * @returns {Promise<{data: {products: any[]}, messages: string[], locations: string[]}>}
+ */
+module.exports.getProductsDb = async (limit = DEFAULT_PRODUCTS_LIMIT, cursor) => {
   try {
     const result = await pool.query(
       `SELECT * FROM product`
     );
-  
-    // console.log('rows', result.rows);
+
+    // TODO: fetch photos
   
     return {
       data: {
         products: result.rows,
       },
-      messages: ["getProductsDb not implemented yet"],
+      messages: [],
       locations: ["products.database.js"],
     };
   } catch (err) {
+
+    console.log(err)
     return {
       errors: [err.message],
-      messages: ["getProductsDb not implemented yet"],
+      messages: [],
       locations: ["products.database.js"],
     }
   }
