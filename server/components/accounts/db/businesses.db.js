@@ -1,6 +1,8 @@
 const AppError = require("../../../utils/error"); // Assuming error handler is used for consistent error responses
-const mockBusinesses = require("./mock/businesses.json");
 const pool = require("../config/dbconfig");
+
+//const mockBusinesses = require("./mock/businesses.json"); // ../tests/unit/mock/businesses.json
+const mockBusinesses = require("../tests/unit/mock/businesses.json");
 
 module.exports.postBusinessesDb = async (businessData) => {
   try {
@@ -25,13 +27,12 @@ module.exports.getBusinessesDb = async ({ limit, offset }) => {
   const businesses = mockBusinesses.slice(offset, offset + limit);
   const totalItems = mockBusinesses.length;
 
-  // We will use a mock data file for now, to simulate db data: server\components\accounts\db\mock\businesses.json
+  // We will use a mock data file for now, to simulate db data: server\components\accounts\tests\unit\mock\businesses.json
   return {
     businesses,
     pagination_info: {
       limit: parseInt(limit),
       offset: parseInt(offset),
-      total_items: totalItems,
     },
   };
 };

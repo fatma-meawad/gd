@@ -31,6 +31,7 @@ paths:
 
   /s1/admins/login:
     post:
+      operationId: loginAdmin
       tags:
         - admins
       summary: >-
@@ -62,6 +63,7 @@ paths:
         - If the login attempt is successful after one or two attempts, the
         system resets the attempt counter back to zero.
       requestBody:
+        description: Admin login
         required: true
         content:
           application/json:
@@ -72,30 +74,107 @@ paths:
                   $ref: '#/components/schemas/AdminData/properties/email'
                 password:
                   $ref: '#/components/schemas/AdminData/properties/password'
+              required:
+                - email
+                - password
+            examples:
+              validLogin:
+                summary: Valid login request
+                value:
+                  email: admin@example.com
+                  password: SecureP@ss123
+              invalidEmail:
+                summary: Invalid email format
+                value:
+                  email: invalid-email
+                  password: SecureP@ss123
+              invalidPassword:
+                summary: Incorrect password
+                value:
+                  email: admin@example.com
+                  password: wrongpassword
+              blockedAccount:
+                summary: Account blocked due to multiple failed attempts
+                value:
+                  email: blocked.admin@example.com
+                  password: SecureP@ss123
       responses:
         '200':
           description: Login successful
           content:
             application/json:
               schema:
-                required:
-                  - admin_id
-                type: object
-                properties:
-                  admin_id:
-                    type: string
+                allOf:
+                  - $ref: '#/components/schemas/SuccessObject'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          admin_id:
+                            type: integer
+                            format: int64
+                            minimum: 1
+                            maximum: 1000001
+                            description: The unique identifier of the logged-in admin
+                          message:
+                            type: string
+                            maxLength: 255
+                            enum: ['Login successful']
+                            description: A success message
+                        required:
+                          - admin_id
+              example:
+                value:
+                  data:
+                    admin_id: 123
+                  messages:
+                    - Login successful
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
         '400':
-          description: Invalid credentials. Please try again.
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Invalid credentials. Please try again.
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
         '423':
-          description: >-
-            Your account has been blocked due to multiple failed login attempts.
-            Please reset your password
+          description: Account blocked due to failed attempts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Your account has been blocked due to multiple failed login attempts. Please reset your password.
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
         default:
           description: Unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - An unexpected error occurred. Please contact support.
+                  locations:
+                    - admins.controller.js
+                    - admins.service.js
 
 
   /s1/admins/{id}:
@@ -281,6 +360,11 @@ paths:
       including their activation status (active or inactive), account creation date, 
       and deactivation time (if applicable), so I can manage and track the admin team effectively.
     parameters:
+      - in: header
+        name: auth
+        schema:
+          type: string
+          example: token
       - in: query
         name: page
         description: The page number for pagination, used to retrieve the corresponding set of admin records.
@@ -852,8 +936,75 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
+
+  /s3/messages/{receiver_id}:
+    get:
+      operationId: getMessagesHistoryByAdminId
+      summary: Retrieve messages with a specific recipient
+      description: >-
+        Fetch all messages exchanged with a specific recipient, identified by their ID.
+      tags:
+        - chat-logs
+      parameters:
+        - name: receiver_id
+          in: path
+          required: true
+          description: ID of the recipient admin.
+          schema:
+            type: integer
+            minimum: 1      
+            maximum: 1000000
+      responses:
+        '200':
+          description: Messages retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/MessageData'
+                    maxItems: 500
+              examples:
+                exampleMessages:
+                  value:
+                    data:
+                      - id: 1
+                        sender_id: 1
+                        recipient_id: 2
+                        thread: General Updates
+                        content: "Hello, are you available?"
+                        time: "2024-12-01T10:00:00Z"
+                      - id: 2
+                        sender_id: 2
+                        recipient_id: 1
+                        thread: General Updates
+                        content: "Yes, how can I help you?"
+                        time: "2024-12-01T10:05:00Z"
+        '400':
+          description: "Bad Request - Invalid or missing parameters"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+        '404':
+          description: No messages found with the specified recipient.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+
   /s3/adminlogs:
     get:
+      operationId: getadminlogs
       summary: >-
         Retrieve admin logs Author: @PietroLauria (tester:@Jany-M) (Reviewer:
         @alberto)
@@ -868,17 +1019,23 @@ paths:
           description: ID of the admin to filter logs by.
           schema:
             type: integer
+            format: int32
+            minimum: 0
+            maximum: 2147483647
         - name: keyword
           in: query
           description: Keyword to search for in log details.
           schema:
             type: string
+            maxLength: 100
+            pattern: '^.{0,100}$'
         - name: date_range
           in: query
+          description: 'Date range filter in the format YYYY-MM-DD:YYYY-MM-DD.'
           schema:
             type: string
+            maxLength: 21
             pattern: '^\d{4}-\d{2}-\d{2}:\d{4}-\d{2}-\d{2}$'
-          description: 'Date range filter in the format YYYY-MM-DD:YYYY-MM-DD.'
         - name: sort_by
           in: query
           description: Field to sort by.
@@ -896,114 +1053,76 @@ paths:
             enum:
               - asc
               - desc
+        - name: auth
+          in: header
+          description: Authorization token; for this assessment, we only check if it exists.
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validAuth:
+              summary: Example of an auth token
+              value: 'some-auth-token'      
       responses:
         '200':
           description: Logs retrieved successfully.
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      description: Primary key of the log entry.
-                    action_type:
-                      type: string
-                      description: Type of action performed.
-                    admin_id:
-                      type: number
-                      description: ID of the admin who performed the action.
-                    message_id:
-                      type: number
-                      description: 'ID of the associated message, if applicable.'
-                    action_time:
-                      type: string
-                      format: date-time
-                      description: Timestamp of when the action occurred.
-                    details:
-                      type: string
-                      description: Additional information about the action.
+                type: object
+                properties:
+                  data:
+                    type: array
+                    maxItems: 1000
+                    items:
+                      $ref: '#/components/schemas/AdminLog'
               examples:
                 array_of_logs:
                   value:
-                    - id: 1
-                      action_type: edit
-                      admin_id: 101
-                      message_id: 201
-                      action_time: '2023-11-10T10:30:00Z'
-                      details: Edited message content.
-                    - id: 2
-                      action_type: create
-                      admin_id: 102
-                      message_id: 202
-                      action_time: '2023-11-10T11:00:00Z'
-                      details: Created new message.
+                    data:
+                      - id: 1
+                        action_type: edit
+                        admin_id: 101
+                        message_id: 201
+                        action_time: '2023-11-10T10:30:00Z'
+                        details: Edited message content.
+                      - id: 2
+                        action_type: create
+                        admin_id: 102
+                        message_id: 202
+                        action_time: '2023-11-10T11:00:00Z'
+                        details: Created new message.
         '400':
           description: Invalid query parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - missing `auth` header.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                errors:
+                  - 'Unauthorized: missing `auth` header.'
         '404':
           description: No logs found for the specified criteria.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         default:
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorObject'
-    post:
-      summary: 'Log an admin action Author: @PietroLauria (reviewer:@Jany-M, @alberto)'
-      description: Creates a log entry for an action performed by an admin.
-      tags:
-        - adminlogs
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - admin_id
-                - action_type
-              properties:
-                admin_id:
-                  type: number
-                  description: ID of the admin performing the action.
-                action_type:
-                  type: string
-                  description: Type of action performed by the admin.
-                message_id:
-                  type: number
-                  description: 'ID of the associated message, if applicable.'
-                action_time:
-                  type: string
-                  format: date-time
-                  description: Timestamp of the action.
-                details:
-                  type: string
-                  description: Additional details about the action.
-      responses:
-        '200':
-          description: Log created successfully.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  log_id:
-                    type: integer
-                    description: ID of the created log entry.
-                  success:
-                    type: boolean
-                    description: Indicates if the log creation was successful.
-        '400':
-          description: 'Missing required fields: admin_id or action_type.'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorObject'
-  /s4/businesses/:
+                $ref: '#/components/schemas/ErrorResponse'
+  /s4/businesses:
     post:
       summary: >-
         Create a new business (author:@rbekkum) (tester:@Jany-M)
@@ -1091,6 +1210,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorObject'
     get:
+      operationId: getBusinesses
       summary: >-
         Get list of businesses (author:@Jany-M) (tester:@rbekkum, @PietroLauria)
         (reviewer:@alberto)
@@ -1100,18 +1220,37 @@ paths:
       tags:
         - accounts
       parameters:
+        - name: auth
+          in: header
+          description: Authorization token
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 600
+            pattern: '^Bearer\s[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_=]+\.[a-zA-Z0-9-_.+/=]*$'
+          examples:
+            validAuth:
+              summary: Example of a valid JWT authorization token
+              value: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U'
         - name: limit
           in: query
           required: false
           schema:
             type: integer
-          description: Number of items per page
+            format: int32
+            minimum: 1
+            maximum: 50
+          description: Number of items per page.
         - name: offset
           in: query
           required: false
           schema:
             type: integer
-          description: Offset for pagination
+            format: int32
+            minimum: 0
+            maximum: 1000
+          description: Offset for pagination. The number of items to skip before starting to collect the result set.
       responses:
         '200':
           description: Success
@@ -1119,50 +1258,15 @@ paths:
             application/json:
               schema:
                 type: object
+                required: ['businesses', 'pagination_info']
                 properties:
                   businesses:
                     type: array
+                    maxItems: 50
                     items:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                        title:
-                          type: string
-                        image:
-                          type: string
-                        phone:
-                          type: string
-                        address:
-                          type: string
-                        web_address:
-                          type: string
-                        description:
-                          type: string
-                        main_owner_name:
-                          type: string
-                        main_owner_email:
-                          type: string
-                          format: email
-                        main_owner_phone:
-                          type: string
-                        created_at:
-                          type: integer
-                        updated_at:
-                          type: integer
-                        is_active:
-                          type: boolean
-                        deactivated_at:
-                          type: integer
+                      $ref: '#/components/schemas/BusinessData'
                   pagination_info:
-                    type: object
-                    properties:
-                      limit:
-                        type: integer
-                      offset:
-                        type: integer
-                      total_items:
-                        type: integer
+                    $ref: '#/components/schemas/PaginationInfo'
               examples:
                 businesses-list:
                   summary: A list of businesses
@@ -1171,21 +1275,20 @@ paths:
                       - id: 1
                         title: Example Business
                         image: 'http://example.com/image.png'
-                        phone: '+1234567890'
+                        phone: '+1234567890123'
                         address: 123 Example Street
                         web_address: 'http://example.com'
                         description: An example business description
                         main_owner_name: John Doe
                         main_owner_email: john.doe@example.com
-                        main_owner_phone: '+1234567890'
-                        created_at: 12345678
-                        updated_at: 12345678
+                        main_owner_phone: '+1234567890123'
+                        created_at: "2024-10-01T12:00:00Z"
+                        updated_at: "2024-10-01T12:00:00Z"
                         is_active: true
-                        deactivated_at: 12345678
+                        deactivated_at: "2024-11-01T12:00:00Z"
                     pagination_info:
                       limit: 1
                       offset: 0
-                      total_items: 1
         '400':
           description: Invalid request parameters
           content:
@@ -1391,6 +1494,7 @@ paths:
                   locations:
                     - products.controller.js
     post:
+      operationId: postProducts
       tags:
         - products
       summary: >-
@@ -1404,59 +1508,43 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - category_id
-                - name
-                - short_description
-              properties:
-                name:
-                  type: string
-                  minLength: 3
-                  maxLength: 100
-                  example: Wireless RGB Keyboard
-                category_id:
-                  type: integer
-                  example: 54
-                category_name:
-                  type: string
-                  minLength: 3
-                  maxLength: 100
-                  nullable: true
-                  example: Keyboards
-                short_description:
-                  type: string
-                  minLength: 20
-                  maxLength: 1000
-                  example: >-
-                    Experience seamless typing with this wireless RGB keyboard,
-                    featuring customizable backlighting, ergonomic design, and
-                    reliable connectivity for a smooth and vibrant typing
-                    experience.
-                detailed_description:
-                  type: string
-                  maxLength: 10000
-                  nullable: true
-                  example: >-
-                    Upgrade your typing experience with this wireless RGB
-                    keyboard, combining style and functionality. With
-                    customizable RGB lighting, an ergonomic design, and quiet,
-                    responsive keys, it ensures a smooth typing experience
-                    whether you're working or gaming. Benefit from stable
-                    wireless connectivity, extended battery life, and a sleek,
-                    vibrant design that enhances any workspace.
-                product_photos:
-                  type: array
-                  nullable: true
-                  items:
-                    type: string
-                    format: uri
-                    example: 'https://www.youtube.com/photo.jpg'
-                product_url:
-                  type: string
-                  nullable: true
-                  format: uri
-                  example: 'https://youtu.be/0LE0trd740Q'
+              $ref: '#/components/schemas/ProductData'
+            examples:
+              correctProductData:
+                summary: Valid product data input
+                value:
+                  product_name: RGB keyboard
+                  category_id: 12345
+                  category_name: Keyboards
+                  short_description: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience
+                  detailed_description: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace
+                  product_photos:
+                    - https://example.com/photo1.jpg
+                    - https://example.com/photo2.jpg
+                  product_url: https://youtu.be/0LE0trd740Q
+              wrongCatIdFormat:
+                summary: invalid category_id format
+                value:
+                  product_name: RGB keyboard
+                  category_id: 12345n
+                  category_name: Keyboards
+                  short_description: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience
+                  detailed_description: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace
+                  product_photos:
+                    - https://example.com/photo1.jpg
+                    - https://example.com/photo2.jpg
+                  product_url: https://youtu.be/0LE0trd740Q
+              missingProductName:
+                summary: Missing product name
+                value:
+                  category_id: 12345n
+                  category_name: Keyboards
+                  short_description: Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience
+                  detailed_description: Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace
+                  product_photos:
+                    - https://example.com/photo1.jpg
+                    - https://example.com/photo2.jpg
+                  product_url: https://youtu.be/0LE0trd740Q
       responses:
         '200':
           description: Success
@@ -1465,50 +1553,59 @@ paths:
               schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
-                  id:
-                    type: string
-                  name:
-                    type: string
-                  category_id:
-                    type: string
-                  category_name:
-                    type: string
-                  short_description:
-                    type: string
-                  detailed_description:
-                    type: string
-                  product_photos:
-                    type: array
-                    items:
-                      type: string
-                  product_url:
-                    type: string
+                  data:
+                    type: object
+                    properties:
+                      successObject:
+                        $ref: '#/components/schemas/SuccessObject'
+                      productObject:
+                        $ref: '#/components/schemas/ProductData'
+              examples:
+                successExample:
+                  summary: Success message for product creation
+                  value:
+                    status: success
+                    messages:
+                      - Product created
+                      - The product can be viewed on the product list
+                    id: 2147483647
+                    category_id: 123456
+                    category_name: "Sample category"
+                    product_name: "Sample product"
+                    short_description: "Sample description"
+                    detailed_description: "Sample long description"
+                    product_photos:
+                      - 'https://www.youtube.com/photo.jpg'
+                      - 'https://www.youtube.com/photo2.jpg'
+                    product_url: "https://youtu.be/0LE0trd740Q"
         '400':
-          description: Please fill in all the required fields
+          description: Please fill in all the required fields wirh data of approppriate format
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Invalid input
+                  locations:
+                    - products.controller.js
+                    - products.db.js
+                    - product.services.js
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
+                $ref: '#/components/schemas/ErrorObject'
+              example:
+                value:
+                  status: error
+                  errors:
+                    - Unauthorised
+                  locations:
+                    - products.controller.js
         default:
           description: Unexpected error
           content:
@@ -1606,6 +1703,46 @@ components:
       minimum: 1
       maximum: 100
       description: The number of results per page.
+    AdminLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+          description: Primary key of the log entry.
+          readOnly: true
+        action_type:
+          type: string
+          maxLength: 100
+          pattern: '^.{0,100}$'
+          description: Type of action performed.
+        admin_id:
+          type: number
+          description: ID of the admin who performed the action.
+        message_id:
+          type: number
+          description: 'ID of the associated message, if applicable.'
+        action_time:
+          type: string
+          format: date-time
+          maxLength: 20
+          description: Timestamp of when the action occurred.
+          readOnly: true
+        details:
+          type: string
+          maxLength: 300
+          pattern: '^.{0,300}$'
+          description: Additional information about the action.
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          maxItems: 1000
+          items:
+            $ref: '#/components/schemas/ErrorObject'
     AdminData:
       title: Admin
       type: object
@@ -1683,6 +1820,7 @@ components:
         - phone
         - password
         - activation_code
+
     MessageData:
       title: Message
       type: object
@@ -1868,6 +2006,13 @@ components:
           minimum: 0
           maximum: 2147483647
           format: int32
+        category_name:
+          type: string
+          description: Name of the category
+          maxLength: 100
+          minLength: 3
+          nullable: true
+          pattern: ^[^\n]*$
         product_name:
           type: string
           description: Name of the product
@@ -1882,6 +2027,15 @@ components:
           minLength: 20
           nullable: false
           pattern: ^[^\n]*$
+        product_photos:
+          type: array
+          nullable: true
+          maxItems: 5
+          items:
+            type: string
+            maxLength: 1000
+            format: uri
+            example: 'https://www.youtube.com/photo.jpg'
         detailed_description:
           type: string
           description: Detailed description of the product
@@ -1894,6 +2048,10 @@ components:
           description: URL to the product page
           nullable: true
           maxLength: 1000
+      required:
+      - category_id
+      - product_name
+      - short_description
     PageInfo:
       title: PageInfo
       type: object
@@ -1927,4 +2085,81 @@ components:
           minimum: 0
           maximum: 2147483647
           format: int32
-        
+    BusinessData:
+      title: Business
+      description: Schema for Business
+      type: object
+      required: ['id', 'title', 'main_owner_email', 'created_at', 'is_active']
+      properties:
+        id:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        title:
+          type: string
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9\s.-]*$'
+        image:
+          type: string
+          format: uri
+          maxLength: 2048
+        phone:
+          type: string
+          maxLength: 20
+          pattern: '^\+?[1-9]\d{1,14}$'
+        address:
+          type: string
+          maxLength: 255
+          pattern: '^[a-zA-Z0-9\s,.-]*$'
+        web_address:
+          type: string
+          format: uri
+          maxLength: 2048
+        description:
+          type: string
+          maxLength: 500
+          pattern: '^[a-zA-Z0-9\s.,!?()-]*$'
+        main_owner_name:
+          type: string
+          maxLength: 100
+          pattern: '^[a-zA-Z\s.-]*$'
+        main_owner_email:
+          type: string
+          format: email
+          maxLength: 255
+        main_owner_phone:
+          type: string
+          maxLength: 20
+          pattern: '^\+?[1-9]\d{1,14}$'
+        created_at:
+          type: string
+          format: date-time
+          maxLength: 30
+        updated_at:
+          type: string
+          format: date-time
+          maxLength: 30
+        deactivated_at:
+          type: string
+          format: date-time
+          maxLength: 30
+          nullable: true
+        is_active:
+          type: boolean 
+    PaginationInfo:
+      title: Business Pagination
+      description: Schema for Business Pagination
+      type: object
+      required: ['limit', 'offset']
+      properties:
+        limit:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 2147483647
+        offset:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647

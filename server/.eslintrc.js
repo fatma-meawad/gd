@@ -28,7 +28,7 @@ module.exports = {
     "unicorn/prefer-array-flat": "warn",
     "unicorn/prefer-spread": "warn",
     "jsdoc/check-alignment": "warn",
-    "jsdoc/check-indentation": "warn",
+    "jsdoc/check-indentation": "error",
     "jsdoc/check-syntax": "warn",
     "jsdoc/require-description": "warn",
     "jsdoc/require-jsdoc": "warn",
@@ -38,7 +38,7 @@ module.exports = {
     "max-depth": ["warn", { max: 4 }],
     "max-lines-per-function": ["warn", { max: 200 }],
     "max-statements": ["warn", { max: 200 }],
-    "no-magic-numbers": ["warn", { ignore: [0, 1, -1] }],
+    "no-magic-numbers": ["error", { ignore: [0, 1, -1] }],
     "sonarjs/cognitive-complexity": ["warn", 15],
     "sonarjs/max-switch-cases": ["warn", 10],
     "sonarjs/no-duplicate-string": ["error"],
@@ -47,19 +47,23 @@ module.exports = {
     "sonarjs/prefer-single-boolean-return": "warn",
     "sonarjs/no-redundant-jump": "warn", // Flags unnecessary returns
     "sonarjs/no-small-switch": "warn",
-    "no-console": "warn",
-    "no-unused-vars": 0,
+    "no-console": "error",
     "prefer-const": "warn",
     "consistent-return": "error",
     camelcase: [
-      "warn",
+      "error",
       {
         properties: "always",
         ignoreDestructuring: true,
         ignoreImports: true,
       },
     ],
-
+    "no-unused-vars": [
+      "error",
+      {
+        argsIgnorePattern: "^_",
+      },
+    ],
     eqeqeq: "warn",
     "no-lonely-if": "warn",
     "no-else-return": "warn",

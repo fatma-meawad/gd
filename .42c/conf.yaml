@@ -1,3 +1,0 @@
-apis:
-  openapi/specs.yaml:
-    alias: galleria-dashboard
