@@ -13,7 +13,7 @@ describe("getProductsDb", () => {
   });
 
   // Test case 2: Limit less than total products
-  it("should return limited products when limit is less than total products", async () => {
+  it("should return up to the specified number of products", async () => {
     const limit = 1;
     const result = await getProductsDb(limit);
 
