@@ -7,7 +7,7 @@ module.exports.getProducts = async (limit = 20, cursor = null) => {
 
   try {
     let result = await products.getProductsDb(limit, cursor);
-    return { ...result, messages: [] };
+    return { ...result };
   } catch (error) {
     throw new AppError(error);
   }
