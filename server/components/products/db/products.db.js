@@ -7,11 +7,26 @@ module.exports.getProductsDb = async (limit, cursor) => {
   2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
 */
-  return {
-    data: {},
-    messages: ["getProductsDb not implemented yet"],
-    locations: ["products.database.js"],
-  };
+
+  try {
+    // const result = await pool.query(
+    //   `SELECT * FROM product`
+    // );
+  
+    // console.log(result.rows);
+  
+    return {
+      data: {},
+      messages: ["getProductsDb not implemented yet"],
+      locations: ["products.database.js"],
+    };
+  } catch (err) {
+    return {
+      errors: [err.message],
+      messages: ["getProductsDb not implemented yet"],
+      locations: ["products.database.js"],
+    }
+  }
 };
 
 module.exports.postProductsDb = async (
