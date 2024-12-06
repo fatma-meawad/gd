@@ -1,3 +1,10 @@
+/**
+ * Builds a SQL query to fetch products with optional cursor-based pagination.
+ *
+ * @param {number} [cursor] - The ID of the last product fetched in the previous query, used for pagination.
+ * @param {number} limit - The maximum number of products to fetch.
+ * @returns {{ query: string, params: Array }} An object containing the SQL query string and the parameters array.
+ */
 const buildGetQuery = (cursor, limit) => {
   let query = "SELECT * FROM product";
   const params = [];
