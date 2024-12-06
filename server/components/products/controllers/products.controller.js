@@ -10,7 +10,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
 
   if (req.query) {
     if (req.query.limit) {
-      if (+req.query.limit === NaN) {
+      if (isNaN(+req.query.limit)) {
         throw new AppError({
           message: "Limit should be a number",
           statusCode: STATUS_CODES.BAD_REQUEST,
