@@ -38,16 +38,23 @@ describe("getProductsDb", () => {
   });
 
   // Test case 4: Verify page info details
-  it.skip("should return correct page info", async () => {
+  it("should return correct page info", async () => {
     const limit = 1;
     const result = await getProductsDb(limit);
 
-    expect(result.data.page_info).toEqual({
-      has_next_page: true,
-      end_cursor: null,
-      start_cursor: null,
-      // total_count: mockProducts.length,
-      page: 1,
-    });
+    expect(result.data.page_info).toBeDefined();
+    expect(result.data.page_info.total_count).toBeDefined();
+    expect(result.data.page_info.has_next_page).toBe(
+      result.data.page_info.total_count > limit
+    );
+    expect(result.data.page_info.start_cursor).toBe(
+      result.data.products.length > 0 ? result.data.products[0].id.toString() : null
+    )
+    expect(result.data.page_info.end_cursor).toBe(
+      result.data.page_info.has_next_page
+        ? result.data.products[result.data.products.length - 1].id.toString()
+        : null
+    )
+    expect(result.data.page_info.page).toBe(1);
   });
 });
