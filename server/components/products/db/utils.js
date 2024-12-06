@@ -1,3 +1,6 @@
+const DATABASE_FILE = "products.db.js"
+const DEFAULT_PRODUCTS_LIMIT = 50;
+
 /**
  * Builds a SQL query to fetch products with optional cursor-based pagination.
  *
@@ -28,34 +31,34 @@ const buildGetQuery = (cursor, limit) => {
  * @param {string|null} cursor - The cursor indicating the current position in the pagination.
  * @param {number} limit - The maximum number of results per page.
  * @param {number} totalCount - The total number of results available.
- * @returns {Object} An object containing pagination information.
- * @returns {number} total_count - The total number of results.
- * @returns {string|null} start_cursor - The cursor for the start of the current page.
- * @returns {string|null} end_cursor - The cursor for the end of the current page.
- * @returns {boolean} has_next_page - Indicates if there is a next page available.
- * @returns {number} page - The current page number.
+ * @returns {{ total_count: number, start_cursor: string|null, end_cursor: string|null, has_next_page: boolean, page: number }} An object containing pagination information.
  */
 const calculatePaginationInfo = (resultRows, cursor, limit, totalCount) => {
   const totalPages = Math.ceil(totalCount / limit);
-  const start_cursor =
+  const startCursor =
     cursor || (resultRows.length > 0 ? resultRows[0].id.toString() : null);
-  const page = cursor ? Math.ceil(start_cursor / limit) : 1;
-  const has_next_page = page < totalPages;
-  const end_cursor = has_next_page
+  const page = cursor ? Math.ceil(startCursor / limit) : 1;
+  const hasNextPage = page < totalPages;
+  const endCursor = hasNextPage
     ? resultRows[resultRows.length - 1].id.toString()
     : null;
 
   return {
+    // eslint-disable-next-line camelcase
     total_count: totalCount,
-    start_cursor,
-    end_cursor,
-    has_next_page,
+    // eslint-disable-next-line camelcase
+    start_cursor: startCursor,
+    // eslint-disable-next-line camelcase
+    end_cursor: endCursor,
+    // eslint-disable-next-line camelcase
+    has_next_page: hasNextPage,
     page,
   };
 };
 
 module.exports = {
-  DEFAULT_PRODUCTS_LIMIT: 50,
+  DATABASE_FILE,
+  DEFAULT_PRODUCTS_LIMIT,
   buildGetQuery,
   calculatePaginationInfo,
 };

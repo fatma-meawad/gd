@@ -4,6 +4,7 @@ const {
   DEFAULT_PRODUCTS_LIMIT,
   buildGetQuery,
   calculatePaginationInfo,
+  DATABASE_FILE,
 } = require("./utils");
 
 module.exports.getProductsDb = async (
@@ -24,16 +25,18 @@ module.exports.getProductsDb = async (
     return {
       data: {
         products: result.rows,
+        // the yaml contract wants snake_case
+        // eslint-disable-next-line camelcase
         page_info: pageInfo,
       },
       messages: [],
-      locations: ["products.database.js"],
+      locations: [DATABASE_FILE],
     };
   } catch (err) {
     return {
       errors: [err.message],
       messages: [],
-      locations: ["products.database.js"],
+      locations: [DATABASE_FILE],
     };
   }
 };
@@ -101,7 +104,7 @@ module.exports.postProductsByProductIdTagsDb = async (options) => {
 */
   return {
     messages: ["postProductsByProductIdTagsDb not implemented yet"],
-    locations: ["products.database.js"],
+    locations: [DATABASE_FILE],
   };
 };
 
@@ -113,7 +116,7 @@ module.exports.postProductsByProductIdPriceDb = async (options) => {
 */
   return {
     messages: ["postProductsByProductIdPriceDb not implemented yet"],
-    locations: ["products.database.js"],
+    locations: [DATABASE_FILE],
   };
 };
 
@@ -125,7 +128,7 @@ module.exports.postProductsByProductIdInventoryDb = async (options) => {
 */
   return {
     messages: ["postProductsByProductIdInventoryDb not implemented yet"],
-    locations: ["products.database.js"],
+    locations: [DATABASE_FILE],
   };
 };
 
@@ -137,7 +140,7 @@ module.exports.postProductsBulkEditDb = async (options) => {
 */
   return {
     messages: ["postProductsBulkEditDb not implemented yet"],
-    locations: ["products.database.js"],
+    locations: [DATABASE_FILE],
   };
 };
 
@@ -149,7 +152,7 @@ module.exports.putProductsByIdExpirationDateDb = async (options) => {
 */
   return {
     messages: ["putProductsByIdExpirationDateDb not implemented yet"],
-    locations: ["products.database.js"],
+    locations: [DATABASE_FILE],
   };
 };
 
@@ -161,7 +164,7 @@ module.exports.putProductsByIdDiscountDb = async (options) => {
 */
   return {
     messages: ["putProductsByIdDiscountDb not implemented yet"],
-    locations: ["products.database.js"],
+    locations: [DATABASE_FILE],
   };
 };
 
@@ -173,7 +176,7 @@ module.exports.postProductsByProductIdPhotosDb = async (options) => {
 */
   return {
     messages: ["postProductsByProductIdPhotosDb not implemented yet"],
-    locations: ["products.database.js"],
+    locations: [DATABASE_FILE],
   };
 };
 
@@ -185,6 +188,6 @@ module.exports.getProductsByProductIdPhotosDb = async (options) => {
 */
   return {
     messages: ["getProductsByProductIdPhotosDb not implemented yet"],
-    locations: ["products.database.js"],
+    locations: [DATABASE_FILE],
   };
 };
