@@ -16,7 +16,7 @@ module.exports.getProductsDb = async (
     const result = await pool.query(query, params);
     const totalResult = await pool.query("SELECT COUNT(*) FROM product");
     const pageInfo = await calculatePaginationInfo(
-      result,
+      result.rows,
       cursor,
       limit,
       +totalResult.rows[0].count
