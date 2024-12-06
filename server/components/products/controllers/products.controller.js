@@ -50,8 +50,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
     short_description: req.short_description,
     detailed_description: req.detailed_description,
     product_photos: req.product_photos,
-    product_url: req.product_url
-
+    product_url: req.product_url,
   };
 
   /**  request:
@@ -66,15 +65,13 @@ exports.postProducts = asyncHandler(async (req, res) => {
   */
 
   const headers = req.headers;
-  if (!headers.auth)
-  {
-    const result=
-    {
+  if (!headers.auth) {
+    const result = {
       message: "Authentification header is missing",
       status: "401",
       errors: ["401 unauthorized"],
       locations: ["products.controller.js"],
-    }
+    };
     res.status(401).send(result);
   }
 

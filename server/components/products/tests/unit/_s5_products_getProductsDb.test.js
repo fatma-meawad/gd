@@ -9,7 +9,9 @@ describe("getProductsDb", () => {
   it("should return a default number of products when no limit is specified", async () => {
     const result = await getProductsDb();
 
-    expect(result.data.products.length).toBeLessThanOrEqual(DEFAULT_PRODUCTS_LIMIT);
+    expect(result.data.products.length).toBeLessThanOrEqual(
+      DEFAULT_PRODUCTS_LIMIT
+    );
   });
 
   // Test case 2: Limit less than total products
@@ -48,13 +50,15 @@ describe("getProductsDb", () => {
       result.data.page_info.total_count > limit
     );
     expect(result.data.page_info.start_cursor).toBe(
-      result.data.products.length > 0 ? result.data.products[0].id.toString() : null
-    )
+      result.data.products.length > 0
+        ? result.data.products[0].id.toString()
+        : null
+    );
     expect(result.data.page_info.end_cursor).toBe(
       result.data.page_info.has_next_page
         ? result.data.products[result.data.products.length - 1].id.toString()
         : null
-    )
+    );
     expect(result.data.page_info.page).toBe(1);
   });
 });

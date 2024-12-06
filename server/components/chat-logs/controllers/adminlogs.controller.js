@@ -58,7 +58,9 @@ exports.getAdminlogs = asyncHandler(async (req, res) => {
   }
 
   if (errors.length > 0) {
-    return res.status(400).json(formatErrorResponse(400, errors, ["getAdminlogs"]));
+    return res
+      .status(400)
+      .json(formatErrorResponse(400, errors, ["getAdminlogs"]));
   }
 
   // Call the service function

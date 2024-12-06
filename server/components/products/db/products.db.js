@@ -1,14 +1,26 @@
 require("dotenv-flow").config();
 const schema = require("../schema.json");
 const pool = require("../config/dbconfig");
-const { DEFAULT_PRODUCTS_LIMIT, buildGetQuery, calculatePaginationInfo } = require("./utils");
+const {
+  DEFAULT_PRODUCTS_LIMIT,
+  buildGetQuery,
+  calculatePaginationInfo,
+} = require("./utils");
 
-module.exports.getProductsDb = async (limit = DEFAULT_PRODUCTS_LIMIT, cursor) => {
+module.exports.getProductsDb = async (
+  limit = DEFAULT_PRODUCTS_LIMIT,
+  cursor
+) => {
   try {
     const { query, params } = buildGetQuery(cursor, limit);
     const result = await pool.query(query, params);
-    const totalResult = await pool.query('SELECT COUNT(*) FROM product');
-    const pageInfo = await calculatePaginationInfo(result, cursor, limit, +totalResult.rows[0].count);
+    const totalResult = await pool.query("SELECT COUNT(*) FROM product");
+    const pageInfo = await calculatePaginationInfo(
+      result,
+      cursor,
+      limit,
+      +totalResult.rows[0].count
+    );
 
     return {
       data: {
@@ -16,13 +28,13 @@ module.exports.getProductsDb = async (limit = DEFAULT_PRODUCTS_LIMIT, cursor) =>
         page_info: pageInfo,
       },
       messages: [],
-      locations: ['products.database.js'],
+      locations: ["products.database.js"],
     };
   } catch (err) {
     return {
       errors: [err.message],
       messages: [],
-      locations: ['products.database.js'],
+      locations: ["products.database.js"],
     };
   }
 };
@@ -33,47 +45,46 @@ module.exports.postProductsDb = async (product) => {
   2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
 */
-// const {
-//   id,
-//   product_name,
-//   category_id,
-//   category_name, 
-//   short_description,
-//   detailed_description, 
-//   product_photos = [], // Default to empty array if missing
-//   product_url = ""
-// } = product;
+  // const {
+  //   id,
+  //   product_name,
+  //   category_id,
+  //   category_name,
+  //   short_description,
+  //   detailed_description,
+  //   product_photos = [], // Default to empty array if missing
+  //   product_url = ""
+  // } = product;
 
-//Check for missing fields (To pass Test Case 2: Invalid input - missing required field/-s)
-// const requiredFields = ['category_id', 'product_name', 'short_description'];
-// const missingFields = requiredFields.filter(field => !product[field]);
+  //Check for missing fields (To pass Test Case 2: Invalid input - missing required field/-s)
+  // const requiredFields = ['category_id', 'product_name', 'short_description'];
+  // const missingFields = requiredFields.filter(field => !product[field]);
 
-// if (missingFields.length > 0) {
-//   throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
-// }
+  // if (missingFields.length > 0) {
+  //   throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+  // }
 
-//Validate data types (To pass Test Case 3: Invalid input - incorrect data types/-s)
-// if (
-//   typeof category_id !== 'number' ||
-//   typeof product_name !== 'string' ||
-//   typeof short_description !== 'string'
-//   ) 
-// {throw new Error('Invalid data types entered');}
+  //Validate data types (To pass Test Case 3: Invalid input - incorrect data types/-s)
+  // if (
+  //   typeof category_id !== 'number' ||
+  //   typeof product_name !== 'string' ||
+  //   typeof short_description !== 'string'
+  //   )
+  // {throw new Error('Invalid data types entered');}
 
-// const newProduct = {
-//   id,
-//   product_name,
-//   category_id,
-//   category_name,
-//   short_description,
-//   detailed_description,
-//   product_photos,
-//   product_url,
-// };
+  // const newProduct = {
+  //   id,
+  //   product_name,
+  //   category_id,
+  //   category_name,
+  //   short_description,
+  //   detailed_description,
+  //   product_photos,
+  //   product_url,
+  // };
 
-//Simulate saving the product by pushing it into the mock array
-// mockProducts.push(newProduct);
-
+  //Simulate saving the product by pushing it into the mock array
+  // mockProducts.push(newProduct);
 
   return {
     // data: newProduct,
