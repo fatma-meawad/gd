@@ -1,5 +1,4 @@
 require("dotenv-flow").config();
-const schema = require("../schema.json");
 const pool = require("../config/dbconfig");
 const {
   DEFAULT_PRODUCTS_LIMIT,
