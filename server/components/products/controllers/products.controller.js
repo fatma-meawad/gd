@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const products = require("../services/products.services");
 const AppError = require("../../../utils/error");
 
+const CURRENT_FILE = "products.controller.js";
+
 exports.getProducts = asyncHandler(async (req, res) => {
   let limit;
   let cursor;
@@ -13,7 +15,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
           message: "Limit should be a number",
           statusCode: 400,
           errors: ["Limit should be a number"],
-          locations: ["products.controller.js"],
+          locations: [CURRENT_FILE],
         });
       }
       if (req.query.limit < 1) {
@@ -21,7 +23,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
           message: "Limit should be greater than 0",
           statusCode: 400,
           errors: ["Limit should be greater than 0"],
-          locations: ["products.controller.js"],
+          locations: [CURRENT_FILE],
         });
       }
       limit = req.query.limit;
@@ -37,11 +39,11 @@ exports.getProducts = asyncHandler(async (req, res) => {
       message: '"auth" header is missing',
       statusCode: 401,
       errors: ['"header" is missing'],
-      locations: ["products.controller.js"],
+      locations: [CURRENT_FILE],
     });
   }
 
-  let result = await products.getProducts(limit, cursor);
+  const result = await products.getProducts(limit, cursor);
 
   res.status(200).send(result);
 });
@@ -74,7 +76,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
       message: "Authentification header is missing",
       status: "401",
       errors: ["401 unauthorized"],
-      locations: ["products.controller.js"],
+      locations: [CURRENT_FILE],
     };
     res.status(401).send(result);
   }
@@ -92,7 +94,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
 
   // // Temporary response
   result.messages.push("postProducts controller not implemented yet");
-  result.locations.push("products.controller.js");
+  result.locations.push(CURRENT_FILE);
   res.status(200).send(result);
 });
 
@@ -120,7 +122,7 @@ exports.postProductsByProductIdTags = asyncHandler(async (req, res) => {
   result.messages.push(
     "postProductsByProductIdTags controller not implemented yet"
   );
-  result.locations.push("products.controller.js");
+  result.locations.push(CURRENT_FILE);
   res.status(200).send(result);
 });
 
@@ -148,7 +150,7 @@ exports.postProductsByProductIdPrice = asyncHandler(async (req, res) => {
   result.messages.push(
     "postProductsByProductIdPrice controller not implemented yet"
   );
-  result.locations.push("products.controller.js");
+  result.locations.push(CURRENT_FILE);
   res.status(200).send(result);
 });
 
@@ -176,7 +178,7 @@ exports.postProductsByProductIdInventory = asyncHandler(async (req, res) => {
   result.messages.push(
     "postProductsByProductIdInventory controller not implemented yet"
   );
-  result.locations.push("products.controller.js");
+  result.locations.push(CURRENT_FILE);
   res.status(200).send(result);
 });
 
@@ -199,7 +201,7 @@ exports.postProductsBulkEdit = asyncHandler(async (req, res) => {
 
   // Temporary response
   result.messages.push("postProductsBulkEdit controller not implemented yet");
-  result.locations.push("products.controller.js");
+  result.locations.push(CURRENT_FILE);
   res.status(200).send(result);
 });
 
@@ -227,7 +229,7 @@ exports.putProductsByIdExpirationDate = asyncHandler(async (req, res) => {
   result.messages.push(
     "putProductsByIdExpirationDate controller not implemented yet"
   );
-  result.locations.push("products.controller.js");
+  result.locations.push(CURRENT_FILE);
   res.status(200).send(result);
 });
 
@@ -255,7 +257,7 @@ exports.putProductsByIdDiscount = asyncHandler(async (req, res) => {
   result.messages.push(
     "putProductsByIdDiscount controller not implemented yet"
   );
-  result.locations.push("products.controller.js");
+  result.locations.push(CURRENT_FILE);
   res.status(200).send(result);
 });
 
@@ -283,7 +285,7 @@ exports.postProductsByProductIdPhotos = asyncHandler(async (req, res) => {
   result.messages.push(
     "postProductsByProductIdPhotos controller not implemented yet"
   );
-  result.locations.push("products.controller.js");
+  result.locations.push(CURRENT_FILE);
   res.status(200).send(result);
 });
 
@@ -310,6 +312,6 @@ exports.getProductsByProductIdPhotos = asyncHandler(async (req, res) => {
   result.messages.push(
     "getProductsByProductIdPhotos controller not implemented yet"
   );
-  result.locations.push("products.controller.js");
+  result.locations.push(CURRENT_FILE);
   res.status(200).send(result);
 });
