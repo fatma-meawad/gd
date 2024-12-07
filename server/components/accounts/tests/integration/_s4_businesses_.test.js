@@ -16,7 +16,7 @@ const { getBusinessesDb } = require("../../db/businesses.db");
 
 // Valid JWT token for testing, matching the pattern in specs.yaml
 const validAuthToken =
-"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U";
+  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U";
 
 //TODO: The test cases are generated from your examples, but double check that all is ok and all your cases are covered
 //TODO: Check the requirements in the task to see what other checks are required
@@ -80,20 +80,18 @@ describe("Test suite for /s4/businesses", () => {
    * - Tests both required and optional fields with their patterns
    */
   describe("Test suite for GET /s4/businesses", () => {
-
     beforeEach(() => {
       jest.clearAllMocks(); // Clear any previous mocks
     });
 
     // Happy Path Tests
     test("Test case: Successful retrieval with default pagination", async () => {
-      
       // Use the full mock data
       getBusinessesDb.mockResolvedValue({
         businesses: getMockBusinesses(false),
         pagination_info: { limit: 50, offset: 0 },
       });
-      
+
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -120,13 +118,12 @@ describe("Test suite for /s4/businesses", () => {
 
     // Pagination Tests
     test("Test case: Valid pagination parameters", async () => {
-      
       // Use the full mock data
       getBusinessesDb.mockResolvedValue({
         businesses: getMockBusinesses(false),
         pagination_info: { limit: 10, offset: 0 },
       });
-      
+
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -140,7 +137,6 @@ describe("Test suite for /s4/businesses", () => {
       expect(response.body.pagination_info.offset).toBe(0);
     });
     test("Test case: Maximum allowed limit", async () => {
-
       // Use the full mock data
       getBusinessesDb.mockResolvedValue({
         businesses: getMockBusinesses(false),
@@ -159,7 +155,6 @@ describe("Test suite for /s4/businesses", () => {
       expect(response.body.businesses.length).toBeLessThanOrEqual(50);
     });
     test("Test case: Maximum allowed offset", async () => {
-
       // Use the empty mock data
       getBusinessesDb.mockResolvedValue({
         businesses: getMockBusinesses(true),
@@ -181,7 +176,6 @@ describe("Test suite for /s4/businesses", () => {
 
     // Invalid Pagination Tests
     test("Test case: Invalid limit parameter", async () => {
-
       // Use the full mock data
       getBusinessesDb.mockResolvedValue({
         businesses: getMockBusinesses(false),
@@ -209,7 +203,6 @@ describe("Test suite for /s4/businesses", () => {
       );
     });
     test("Test case: Invalid offset parameter", async () => {
-
       // Use the full mock data
       getBusinessesDb.mockResolvedValue({
         businesses: getMockBusinesses(false),
@@ -294,7 +287,6 @@ describe("Test suite for /s4/businesses", () => {
 
     // Not Found Tests
     test("Test case: No businesses found", async () => {
-
       // Use the empty mock data
       getBusinessesDb.mockResolvedValue({
         businesses: getMockBusinesses(true),
@@ -315,7 +307,6 @@ describe("Test suite for /s4/businesses", () => {
 
     // Empty list Test
     test("Test case: Empty businesses list", async () => {
-      
       // Use the empty mock data
       getBusinessesDb.mockResolvedValue({
         businesses: getMockBusinesses(true),
@@ -336,7 +327,6 @@ describe("Test suite for /s4/businesses", () => {
 
     // Example Response Validation
     test("Test case: Response matches businesses-list example with complete schema validation", async () => {
-
       // Use the full mock data
       getBusinessesDb.mockResolvedValue({
         businesses: getMockBusinesses(false),

@@ -3,7 +3,7 @@ const fullMockBusinesses = require("./businesses.json");
 const emptyMockBusinesses = require("./businesses_empty.json");
 
 module.exports = {
-	getMockBusinesses: (isEmpty = false) => {
-   	return isEmpty ? emptyMockBusinesses : fullMockBusinesses;
+  getMockBusinesses: (isEmpty = false) => {
+    return isEmpty ? emptyMockBusinesses : fullMockBusinesses;
   },
 };
