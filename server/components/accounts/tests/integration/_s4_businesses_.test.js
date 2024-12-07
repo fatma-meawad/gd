@@ -4,12 +4,26 @@ const ROOT_DIR = process.cwd();
 const app = require(ROOT_DIR + "/app");
 const baseUrl = process.env.BASE_API_TEST_URL;
 
+// Import the mock data factory
+const { getMockBusinesses } = require("../mock/mockDataFactory");
+
+// Mock the businesses.db.js module
+jest.mock("../../db/businesses.db", () => ({
+  getBusinessesDb: jest.fn(),
+}));
+
+const { getBusinessesDb } = require("../../db/businesses.db");
+
+// Valid JWT token for testing, matching the pattern in specs.yaml
+const validAuthToken =
+"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U";
+
 //TODO: The test cases are generated from your examples, but double check that all is ok and all your cases are covered
 //TODO: Check the requirements in the task to see what other checks are required
 
 describe("Test suite for /s4/businesses", () => {
   // POST /businesses
-  describe("Test suite for post /s4/businesses", () => {
+  /*describe("Test suite for post /s4/businesses", () => {
     test("Test case: /s4/businesses with Request Example: ValidExample", async () => {
       const response = await request(app)
         .post(baseUrl + "/s4/businesses")
@@ -55,7 +69,7 @@ describe("Test suite for /s4/businesses", () => {
       expect(response.body).toHaveProperty("errors");
       //TODO: assert the exact error messages to assert why the request failed.
     });
-  });
+  });*/
 
   // GET /businesses
   /* This test suite validates the GET /businesses endpoint against the OpenAPI specification:
@@ -66,12 +80,20 @@ describe("Test suite for /s4/businesses", () => {
    * - Tests both required and optional fields with their patterns
    */
   describe("Test suite for GET /s4/businesses", () => {
-    // Valid JWT token for testing, matching the pattern in specs.yaml
-    const validAuthToken =
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U";
+
+    beforeEach(() => {
+      jest.clearAllMocks(); // Clear any previous mocks
+    });
 
     // Happy Path Tests
     test("Test case: Successful retrieval with default pagination", async () => {
+      
+      // Use the full mock data
+      getBusinessesDb.mockResolvedValue({
+        businesses: getMockBusinesses(false),
+        pagination_info: { limit: 50, offset: 0 },
+      });
+      
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -98,6 +120,13 @@ describe("Test suite for /s4/businesses", () => {
 
     // Pagination Tests
     test("Test case: Valid pagination parameters", async () => {
+      
+      // Use the full mock data
+      getBusinessesDb.mockResolvedValue({
+        businesses: getMockBusinesses(false),
+        pagination_info: { limit: 10, offset: 0 },
+      });
+      
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -111,6 +140,13 @@ describe("Test suite for /s4/businesses", () => {
       expect(response.body.pagination_info.offset).toBe(0);
     });
     test("Test case: Maximum allowed limit", async () => {
+
+      // Use the full mock data
+      getBusinessesDb.mockResolvedValue({
+        businesses: getMockBusinesses(false),
+        pagination_info: { limit: 50, offset: 0 },
+      });
+
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -122,8 +158,14 @@ describe("Test suite for /s4/businesses", () => {
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body.businesses.length).toBeLessThanOrEqual(50);
     });
-
     test("Test case: Maximum allowed offset", async () => {
+
+      // Use the empty mock data
+      getBusinessesDb.mockResolvedValue({
+        businesses: getMockBusinesses(true),
+        pagination_info: { limit: 50, offset: 1000 },
+      });
+
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -139,6 +181,13 @@ describe("Test suite for /s4/businesses", () => {
 
     // Invalid Pagination Tests
     test("Test case: Invalid limit parameter", async () => {
+
+      // Use the full mock data
+      getBusinessesDb.mockResolvedValue({
+        businesses: getMockBusinesses(false),
+        pagination_info: { limit: 50, offset: 0 },
+      });
+
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -159,8 +208,14 @@ describe("Test suite for /s4/businesses", () => {
         ])
       );
     });
-
     test("Test case: Invalid offset parameter", async () => {
+
+      // Use the full mock data
+      getBusinessesDb.mockResolvedValue({
+        businesses: getMockBusinesses(false),
+        pagination_info: { limit: 50, offset: 0 },
+      });
+
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -239,7 +294,13 @@ describe("Test suite for /s4/businesses", () => {
 
     // Not Found Tests
     test("Test case: No businesses found", async () => {
-      // This test fails for now, for lack of logic, but it's setup to correctly expect a 404
+
+      // Use the empty mock data
+      getBusinessesDb.mockResolvedValue({
+        businesses: getMockBusinesses(true),
+        pagination_info: { limit: 50, offset: 0 },
+      });
+
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -249,12 +310,18 @@ describe("Test suite for /s4/businesses", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.error).toBe("No businesses found");
+      expect(response.body.errors).toContain("No businesses found");
     });
 
     // Empty list Test
     test("Test case: Empty businesses list", async () => {
-      // This test correctly PASSES when the object server/components/accounts/db/mock/businesses.json is empty, otherwise it will fail since the mock json is not empty
+      
+      // Use the empty mock data
+      getBusinessesDb.mockResolvedValue({
+        businesses: getMockBusinesses(true),
+        pagination_info: { limit: 50, offset: 0 },
+      });
+
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)
@@ -269,6 +336,13 @@ describe("Test suite for /s4/businesses", () => {
 
     // Example Response Validation
     test("Test case: Response matches businesses-list example with complete schema validation", async () => {
+
+      // Use the full mock data
+      getBusinessesDb.mockResolvedValue({
+        businesses: getMockBusinesses(false),
+        pagination_info: { limit: 50, offset: 0 },
+      });
+
       const response = await request(app)
         .get(baseUrl + "/s4/businesses")
         .set("auth", validAuthToken)

@@ -1,8 +1,8 @@
 const AppError = require("../../../utils/error"); // Assuming error handler is used for consistent error responses
 const pool = require("../config/dbconfig");
 
-//const mockBusinesses = require("./mock/businesses.json"); // ../tests/unit/mock/businesses.json
-const mockBusinesses = require("../tests/unit/mock/businesses.json");
+// DB Mock file
+const mockBusinesses = require("../tests/mock/businesses.json");
 
 module.exports.postBusinessesDb = async (businessData) => {
   try {
@@ -24,6 +24,7 @@ module.exports.getBusinessesDb = async ({ limit, offset }) => {
   3- you can access the schema.json (imported above) and use objects in it/modify or create them.
   */
 
+  // Use mock with data
   const businesses = mockBusinesses.slice(offset, offset + limit);
   const totalItems = mockBusinesses.length;
 
