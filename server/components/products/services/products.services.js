@@ -1,6 +1,7 @@
 const products = require("../db/products.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
+const { StatusCodes } = require("http-status-codes")
 
 module.exports.getProducts = async (limit = 20, cursor = null) => {
   // Implement your business logic here...
@@ -31,7 +32,7 @@ module.exports.postProducts = async (name, category_id, short_description, detai
 
       return {result};
     } catch (error) {
-      throw new AppError(error.message, 500, {
+      throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR, {
           locations: ["products.services.js"],
       });
   }

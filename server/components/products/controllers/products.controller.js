@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const products = require("../services/products.services");
 const AppError = require("../../../utils/error");
+const { StatusCodes } = require("http-status-codes")
 
 exports.getProducts = asyncHandler(async (req, res) => {
   let limit = 20;
@@ -46,7 +47,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
   const headers = req.headers;
   
   if (!headers.auth) {
-      return res.status(401).json({
+      return res.status(StatusCodes.UNAUTHORIZED).json({
           status: "error",
           message: "Authentication header is missing",
           errors: ["401 Unauthorized"],
@@ -65,7 +66,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (!product_name || !category_id || !short_description) {
-      return res.status(400).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
           status: "error",
           message: "Missing required fields",
           errors: ["Invalid input"],
@@ -78,7 +79,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
       typeof category_id !== "number" || 
       typeof short_description !== "string"
   ) {
-      return res.status(400).json({
+      return res.status(StatusCodes.BAD_REQUEST).json({
           status: "error",
           message: "Invalid data types",
           errors: ["Invalid input"],
@@ -109,7 +110,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
       
       res.status(200).json({result});
   } catch (error) {
-      throw new AppError("Error creating product", 500, {
+      throw new AppError("Error creating product", StatusCodes.INTERNAL_SERVER_ERROR, {
           originalError: error,
           locations: ["products.controller.js"],
       });
