@@ -18,13 +18,13 @@ module.exports.postProductsDb = async (product) => {
   const { 
     product_name: productName, 
     category_id: categoryId, 
-    // category_name: categoryName, 
     short_description: shortDescription, 
     detailed_description: detailedDescription, 
-    // product_photos: productPhotos, 
+    product_photos: productPhotos,
     product_url: productUrl 
-  }  = product;
-  const requiredFields = ['category_id', 'product_name', 'short_description' ];
+  } = product;
+
+  const requiredFields = ['category_id', 'product_name', 'short_description'];
   const missingFields = requiredFields.filter(field => !product[field]);
   if (missingFields.length > 0) {
     throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
@@ -35,38 +35,54 @@ module.exports.postProductsDb = async (product) => {
     typeof productName !== 'string' || productName.length < productNameLength ||
     typeof categoryId !== 'number' || !Number.isInteger(categoryId) ||
     typeof shortDescription !== 'string' || shortDescription.length < shortDescriptionLength ||
-    ( productUrl && typeof  productUrl !== 'string')
+    (productUrl && typeof productUrl !== 'string') ||
+    (productPhotos && !Array.isArray(productPhotos))
   ) {
     throw new Error("Invalid data types entered");
   }
 
   try {
-    const query = `
+    await pool.query('BEGIN');
+    const productQuery = `
       INSERT INTO product (product_name, category_id, short_description, detailed_description, product_url) 
       VALUES ($1, $2, $3, $4, $5)
       RETURNING id, product_name, category_id, short_description, detailed_description, product_url
     `;
-    const values = [
+    const productValues = [
       productName,
       categoryId,
-      // categoryName,
       shortDescription,
       detailedDescription,
-      // productPhotos,
-      productUrl
+      productUrl,
     ];
 
-    const result = await pool.query(query, values);
-    const newProduct = result.rows[0];
+    const productResult = await pool.query(productQuery, productValues);
+    const newProduct = productResult.rows[0];
+
+    if (productPhotos && productPhotos.length > 0) {
+      const photoQuery = `
+        INSERT INTO ProductPhotos (product_id, photo_url) 
+        VALUES ($1, $2)
+      `;
+      for (const photoUrl of productPhotos) {
+        if (typeof photoUrl !== 'string') {
+          throw new Error("Invalid photo URL format");
+        }
+        await pool.query(photoQuery, [newProduct.id, photoUrl]);
+      }
+    }
+
+    await pool.query('COMMIT');
 
     return {
       status: "success",
-      data: newProduct, 
-      messages: ["postMessagesDb Message"],
-      locations: ["messages.database.js"],
+      data: newProduct,
+      messages: ["Product created successfully with associated photos"],
+      locations: ["products.database.js"],
     };
   } catch (error) {
 
+    await pool.query('ROLLBACK');
     const structuredError = {
       status: "error",
       messages: ["Database error while creating product"],
@@ -76,10 +92,10 @@ module.exports.postProductsDb = async (product) => {
         locations: ["products.db.js"],
       },
     };
-    // console.error(structuredError);
     throw structuredError;
   }
 };
+
 
 module.exports.postProductsByProductIdTagsDb = async (options) => {
   /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();

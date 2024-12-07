@@ -61,7 +61,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
       // category_name: categoryName, 
       short_description: shortDescription, 
       detailed_description: detailedDescription, 
-      // product_photos: productPhotos, 
+      product_photos: productPhotos, 
       product_url: productUrl 
   } = req.body;
 
@@ -93,7 +93,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
       // categoryName,
       shortDescription,
       detailedDescription,
-      // productPhotos,
+      productPhotos,
       productUrl
   };
 
@@ -104,7 +104,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
           // options.categoryName,
           options.shortDescription,
           options.detailedDescription,
-          // options.productPhotos,
+          options.productPhotos,
           options.productUrl
       );
       

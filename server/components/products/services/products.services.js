@@ -14,7 +14,7 @@ module.exports.getProducts = async (limit = 20, cursor = null) => {
   }
 };
 
-module.exports.postProducts = async (productName, categoryId, shortDescription, detailedDescription, productUrl) => {
+module.exports.postProducts = async (productName, categoryId, shortDescription, detailedDescription, productPhotos, productUrl) => {
   try {
     // Convert camelCase keys to snake_case for the database
     const product = Object.keys({
@@ -22,10 +22,11 @@ module.exports.postProducts = async (productName, categoryId, shortDescription, 
       categoryId,
       shortDescription,
       detailedDescription,
+      productPhotos,
       productUrl,
     }).reduce((acc, key) => {
       const snakeKey = key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-      acc[snakeKey] = { productName, categoryId, shortDescription, detailedDescription, productUrl }[key];
+      acc[snakeKey] = { productName, categoryId, shortDescription, detailedDescription, productPhotos, productUrl }[key];
       return acc;
     }, {});
 
