@@ -2,7 +2,7 @@ const products = require("../db/products.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 const { StatusCodes } = require("http-status-codes")
-
+const locationHere="products.services.js"
 module.exports.getProducts = async (limit = 20, cursor = null) => {
   // Implement your business logic here...
 
@@ -14,29 +14,35 @@ module.exports.getProducts = async (limit = 20, cursor = null) => {
   }
 };
 
-module.exports.postProducts = async (name, category_id, short_description, detailed_description, product_url) => {
+module.exports.postProducts = async (productName, categoryId, shortDescription, detailedDescription, productUrl) => {
   try {
-      const product = {
-          product_name: name,
-          category_id,
-          // category_name,
-          short_description,
-          detailed_description,
-          // product_photos,
-          product_url,
-      };
+    // Convert camelCase keys to snake_case for the database
+    const product = Object.keys({
+      productName,
+      categoryId,
+      shortDescription,
+      detailedDescription,
+      productUrl,
+    }).reduce((acc, key) => {
+      const snakeKey = key.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+      acc[snakeKey] = { productName, categoryId, shortDescription, detailedDescription, productUrl }[key];
+      return acc;
+    }, {});
 
-      const result = await products.postProductsDb(product);
-      result.messages.push("Product created successfully in the database");
-      result.locations.push("products.services.js");
+    const result = await products.postProductsDb(product);
+    const resultMessage="Product created successfully in the database"
 
-      return {result};
-    } catch (error) {
-      throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR, {
-          locations: ["products.services.js"],
-      });
+    result.messages.push(resultMessage);
+    result.locations.push(locationHere);
+
+    return { result };
+  } catch (error) {
+    throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR, {
+      locations: [locationHere],
+    });
   }
 };
+
 
 module.exports.postProductsByProductIdTags = async (product_id) => {
   // Implement your business logic here...
