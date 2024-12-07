@@ -1,5 +1,3 @@
-const pool = require("../config/dbconfig");
-
 module.exports.postAdminsLoginDb = async (credentials) => {
   /**
     Database query logic for admin login:
@@ -103,6 +101,9 @@ module.exports.postAdminsPasswordResetDb = async (options) => {
   };
 };
 
+// server/components/admins/db/admins.db.js
+
+const db = require("../config/dbconfig.js");
 const bcrypt = require("bcrypt");
 
 module.exports.postAdminsRegisterDb = async (admin) => {
@@ -117,13 +118,23 @@ module.exports.postAdminsRegisterDb = async (admin) => {
     bio = null,
   } = admin;
 
-  const client = await pool.connect();
-
   try {
-    await client.query("BEGIN");
+    // Start transaction
+    await db.query("BEGIN");
 
-    // Validate activation code
-    const codeRes = await client.query(
+    // 1. Check if email already exists
+    const emailCheck = await db.query(
+      'SELECT email FROM AdminAccount WHERE email = $1',
+      [email]
+    );
+
+    if (emailCheck.rows.length > 0) {
+      await db.query("ROLLBACK");
+      throw new Error("Email already registered");
+    }
+
+    // 2. Validate activation code
+    const codeRes = await db.query(
       `SELECT * FROM ActivationCode 
        WHERE code = $1 
        AND is_used = false 
@@ -133,24 +144,25 @@ module.exports.postAdminsRegisterDb = async (admin) => {
     );
 
     if (codeRes.rows.length === 0) {
+      await db.query("ROLLBACK");
       throw new Error("Invalid or expired registration code");
     }
 
-    // Hash password
+    // 3. Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert admin
+    // 4. Insert admin
     let insertAdminRes;
     try {
-      insertAdminRes = await client.query(
+      insertAdminRes = await db.query(
         `INSERT INTO AdminAccount (
-          full_name, email, phone, password_hash, 
-          address, profile_photo, bio, 
-          status, login_attempts
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-        RETURNING id, full_name, email, phone, status, 
-                  login_attempts, created_at, updated_at`,
+            full_name, email, phone, password_hash, 
+            address, profile_photo, bio, 
+            status, login_attempts
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          RETURNING id, full_name, email, phone, status, 
+                    login_attempts, created_at, updated_at`,
         [
           full_name, 
           email, 
@@ -159,28 +171,32 @@ module.exports.postAdminsRegisterDb = async (admin) => {
           address, 
           profile_photo, 
           bio,
-          'active',
-          0
+          'active',  // explicit status
+          0          // explicit login_attempts
         ]
       );
     } catch (err) {
-      if (err.message && err.message.includes("duplicate key value violates unique constraint")) {
+      // Handle unique constraint violation for email
+      if (err.code === '23505' && err.constraint === 'adminaccount_email_key') {
+        await db.query("ROLLBACK");
         throw new Error("Email already registered");
       }
+      await db.query("ROLLBACK");
       throw err;
     }
 
     const newAdmin = insertAdminRes.rows[0];
 
-    // Update activation code
-    await client.query(
+    // 5. Update activation code
+    await db.query(
       `UPDATE ActivationCode 
        SET is_used = $1, used_by = $2 
        WHERE code = $3`,
       [true, newAdmin.id, activation_code]
     );
 
-    await client.query("COMMIT");
+    // 6. Commit transaction
+    await db.query("COMMIT");
 
     return {
       data: newAdmin,
@@ -189,9 +205,13 @@ module.exports.postAdminsRegisterDb = async (admin) => {
     };
 
   } catch (error) {
-    await client.query("ROLLBACK");
+    // Ensure ROLLBACK is called if not already done
+    try {
+      await db.query("ROLLBACK");
+    } catch (rollbackError) {
+      // Log rollback error if necessary
+      console.error("Rollback failed:", rollbackError);
+    }
     throw error;
-  } finally {
-    client.release();
   }
 };
