@@ -103,9 +103,6 @@ module.exports.postAdminsPasswordResetDb = async (options) => {
   };
 };
 
-// server/components/admins/db/admins.db.js
-
-const db = require("../config/dbconfig.js");
 const bcrypt = require("bcrypt");
 
 module.exports.postAdminsRegisterDb = async (admin) => {
@@ -120,15 +117,17 @@ module.exports.postAdminsRegisterDb = async (admin) => {
     bio = null,
   } = admin;
 
-  try {
-    // Start transaction
-    await db.query("BEGIN");
+  const client = await pool.connect();
 
-    // Validate activation code with FOR UPDATE to ensure concurrency safety
-    const codeRes = await db.query(
-      `SELECT id, is_used, expiry_date 
-       FROM ActivationCode 
+  try {
+    await client.query("BEGIN");
+
+    // Validate activation code
+    const codeRes = await client.query(
+      `SELECT * FROM ActivationCode 
        WHERE code = $1 
+       AND is_used = false 
+       AND expiry_date > CURRENT_TIMESTAMP
        FOR UPDATE`,
       [activation_code]
     );
@@ -137,25 +136,13 @@ module.exports.postAdminsRegisterDb = async (admin) => {
       throw new Error("Invalid or expired registration code");
     }
 
-    const codeData = codeRes.rows[0];
-    const now = new Date();
-
-    // Validate activation code properties
-    if (codeData.is_used) {
-      throw new Error("Activation code already used");
-    }
-
-    if (codeData.expiry_date < now) {
-      throw new Error("Activation code expired");
-    }
-
-    // Hash the password securely
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert the new admin into the database
+    // Insert admin
     let insertAdminRes;
     try {
-      insertAdminRes = await db.query(
+      insertAdminRes = await client.query(
         `INSERT INTO AdminAccount (
           full_name, email, phone, password_hash, 
           address, profile_photo, bio, 
@@ -165,19 +152,19 @@ module.exports.postAdminsRegisterDb = async (admin) => {
         RETURNING id, full_name, email, phone, status, 
                   login_attempts, created_at, updated_at`,
         [
-          full_name,
-          email,
-          phone,
-          hashedPassword,
-          address,
-          profile_photo,
+          full_name, 
+          email, 
+          phone, 
+          hashedPassword, 
+          address, 
+          profile_photo, 
           bio,
-          'active', // Explicit status
-          0         // Explicit login attempts
+          'active',
+          0
         ]
       );
     } catch (err) {
-      if (err.constraint === 'adminaccount_email_key') {
+      if (err.message && err.message.includes("duplicate key value violates unique constraint")) {
         throw new Error("Email already registered");
       }
       throw err;
@@ -185,36 +172,26 @@ module.exports.postAdminsRegisterDb = async (admin) => {
 
     const newAdmin = insertAdminRes.rows[0];
 
-    // Mark activation code as used and associate it with the new admin
-    await db.query(
+    // Update activation code
+    await client.query(
       `UPDATE ActivationCode 
        SET is_used = $1, used_by = $2 
-       WHERE id = $3`,
-      [true, newAdmin.id, codeData.id]
+       WHERE code = $3`,
+      [true, newAdmin.id, activation_code]
     );
 
-    // Commit the transaction
-    await db.query("COMMIT");
+    await client.query("COMMIT");
 
-    // Return structured response
     return {
-      data: {
-        id: newAdmin.id,
-        full_name: newAdmin.full_name,
-        email: newAdmin.email,
-        phone: newAdmin.phone,
-        status: newAdmin.status,
-        login_attempts: newAdmin.login_attempts,
-        created_at: newAdmin.created_at,
-        updated_at: newAdmin.updated_at,
-      },
+      data: newAdmin,
       messages: ["Admin registered successfully"],
       locations: ["admins.database.js"],
     };
+
   } catch (error) {
-    // Rollback transaction on error
-    await db.query("ROLLBACK");
+    await client.query("ROLLBACK");
     throw error;
+  } finally {
+    client.release();
   }
 };
-
