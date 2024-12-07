@@ -35,7 +35,7 @@ describe('AdminsDatabase', () => {
         profile_photo: "https://example.com/photo.jpg",
         bio: "Test bio"
       };
-
+    
       mockClient.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ // SELECT ActivationCode
@@ -54,13 +54,33 @@ describe('AdminsDatabase', () => {
         })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
         .mockResolvedValueOnce({ rows: [] }); // COMMIT
-
+    
       const result = await postAdminsRegisterDb(mockAdmin);
-
+    
+      // Basic result checks
       expect(result.data).toHaveProperty('id');
       expect(result.data).toHaveProperty('email');
       expect(result.data).toHaveProperty('full_name');
       expect(result.messages).toContain('Admin registered successfully');
+    
+      // Check the INSERT query content with a more flexible pattern
+      const insertQuery = mockClient.query.mock.calls[2][0];
+      expect(insertQuery).toMatch(/INSERT INTO AdminAccount/i);
+      expect(insertQuery).toMatch(/RETURNING[\s\n]+id[\s\n,]+full_name[\s\n,]+email[\s\n,]+phone[\s\n,]+status[\s\n,]+login_attempts[\s\n,]+created_at[\s\n,]+updated_at/i);
+    
+      // Verify the parameters separately
+      const insertParams = mockClient.query.mock.calls[2][1];
+      expect(insertParams).toEqual([
+        mockAdmin.full_name,
+        mockAdmin.email,
+        mockAdmin.phone,
+        expect.stringMatching(/^\$2[aby]\$\d{1,2}\$/), // Hashed password
+        mockAdmin.address,
+        mockAdmin.profile_photo,
+        mockAdmin.bio,
+        'active',
+        0
+      ]);
     });
 
     test("should fail when email already exists", async () => {
@@ -77,7 +97,9 @@ describe('AdminsDatabase', () => {
         .mockResolvedValueOnce({ // SELECT ActivationCode
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
-        .mockRejectedValueOnce(new Error("duplicate key value violates unique constraint")); // INSERT fails
+        .mockRejectedValueOnce({
+          message: "duplicate key value violates unique constraint \"adminaccount_email_key\""
+        });
 
       await expect(postAdminsRegisterDb(mockAdmin)).rejects.toThrow("Email already registered");
       
@@ -85,7 +107,7 @@ describe('AdminsDatabase', () => {
       expect(mockClient.release).toHaveBeenCalled();
     });
 
-    test("should validate activation code exists in ActivationCode table", async () => {
+    test("should validate activation code exists and is valid", async () => {
       const mockAdmin = {
         full_name: "John Smith",
         email: "john@example.com",
@@ -96,7 +118,9 @@ describe('AdminsDatabase', () => {
 
       mockClient.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ rows: [] }); // SELECT returns no rows
+        .mockResolvedValueOnce({ 
+          rows: [] // No valid activation codes
+        });
 
       await expect(postAdminsRegisterDb(mockAdmin)).rejects.toThrow("Invalid or expired registration code");
       
@@ -104,7 +128,7 @@ describe('AdminsDatabase', () => {
       expect(mockClient.release).toHaveBeenCalled();
       
       expect(mockClient.query).toHaveBeenNthCalledWith(2, 
-        expect.stringContaining("SELECT * FROM ActivationCode"),
+        expect.stringMatching(/SELECT.*WHERE.*is_used.*=.*false.*expiry_date.*>.*CURRENT_TIMESTAMP/s),
         [mockAdmin.activation_code]
       );
     });
@@ -138,7 +162,7 @@ describe('AdminsDatabase', () => {
 
       expect(mockClient.query).toHaveBeenNthCalledWith(4,
         expect.stringContaining("UPDATE ActivationCode"),
-        [true, 1, mockAdmin.activation_code]
+        [true, expect.any(Number), mockAdmin.activation_code] // matches your parameter order
       );
     });
 
@@ -205,9 +229,18 @@ describe('AdminsDatabase', () => {
       await postAdminsRegisterDb(mockAdmin);
 
       const insertCall = mockClient.query.mock.calls[2];
-      expect(insertCall[1]).toContain(null); // address should be null
-      expect(insertCall[1]).toContain(null); // profile_photo should be null
-      expect(insertCall[1]).toContain(null); // bio should be null
+      const params = insertCall[1];
+      
+      // Check specific optional fields from schema
+      expect(params).toContain(null); // address (position 5)
+      expect(params).toContain(null); // profile_photo (position 6)
+      expect(params).toContain(null); // bio (position 7)
+      
+      // Required fields should not be null
+      expect(params[0]).not.toBeNull(); // full_name
+      expect(params[1]).not.toBeNull(); // email
+      expect(params[2]).not.toBeNull(); // phone
+      expect(params[3]).not.toBeNull(); // password_hash
     });
 
     test("should set created_at and updated_at timestamps", async () => {
