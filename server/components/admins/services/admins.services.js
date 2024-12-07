@@ -113,34 +113,36 @@ module.exports.putAdminsPasswordReset = async (adminId, newPassword) => {
   }
 };
 
-module.exports.postAdminsPasswordReset = async (email) => {
-  // Implement your business logic here...
-
-  try {
-    let result = await admins.postAdminsPasswordResetDb(email);
-    //delete this when you actually implement something.
-    result.messages.push(
-      "postAdminsPasswordReset services not implemented yet"
-    );
-    result.locations.push("admins.services.js");
-
-    return result;
-  } catch (error) {
-    throw new AppError(error);
-  }
-};
-
 module.exports.postAdminsRegister = async (admin) => {
-  // Implement your business logic here...
-
   try {
-    let result = await admins.postAdminsRegisterDb(admin);
-    //delete this when you actually implement something.
-    result.messages.push("postAdminsRegister services not implemented yet");
-    result.locations.push("admins.services.js");
-
-    return result;
+    const result = await admins.postAdminsRegisterDb(admin);
+    return {
+      data: result.data,
+      messages: ["Registration successful"],
+      locations: ["admins.service.js"]
+    };
   } catch (error) {
-    throw new AppError(error);
+    if (error.message === "Email already registered") {
+      const appError = new AppError({
+        errors: [error.message],
+        locations: ["admins.service.js"]
+      });
+      appError.statusCode = 409;
+      throw appError;
+    }
+    if (error.message === "Invalid or expired registration code") {
+      const appError = new AppError({
+        errors: [error.message],
+        locations: ["admins.service.js"]
+      });
+      appError.statusCode = 400;
+      throw appError;
+    }
+    const appError = new AppError({
+      errors: [error.message || "Internal server error"],
+      locations: ["admins.service.js"]
+    });
+    appError.statusCode = 500;
+    throw appError;
   }
 };
