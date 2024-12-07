@@ -13,22 +13,27 @@ module.exports.getProducts = async (limit = 20, cursor = null) => {
   }
 };
 
-module.exports.postProducts = async (name, category_id, short_description) => {
-  // Implement your business logic here...
-
+module.exports.postProducts = async (name, category_id, short_description, detailed_description, product_url) => {
   try {
-    let result = await products.postProductsDb(
-      name,
-      category_id,
-      short_description
-    );
-    //delete this when you actually implement something.
-    result.messages.push("postProducts services not implemented yet");
-    result.locations.push("products.services.js");
+      const product = {
+          product_name: name,
+          category_id,
+          // category_name,
+          short_description,
+          detailed_description,
+          // product_photos,
+          product_url,
+      };
 
-    return result;
-  } catch (error) {
-    throw new AppError(error);
+      const result = await products.postProductsDb(product);
+      result.messages.push("Product created successfully in the database");
+      result.locations.push("products.services.js");
+
+      return {result};
+    } catch (error) {
+      throw new AppError(error.message, 500, {
+          locations: ["products.services.js"],
+      });
   }
 };
 
