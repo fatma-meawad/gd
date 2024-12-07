@@ -38,7 +38,7 @@ exports.getProducts = asyncHandler(async (req, res) => {
     throw new AppError({
       message: '"auth" header is missing',
       statusCode: STATUS_CODES.UNAUTHORIZED,
-      errors: ['"header" is missing'],
+      errors: ['"auth" header is missing'],
       locations: [CONTROLLER_FILE],
     });
   }
