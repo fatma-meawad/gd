@@ -1,27 +1,14 @@
 const messages = require("../db/messages.db");
 const path = require("path");
-const AppError = require(path.join(__dirname, "../../../utils/error"));
+const AppError = require("../../../utils/error");
 
-module.exports.postMessages = async (
-  sender_id,
-  recipient_id,
-  thread,
-  content,
-  time
-) => {
-  // Implement your business logic here...
+module.exports.postMessages = async (sender_id, recipient_id, thread, content) => {
+  // console.log("Service inputs: ", { sender_id, recipient_id, thread, content });
 
   try {
-    let result = await messages.postMessagesDb(
-      sender_id,
-      recipient_id,
-      thread,
-      content,
-      time
-    );
-    return result;
+    return await messages.postMessagesDb(sender_id, recipient_id, thread, content);
   } catch (error) {
-    throw new AppError(error);
+    throw new AppError({statuscode: 500, messages: "Message could not be saved", location: messages.services.js, error: error});
   }
 };
 

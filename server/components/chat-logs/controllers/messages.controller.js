@@ -3,45 +3,27 @@ const messages = require("../services/messages.services");
 const AppError = require("../../../utils/error");
 
 exports.postMessages = asyncHandler(async (req, res) => {
-  const options = {
-    sender_id: req.body.sender_id,
-    recipient_id: req.body.recipient_id,
-    thread: req.body.thread,
-    content: req.body.content,
-  };
+  // console.log(req.body);
+  const { sender_id, recipient_id, thread, content } = req.body;
+  // console.log("Controller inputs: ", sender_id, recipient_id, thread, content);
 
-  if (
-    !req.headers.auth ||
-    req.headers.auth.trim() === "" ||
-    req.headers.auth == "123"
-  ) {
-    return res.status(401).json({
-      message: '"auth" header is invalid',
-      status: "401",
-      errors: ["401 unauthorized"],
-      locations: ["messages.controller.js"],
+  const headers = req.headers;
+  if (!headers.auth || headers.auth === "123") {
+    throw new AppError({
+      message: '"auth" header is missing',
+      statuscode: 401,
+      errors: ['"auth" header is missing'],
+      locations: [messages.controller.js],
     });
   }
-
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
-
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await messages.postMessages(
-    options.sender_id,
-    options.recipient_id,
-    options.thread,
-    options.content
-  );
-
-  // // Temporary response
-  res.status(200).send(result);
+  
+  try {
+    const result = await messages.postMessages(sender_id, recipient_id, thread, content);
+    // console.log("controller result: ", result);
+    return res.status(200).json(result);
+  } catch (error) {
+    throw new AppError({statuscode: 500, messages: "Message could not be saved", location: [messages.controller.js]});
+  }
 });
 
 exports.getMessagesByThread = asyncHandler(async (req, res) => {
