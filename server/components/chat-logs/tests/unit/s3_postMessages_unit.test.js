@@ -12,18 +12,8 @@ describe("postMessagesDb", () => {
 
   // Test Case 1: Successful insertion
   it("should successfully save a valid message and return it", async () => {
-    const result = await postMessagesDb(5, 6, "Test Thread", "This is a test message");
-
-    console.log("db test result: ", result);
-    
-
-    // expect(result).toEqual({
-    //     sender_id: 5,
-    //     recipient_id: 6,
-    //     thread: "Test Thread",
-    //     content: "This is a test message",
-    // });
-    expect(result).toContainEqual(validMessage);
+    const result = await postMessagesDb(5, 6, "Test Thread", "This is a test message");  
+    expect(result).toMatchObject(validMessage);
   });
 
   // Test Case 2: Invalid input - missing required fields

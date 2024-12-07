@@ -1859,7 +1859,7 @@ components:
           description: Message's content
         time:
           type: string
-          maxLength: 20
+          maxLength: 30
           format: date-time
           description: A timestamp in ISO 8601 format representing the date and time the message was sent, in UTC
           readOnly: true

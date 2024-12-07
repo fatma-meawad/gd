@@ -1,8 +1,7 @@
+require("dotenv-flow").config();
 const pool = require("../config/dbconfig");
 
 module.exports.postMessagesDb = async (sender_id, recipient_id, thread, content) => {
-  // console.log("Before DB call: ", sender_id, recipient_id, thread, content);
-
   if (!sender_id || !recipient_id || !thread || !content) {    
     throw new Error("Missing required fields");
   }
@@ -23,20 +22,11 @@ module.exports.postMessagesDb = async (sender_id, recipient_id, thread, content)
     if (!result.rows || result.rows.length === 0) {
       throw new Error("Database did not return a row");
     }    
-
-    // console.log("db result: ", result.rows[0]);
     
-    return {
-    //   messages: ["Message saved successfully"],
-    //   locations: ["messages.database.js"],
-      data: result.rows[0],
-    };
+    return result.rows[0]
   } catch (error) {
-    // throw new AppError({statuscode: 500, messages: "Failed to save message"});
-    // console.log(error);
     throw new Error(error);
   }
-  // added code
 };
 
 module.exports.getMessagesByThreadDb = async (options) => {

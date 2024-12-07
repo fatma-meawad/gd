@@ -1,10 +1,9 @@
+require("dotenv-flow").config();
 const messages = require("../db/messages.db");
 const path = require("path");
 const AppError = require("../../../utils/error");
 
 module.exports.postMessages = async (sender_id, recipient_id, thread, content) => {
-  // console.log("Service inputs: ", { sender_id, recipient_id, thread, content });
-
   try {
     return await messages.postMessagesDb(sender_id, recipient_id, thread, content);
   } catch (error) {

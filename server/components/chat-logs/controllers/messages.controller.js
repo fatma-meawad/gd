@@ -3,12 +3,10 @@ const messages = require("../services/messages.services");
 const AppError = require("../../../utils/error");
 
 exports.postMessages = asyncHandler(async (req, res) => {
-  // console.log(req.body);
   const { sender_id, recipient_id, thread, content } = req.body;
-  // console.log("Controller inputs: ", sender_id, recipient_id, thread, content);
 
-  const headers = req.headers;
-  if (!headers.auth || headers.auth === "123") {
+  const headers = req.headers;  
+  if (!headers.auth ) {
     throw new AppError({
       message: '"auth" header is missing',
       statuscode: 401,
@@ -19,7 +17,6 @@ exports.postMessages = asyncHandler(async (req, res) => {
   
   try {
     const result = await messages.postMessages(sender_id, recipient_id, thread, content);
-    // console.log("controller result: ", result);
     return res.status(200).json(result);
   } catch (error) {
     throw new AppError({statuscode: 500, messages: "Message could not be saved", location: [messages.controller.js]});
