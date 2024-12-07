@@ -54,11 +54,15 @@ describe("Test suite for /s5/products", () => {
         .send({})
         .set("Content-Type", "application/json");
 
+      // console.log("Response Body: ", request.body);
+      // console.log("Response Status: ", response.status);
+      // console.log("Response Headers: ", response.headers);
+      // console.log("Response Body: ", response.body);
+
       expect(response.status).toBe(400);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
     });
     test("Test case: /s5/products with Request Example: InvalidExample", async () => {
       const response = await request(app)
@@ -67,40 +71,46 @@ describe("Test suite for /s5/products", () => {
         .query({})
         .send({})
         .set("Content-Type", "application/json");
+      // console.log("Response Body: ", request.body);
+      // console.log("Response Status: ", response.status);
+      // console.log("Response Headers: ", response.headers);
+      // console.log("Response Body: ", response.body);
 
       expect(response.status).toBe(400);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-
-      //TODO: assert the exact error messages to assert why the request failed.
     });
-//New test cases for scenatios: correctProductData, wrongCatIdFormat, missingProductName.
+//New test cases for scenarios: correctProductData, wrongCatIdFormat, missingProductName.
     test("Test case: /s5/products with Request Example: correctProductData", async () => {
       const response = await request(app)
         .post(baseUrl + "/s5/products")
         .set("Accept", "application/json")
+        .set("auth", "xyz")
         .query({})
         .send({
           product_name: "RGB keyboard",
           category_id: 12345,
-          category_name: "Keyboards",
+          // category_name: "Keyboards",
           short_description: "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
           detailed_description: "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
-          product_photos: [
-            "https://example.com/photo1.jpg",
-            "https://example.com/photo2.jpg"
-          ],
+          // product_photos: [
+          //   "https://example.com/photo1.jpg",
+          //   "https://example.com/photo2.jpg"
+          // ],
           product_url: "https://youtu.be/0LE0trd740Q"
         })
         .set("Content-Type", "application/json");
 
+        // console.log("Response Body: ", request.body);
+        // console.log("Response Status: ", response.status);
+        // console.log("Response Headers: ", response.headers);
+        // console.log("Response Body: ", response.body);
+
         expect(response.status).toBe(200);
         expect(response.headers["content-type"]).toMatch(/json/);
         expect(response.body).toEqual(expect.any(Object));
-        // expect(response.body).toHaveProperty("data"); //Uncomment at phase 2*************It is being flagged at tests.
-        expect(response.body).toHaveProperty("locations"); //Delete at phase 2**************
-        expect(response.body).toHaveProperty("messages");
+        expect(response.body).toHaveProperty("result");
     });
 
     test("Test case: /s5/products with Request Example: wrongCatIdFormat", async () => {
@@ -111,16 +121,20 @@ describe("Test suite for /s5/products", () => {
         .send({
           product_name: "RGB keyboard",
           category_id: "12345n",
-          category_name: "Keyboards",
+          // category_name: "Keyboards",
           short_description: "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
           detailed_description: "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
-          product_photos: [
-            "https://example.com/photo1.jpg",
-            "https://example.com/photo2.jpg"
-          ],
+          // product_photos: [
+          //   "https://example.com/photo1.jpg",
+          //   "https://example.com/photo2.jpg"
+          // ],
           product_url: "https://youtu.be/0LE0trd740Q"
         })
         .set("Content-Type", "application/json");
+
+        // console.log("Response Status: ", response.status);
+        // console.log("Response Headers: ", response.headers);
+        // console.log("Response Body: ", response.body);
 
         expect(response.status).toBe(400);
         expect(response.headers["content-type"]).toMatch(/json/);
@@ -137,13 +151,13 @@ describe("Test suite for /s5/products", () => {
         .send({
           // product_name: "RGB keyboard",
           category_id: 12345,
-          category_name: "Keyboards",
+          // category_name: "Keyboards",
           short_description: "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
           detailed_description: "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
-          product_photos: [
-            "https://example.com/photo1.jpg",
-            "https://example.com/photo2.jpg"
-          ],
+          // product_photos: [
+          //   "https://example.com/photo1.jpg",
+          //   "https://example.com/photo2.jpg"
+          // ],
           product_url: "https://youtu.be/0LE0trd740Q"
         })
         .set("Content-Type", "application/json");
@@ -154,7 +168,5 @@ describe("Test suite for /s5/products", () => {
         expect(response.body).toEqual(expect.any(Object));
         expect(response.body).toHaveProperty("errors");
     });
-
-    //TODO: The following cover your respones in openapi. If your examples cover a test case, you can delete it.
   });
 });
