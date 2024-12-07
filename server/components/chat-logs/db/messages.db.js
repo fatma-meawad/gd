@@ -1,29 +1,39 @@
 require("dotenv-flow").config();
 const pool = require("../config/dbconfig");
 
-module.exports.postMessagesDb = async (sender_id, recipient_id, thread, content) => {
-  if (!sender_id || !recipient_id || !thread || !content) {    
+module.exports.postMessagesDb = async (
+  senderId,
+  recipientId,
+  thread,
+  content
+) => {
+  if (!senderId || !recipientId || !thread || !content) {
     throw new Error("Missing required fields");
   }
 
-  if (typeof sender_id !== "number" || typeof recipient_id !== "number") {
+  if (typeof senderId !== "number" || typeof recipientId !== "number") {
     throw new Error("Invalid data type");
   }
 
   try {
     const query = `
-      INSERT INTO Message (sender_id, recipient_id, thread, content)
+      INSERT INTO Message (senderId, recipientId, thread, content)
       VALUES ($1, $2, $3, $4)
       RETURNING *;
     `;
 
-    const result = await pool.query(query, [sender_id, recipient_id, thread, content]);   
+    const result = await pool.query(query, [
+      senderId,
+      recipientId,
+      thread,
+      content,
+    ]);
 
     if (!result.rows || result.rows.length === 0) {
       throw new Error("Database did not return a row");
-    }    
-    
-    return result.rows[0]
+    }
+
+    return result.rows[0];
   } catch (error) {
     throw new Error(error);
   }

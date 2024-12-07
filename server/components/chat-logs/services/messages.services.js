@@ -1,13 +1,28 @@
 require("dotenv-flow").config();
 const messages = require("../db/messages.db");
-const path = require("path");
 const AppError = require("../../../utils/error");
+const { StatusCodes } = require("http-status-codes");
 
-module.exports.postMessages = async (sender_id, recipient_id, thread, content) => {
+module.exports.postMessages = async (
+  senderId,
+  recipientId,
+  thread,
+  content
+) => { 
   try {
-    return await messages.postMessagesDb(sender_id, recipient_id, thread, content);
+    return await messages.postMessagesDb(
+      senderId,
+      recipientId,
+      thread,
+      content
+    );
   } catch (error) {
-    throw new AppError({statuscode: 500, messages: "Message could not be saved", location: messages.services.js, error: error});
+    throw new AppError({
+      statuscode: StatusCodes.INTERNAL_SERVER_ERROR,
+      messages: "Message could not be saved",
+      location: messages.services.js,
+      error: error,
+    });
   }
 };
 

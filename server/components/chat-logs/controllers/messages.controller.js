@@ -1,25 +1,42 @@
 const asyncHandler = require("express-async-handler");
 const messages = require("../services/messages.services");
 const AppError = require("../../../utils/error");
+const { StatusCodes } = require("http-status-codes");
+
+/**
+ * Post messages to the system
+ * @param {Object} req - Request object containing sender, recipient, thread, and content
+ * @param {Object} res - Response object to send back the result
+ */
 
 exports.postMessages = asyncHandler(async (req, res) => {
   const { sender_id, recipient_id, thread, content } = req.body;
 
-  const headers = req.headers;  
-  if (!headers.auth ) {
+  const headers = req.headers;
+  if (!headers.auth) {
     throw new AppError({
       message: '"auth" header is missing',
-      statuscode: 401,
-      errors: ['"auth" header is missing'],
-      locations: [messages.controller.js],
+      statuscode: StatusCodes.UNAUTHORIZED,
+      errors: '"auth" header is missing',
+      locations: messages.controller.js,
     });
   }
-  
-  try {
-    const result = await messages.postMessages(sender_id, recipient_id, thread, content);
-    return res.status(200).json(result);
+
+  try { 
+    const result = await messages.postMessages(
+      sender_id,
+      recipient_id,
+      thread,
+      content
+    );
+    return res.status(StatusCodes.OK).json(result);
   } catch (error) {
-    throw new AppError({statuscode: 500, messages: "Message could not be saved", location: [messages.controller.js]});
+    throw new AppError({
+      statuscode: StatusCodes.INTERNAL_SERVER_ERROR,
+      messages: "Message could not be saved",
+      location: messages.controller.js,
+      error: error,
+    });
   }
 });
 
