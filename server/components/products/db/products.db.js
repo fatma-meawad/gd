@@ -15,59 +15,60 @@ module.exports.getProductsDb = async (limit, cursor) => {
 };
 
 module.exports.postProductsDb = async (product) => {
-  /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
-  1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
-  2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
-  3- you can access the schema.json (imported above) and use objects in it/modify or create them.
-*/
-// const {
-//   id,
-//   product_name,
-//   category_id,
-//   category_name, 
-//   short_description,
-//   detailed_description, 
-//   product_photos = [], // Default to empty array if missing
-//   product_url = ""
-// } = product;
+  const { product_name, category_id, short_description, detailed_description, product_url } = product;
+  const requiredFields = ['category_id', 'product_name', 'short_description' ];
+  const missingFields = requiredFields.filter(field => !product[field]);
+  if (missingFields.length > 0) {
+    throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+  }
+  if (
+    typeof product_name !== 'string' || product_name.length < 3 ||
+    typeof category_id !== 'number' || !Number.isInteger(category_id) ||
+    typeof short_description !== 'string' || short_description.length < 20 ||
+    (product_url && typeof product_url !== 'string')
+  ) {
+    throw new Error("Invalid data types entered");
+  }
 
-//Check for missing fields (To pass Test Case 2: Invalid input - missing required field/-s)
-// const requiredFields = ['category_id', 'product_name', 'short_description'];
-// const missingFields = requiredFields.filter(field => !product[field]);
+  try {
+    const query = `
+      INSERT INTO product (product_name, category_id, short_description, detailed_description, product_url) 
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id, product_name, category_id, short_description, detailed_description, product_url
+    `;
+    const values = [
+      product_name, 
+      category_id, 
+      short_description, 
+      detailed_description, 
+      // product_photos, 
+      product_url, 
+      // category_name
+    ];
 
-// if (missingFields.length > 0) {
-//   throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
-// }
+    const result = await pool.query(query, values);
+    const newProduct = result.rows[0];
 
-//Validate data types (To pass Test Case 3: Invalid input - incorrect data types/-s)
-// if (
-//   typeof category_id !== 'number' ||
-//   typeof product_name !== 'string' ||
-//   typeof short_description !== 'string'
-//   ) 
-// {throw new Error('Invalid data types entered');}
+    return {
+      status: "success",
+      data: newProduct, 
+      messages: ["postMessagesDb Message"],
+      locations: ["messages.database.js"],
+    };
+  } catch (error) {
 
-// const newProduct = {
-//   id,
-//   product_name,
-//   category_id,
-//   category_name,
-//   short_description,
-//   detailed_description,
-//   product_photos,
-//   product_url,
-// };
-
-//Simulate saving the product by pushing it into the mock array
-// mockProducts.push(newProduct);
-
-
-  return {
-    // data: newProduct,
-    //**Swagger shows error 500 if the below returns are not present. But postProductsDb unit tests only pass without them.**
-    messages: ["postMessagesDb not implemented yet"],
-    locations: ["messages.database.js"],
-  };
+    const structuredError = {
+      status: "error",
+      messages: ["Database error while creating product"],
+      details: {
+        originalError: error.message,
+        stack: error.stack,
+        locations: ["products.db.js"],
+      },
+    };
+    console.error(structuredError);
+    throw structuredError;
+  }
 };
 
 module.exports.postProductsByProductIdTagsDb = async (options) => {
