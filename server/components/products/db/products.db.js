@@ -21,10 +21,12 @@ module.exports.postProductsDb = async (product) => {
   if (missingFields.length > 0) {
     throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
   }
+  const product_name_length=3;
+  const short_description_length=20;
   if (
-    typeof product_name !== 'string' || product_name.length < 3 ||
+    typeof product_name !== 'string' || product_name.length < product_name_length ||
     typeof category_id !== 'number' || !Number.isInteger(category_id) ||
-    typeof short_description !== 'string' || short_description.length < 20 ||
+    typeof short_description !== 'string' || short_description.length < short_description_length ||
     (product_url && typeof product_url !== 'string')
   ) {
     throw new Error("Invalid data types entered");
