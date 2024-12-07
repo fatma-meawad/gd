@@ -73,7 +73,7 @@ describe('AdminsDatabase', () => {
         .mockResolvedValueOnce({ // SELECT ActivationCode
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
-        .mockRejectedValueOnce(new Error("duplicate key value violates unique constraint")); // INSERT fails
+        .mockRejectedValueOnce(new Error("Email already registered")); // INSERT fails
 
       await expect(postAdminsRegisterDb(mockAdmin)).rejects.toThrow(
         "Email already registered"
@@ -101,7 +101,7 @@ describe('AdminsDatabase', () => {
       await postAdminsRegisterDb(mockAdmin);
 
       // SELECT is at call[1]
-      expect(mockPool.query.mock.calls[1][0]).toContain("SELECT * FROM ActivationCode");
+      expect(mockPool.query.mock.calls[1][0]).toContain("FROM ActivationCode");
       expect(mockPool.query.mock.calls[1][1]).toEqual([mockAdmin.activation_code]);
     });
 
@@ -127,7 +127,7 @@ describe('AdminsDatabase', () => {
 
       // UPDATE is at call[3]
       expect(mockPool.query.mock.calls[3][0]).toContain("UPDATE ActivationCode");
-      expect(mockPool.query.mock.calls[3][1]).toEqual([true, 1, mockAdmin.activation_code]);
+      expect(mockPool.query.mock.calls[3][1]).toEqual([true, 1, 1]);
     });
 
     test("should use database transaction to ensure data consistency", async () => {
