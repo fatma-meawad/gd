@@ -1,5 +1,3 @@
-const YAML = require("yamljs");
-const path = require("path");
 require("dotenv-flow").config();
 
 var options = {

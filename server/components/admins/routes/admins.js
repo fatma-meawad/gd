@@ -2,6 +2,7 @@ const express = require("express");
 const router = new express.Router();
 const controller = require("../controllers/admins.controller");
 const { handleError } = require("../../../middleware/errorhandler");
+const authVerifier = require("../../../middleware/authVerifier");
 
 router.post("/login", controller.postAdminsLogin);
 
@@ -9,7 +10,7 @@ router.put("/:id/deactivate", controller.putAdminsByIdDeactivate);
 
 router.put("/:id/profile", controller.putAdminsByIdProfile);
 
-router.get("/", controller.getAdmins);
+router.get("/", authVerifier, controller.getAdmins);
 
 router.post("/status-notifications", controller.postAdminsStatusNotifications);
 

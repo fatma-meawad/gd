@@ -361,6 +361,11 @@ paths:
       including their activation status (active or inactive), account creation date, 
       and deactivation time (if applicable), so I can manage and track the admin team effectively.
     parameters:
+      - in: header
+        name: auth
+        schema:
+          type: string
+          example: token
       - in: query
         name: page
         description: The page number for pagination, used to retrieve the corresponding set of admin records.
