@@ -29,12 +29,12 @@ module.exports.postProductsDb = async (product) => {
   if (missingFields.length > 0) {
     throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
   }
-  const product_name_length=3;
-  const short_description_length=20;
+  const productNameLength=3;
+  const shortDescriptionLength=20;
   if (
-    typeof productName !== 'string' || productName.length < product_name_length ||
+    typeof productName !== 'string' || productName.length < productNameLength ||
     typeof categoryId !== 'number' || !Number.isInteger(categoryId) ||
-    typeof shortDescription !== 'string' || shortDescription.length < short_description_length ||
+    typeof shortDescription !== 'string' || shortDescription.length < shortDescriptionLength ||
     ( productUrl && typeof  productUrl !== 'string')
   ) {
     throw new Error("Invalid data types entered");
@@ -76,7 +76,7 @@ module.exports.postProductsDb = async (product) => {
         locations: ["products.db.js"],
       },
     };
-    console.error(structuredError);
+    // console.error(structuredError);
     throw structuredError;
   }
 };
