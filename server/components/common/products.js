@@ -1,4 +1,3 @@
-
 /**
  * Fetches and returns a list of products.
  * Not implementable at the moment. :(

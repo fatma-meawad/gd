@@ -1,4 +1,4 @@
-const DATABASE_FILE = "products.db.js"
+const DATABASE_FILE = "products.db.js";
 const DEFAULT_PRODUCTS_LIMIT = 50;
 
 /**

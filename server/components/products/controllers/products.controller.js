@@ -3,7 +3,6 @@ const products = require("../services/products.services");
 const AppError = require("../../../utils/error");
 const { CONTROLLER_FILE, STATUS_CODES } = require("./utils");
 
-
 exports.getProducts = asyncHandler(async (req, res) => {
   let limit;
   let cursor;
