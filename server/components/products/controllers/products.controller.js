@@ -98,7 +98,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
   };
 
   try {
-      let result = await products.postProducts(
+      const result = await products.postProducts(
           options.productName,
           options.categoryId,
           // options.categoryName,
