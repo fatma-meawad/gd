@@ -104,9 +104,6 @@ module.exports.postAdminsPasswordResetDb = async (options) => {
 };
 
 // server/components/admins/db/admins.db.js
-// server/components/admins/db/admins.db.js
-
-// server/components/admins/db/admins.db.js
 
 const db = require("../config/dbconfig.js");
 const bcrypt = require("bcrypt");
@@ -127,10 +124,24 @@ module.exports.postAdminsRegisterDb = async (admin) => {
     // Start transaction
     await db.query("BEGIN");
 
-    // Hash the password
+    // Validate activation code
+    const codeRes = await db.query(
+      `SELECT * FROM ActivationCode WHERE code = $1 FOR UPDATE`,
+      [activation_code]
+    );
+    if (codeRes.rows.length === 0) {
+      throw new Error("Invalid or expired registration code");
+    }
+    const codeData = codeRes.rows[0];
+    const now = new Date();
+    if (codeData.is_used || codeData.expiry_date < now) {
+      throw new Error("Invalid or expired registration code");
+    }
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert admin first (this will be mockPool.query.mock.calls[1])
+    // Insert admin
     let insertAdminRes;
     try {
       insertAdminRes = await db.query(
@@ -141,7 +152,6 @@ module.exports.postAdminsRegisterDb = async (admin) => {
       );
     } catch (err) {
       if (err.message && err.message.toLowerCase().includes("unique constraint")) {
-        // Duplicate email error
         throw new Error("Email already registered");
       }
       throw err;
@@ -149,13 +159,13 @@ module.exports.postAdminsRegisterDb = async (admin) => {
 
     const newAdmin = insertAdminRes.rows[0];
 
-    // Select and update activation code after insert
-    // Some tests require SELECT first, but let's try without code validation
+    // Update activation code
     await db.query(
       `UPDATE ActivationCode SET is_used = $1, used_by = $2 WHERE code = $3`,
       [true, newAdmin.id, activation_code]
     );
 
+    // Commit transaction
     await db.query("COMMIT");
 
     return {
