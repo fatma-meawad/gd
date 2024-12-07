@@ -108,7 +108,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
           options.productUrl
       );
       
-      res.status(StatusCodes.OK).json({result});
+      return res.status(StatusCodes.OK).json({result});
   } catch (error) {
       throw new AppError("Error creating product", StatusCodes.INTERNAL_SERVER_ERROR, {
           originalError: error,
