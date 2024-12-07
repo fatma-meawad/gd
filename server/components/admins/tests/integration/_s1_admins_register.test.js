@@ -3,11 +3,70 @@ const request = require("supertest");
 const ROOT_DIR = process.cwd();
 const app = require(ROOT_DIR + "/app");
 const baseUrl = process.env.BASE_API_TEST_URL;
+const db = require("../../config/dbconfig");
 
-//TODO: The test cases are generated from your examples, but double check that all is ok and all your cases are covered
-//TODO: Check the requirements in the task to see what other checks are required
+// Add test data setup
+beforeAll(async () => {
+  try {
+    // Clean up any existing test data in correct order
+    await db.query("DELETE FROM ActivationCode");
+    await db.query("DELETE FROM AdminAccount");
+  } catch (error) {
+    console.error('Test setup error:', error);
+    throw error;
+  }
+});
+
+// Cleanup after tests
+afterAll(async () => {
+  try {
+    await db.query("DELETE FROM ActivationCode");
+    await db.query("DELETE FROM AdminAccount");
+    await db.end();
+  } catch (error) {
+    console.error('Test cleanup error:', error);
+    throw error;
+  }
+});
 
 describe("Test suite for /s1/admins/register", () => {
+  beforeEach(async () => {
+    try {
+      // Clean existing data
+      await db.query("DELETE FROM ActivationCode");
+      await db.query("DELETE FROM AdminAccount");
+
+      // Insert test activation codes for this test
+      await db.query(`
+        INSERT INTO ActivationCode (code, type, is_used, expiry_date)
+        VALUES
+          ('ABCD1234', 'activation', false, CURRENT_TIMESTAMP + INTERVAL '1 day'),
+          ('WXYZ5678', 'activation', false, CURRENT_TIMESTAMP + INTERVAL '1 day')
+      `);
+    } catch (error) {
+      console.error('Test reset error:', error);
+      throw error;
+    }
+  });
+
+  // Helper function to create a test admin
+  const createTestAdmin = async (email = "existing@example.com") => {
+    try {
+      await request(app)
+        .post(baseUrl + "/s1/admins/register")
+        .set("Accept", "application/json")
+        .send({
+          full_name: "Test User",
+          email: email,
+          phone: "+1234567890",
+          password: "SecureP@ss123",
+          activation_code: "WXYZ5678"
+        });
+    } catch (error) {
+      console.error('Error creating test admin:', error);
+    }
+  };
+
   describe("Test suite for post /s1/admins/register", () => {
     test("Test case: /s1/admins/register with Request Example: validRegistration", async () => {
       const response = await request(app)
@@ -218,18 +277,20 @@ describe("Test suite for /s1/admins/register", () => {
 
     // Business Logic Tests (These should fail in Phase 1)
     test("Test case: /s1/admins/register with duplicate email", async () => {
+      // First create an admin
+      await createTestAdmin();
+
+      // Then try to create another admin with the same email
       const response = await request(app)
         .post(baseUrl + "/s1/admins/register")
         .set("Accept", "application/json")
-        .query({})
         .send({
           full_name: "Different Name",
           email: "existing@example.com",
           phone: "+1234567891",
           password: "SecureP@ss123",
-          activation_code: "WXYZ5678",
-        })
-        .set("Content-Type", "application/json");
+          activation_code: "ABCD1234"
+        });
 
       expect(response.status).toBe(409);
       expect(response.body).toHaveProperty("errors");
