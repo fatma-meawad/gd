@@ -15,7 +15,15 @@ module.exports.getProductsDb = async (limit, cursor) => {
 };
 
 module.exports.postProductsDb = async (product) => {
-  const { product_name, category_id, short_description, detailed_description, product_url } = product;
+  const { 
+    product_name: productName, 
+    category_id: categoryId, 
+    // category_name: categoryName, 
+    short_description: shortDescription, 
+    detailed_description: detailedDescription, 
+    // product_photos: productPhotos, 
+    product_url: productUrl 
+  }  = product;
   const requiredFields = ['category_id', 'product_name', 'short_description' ];
   const missingFields = requiredFields.filter(field => !product[field]);
   if (missingFields.length > 0) {
@@ -24,10 +32,10 @@ module.exports.postProductsDb = async (product) => {
   const product_name_length=3;
   const short_description_length=20;
   if (
-    typeof product_name !== 'string' || product_name.length < product_name_length ||
-    typeof category_id !== 'number' || !Number.isInteger(category_id) ||
-    typeof short_description !== 'string' || short_description.length < short_description_length ||
-    (product_url && typeof product_url !== 'string')
+    typeof productName !== 'string' || productName.length < product_name_length ||
+    typeof categoryId !== 'number' || !Number.isInteger(categoryId) ||
+    typeof shortDescription !== 'string' || shortDescription.length < short_description_length ||
+    ( productUrl && typeof  productUrl !== 'string')
   ) {
     throw new Error("Invalid data types entered");
   }
@@ -39,13 +47,13 @@ module.exports.postProductsDb = async (product) => {
       RETURNING id, product_name, category_id, short_description, detailed_description, product_url
     `;
     const values = [
-      product_name, 
-      category_id, 
-      short_description, 
-      detailed_description, 
-      // product_photos, 
-      product_url, 
-      // category_name
+      productName,
+      categoryId,
+      // categoryName,
+      shortDescription,
+      detailedDescription,
+      // productPhotos,
+      productUrl
     ];
 
     const result = await pool.query(query, values);
