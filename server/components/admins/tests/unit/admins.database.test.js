@@ -1,20 +1,23 @@
-const { postAdminsRegisterDb } = require("../../db/admins.db");
-
 const mockPool = {
-  query: jest.fn(),
+  query: jest.fn()
 };
 
-jest.mock("../../config/dbconfig.js", () => ({
-  pool: mockPool,
+// Mock dbconfig.js before requiring admins.db.js
+jest.mock('../../config/dbconfig.js', () => ({
+  query: (text, params) => mockPool.query(text, params),
+  end: jest.fn()
 }));
 
-describe("AdminsDatabase", () => {
+// Now that dbconfig.js is mocked, we can safely require admins.db.js
+const { postAdminsRegisterDb } = require('../../db/admins.db');
+
+describe('AdminsDatabase', () => {
   beforeEach(() => {
     mockPool.query.mockReset();
   });
 
-  describe("postAdminsRegisterDb", () => {
-    test("should successfully register a new admin with valid data", async () => {
+  describe('postAdminsRegisterDb', () => {
+    test('should successfully register a new admin with valid data', async () => {
       const mockAdmin = {
         full_name: "John Smith",
         email: "john.smith@example.com",
@@ -23,25 +26,23 @@ describe("AdminsDatabase", () => {
         activation_code: "ABCD1234",
         address: "123 Admin Street",
         profile_photo: "https://example.com/photo.jpg",
-        bio: "Test bio",
+        bio: "Test bio"
       };
 
       mockPool.query.mockResolvedValue({
-        rows: [
-          {
-            id: 1,
-            email: mockAdmin.email,
-            full_name: mockAdmin.full_name,
-          },
-        ],
+        rows: [{
+          id: 1,
+          email: mockAdmin.email,
+          full_name: mockAdmin.full_name
+        }]
       });
 
       const result = await postAdminsRegisterDb(mockAdmin);
 
-      expect(result.data).toHaveProperty("id");
-      expect(result.data).toHaveProperty("email");
-      expect(result.data).toHaveProperty("full_name");
-      expect(result.messages).toContain("Admin registered successfully");
+      expect(result.data).toHaveProperty('id');
+      expect(result.data).toHaveProperty('email');
+      expect(result.data).toHaveProperty('full_name');
+      expect(result.messages).toContain('Admin registered successfully');
     });
 
     test("should fail when email already exists", async () => {
