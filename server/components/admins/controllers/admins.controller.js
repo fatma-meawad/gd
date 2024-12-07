@@ -195,17 +195,11 @@ exports.postAdminsPasswordReset = asyncHandler(async (req, res) => {
   res.status(200).send(result);
 });
 
-exports.postAdminsRegister = asyncHandler(async (req, res) => {
-  const admin = {
-    full_name: req.body.full_name,
-    email: req.body.email,
-    phone: req.body.phone,
-    activation_code: req.body.activation_code,
-    password: req.body.password,
-    address: req.body.address,
-    profile_photo: req.body.profile_photo,
-    bio: req.body.bio,
+exports.postAdminsPasswordReset = asyncHandler(async (req, res) => {
+  const options = {
+    body: req.body,
   };
+
   /**  request:
       1- check if the parameters extracted from req are correct. The params, the query and the body.
       2- the openapi validator should match the types with the contract, so make sure they match
@@ -216,10 +210,33 @@ exports.postAdminsRegister = asyncHandler(async (req, res) => {
       1- the default success status is 200, if you have something else planned, use it to match the validator
       2- use the response schema if any.
   */
-  let result = await admins.postAdminsRegister(admin);
+  let result = await admins.postAdminsPasswordReset(...Object.values(options));
 
   // Temporary response
-  result.messages.push("postAdminsRegister controller not implemented yet");
+  result.messages.push(
+    "postAdminsPasswordReset controller not implemented yet"
+  );
   result.locations.push("admins.controller.js");
-  res.status(201).send(result);
+  res.status(200).send(result);
+});
+
+exports.postAdminsRegister = asyncHandler(async (req, res, next) => {
+  try {
+    const admin = {
+      full_name: req.body.full_name,
+      email: req.body.email,
+      phone: req.body.phone,
+      activation_code: req.body.activation_code,
+      password: req.body.password,
+      address: req.body.address,
+      profile_photo: req.body.profile_photo,
+      bio: req.body.bio
+    };
+
+    const result = await admins.postAdminsRegister(admin);
+    res.status(201).json(result);
+  } catch (error) {
+    // Forward the error to the error handling middleware
+    next(error);
+  }
 });
