@@ -56,16 +56,16 @@ exports.postProducts = asyncHandler(async (req, res) => {
   }
 
   const { 
-      product_name, 
-      category_id, 
-      // category_name, 
-      short_description, 
-      detailed_description, 
-      // product_photos, 
-      product_url 
+      product_name: productName, 
+      category_id: categoryId, 
+      // category_name: categoryName, 
+      short_description: shortDescription, 
+      detailed_description: detailedDescription, 
+      // product_photos: productPhotos, 
+      product_url: productUrl 
   } = req.body;
 
-  if (!product_name || !category_id || !short_description) {
+  if (!productName || !categoryId || !shortDescription) {
       return res.status(StatusCodes.BAD_REQUEST).json({
           status: "error",
           message: "Missing required fields",
@@ -75,9 +75,9 @@ exports.postProducts = asyncHandler(async (req, res) => {
   }
 
   if (
-      typeof product_name !== "string" || 
-      typeof category_id !== "number" || 
-      typeof short_description !== "string"
+      typeof productName !== "string" || 
+      typeof categoryId !== "number" || 
+      typeof shortDescription !== "string"
   ) {
       return res.status(StatusCodes.BAD_REQUEST).json({
           status: "error",
@@ -88,27 +88,27 @@ exports.postProducts = asyncHandler(async (req, res) => {
   }
 
   const options = {
-      product_name,
-      category_id,
-      // category_name,
-      short_description,
-      detailed_description,
-      // product_photos,
-      product_url,
+      productName,
+      categoryId,
+      // categoryName,
+      shortDescription,
+      detailedDescription,
+      // productPhotos,
+      productUrl
   };
 
   try {
       let result = await products.postProducts(
-          options.product_name,
-          options.category_id,
-          // options.category_name,
-          options.short_description,
-          options.detailed_description,
-          // options.product_photos,
-          options.product_url
+          options.productName,
+          options.categoryId,
+          // options.categoryName,
+          options.shortDescription,
+          options.detailedDescription,
+          // options.productPhotos,
+          options.productUrl
       );
       
-      res.status(200).json({result});
+      res.status(StatusCodes.OK).json({result});
   } catch (error) {
       throw new AppError("Error creating product", StatusCodes.INTERNAL_SERVER_ERROR, {
           originalError: error,
