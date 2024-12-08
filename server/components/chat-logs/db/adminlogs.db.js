@@ -1,5 +1,5 @@
 const db = require("../config/dbconfig");
-const MAX_ISO_DATE_LENGTH = 19; // Named constant for the slice operation
+const MAX_ISO_DATE_LENGTH = 19;
 
 module.exports.getAdminlogsDb = async (options) => {
   let query = `SELECT id, action_type, admin_id, message_id, action_time, details FROM Log`;
@@ -48,7 +48,7 @@ module.exports.getAdminlogsDb = async (options) => {
   const formattedRows = result.rows.map(row => ({
     ...row,
     // eslint-disable-next-line camelcase -- action_time is required for OpenAPI compliance
-    action_time: new Date(row.action_time).toISOString().slice(0, MAX_ISO_DATE_LENGTH) + 'Z', // Ensure 'Z' is appended for UTC
+    action_time: new Date(row.action_time).toISOString().slice(0, MAX_ISO_DATE_LENGTH) + 'Z',
   }));
 
   return formattedRows;
