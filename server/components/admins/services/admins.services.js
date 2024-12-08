@@ -3,6 +3,10 @@ const path = require("path");
 const bcrypt = require('bcrypt');
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
+const HTTP_STATUS_CONFLICT = 409;
+const HTTP_STATUS_BAD_REQUEST = 400;
+const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
+
 module.exports.postAdminsLogin = async (credentials) => {
   // Implement your business logic here...
 
@@ -138,7 +142,7 @@ module.exports.postAdminsRegister = async (admin) => {
         errors: [error.message],
         locations: ["admins.service.js"]
       });
-      appError.statusCode = 409;
+      appError.statusCode = HTTP_STATUS_CONFLICT;
       throw appError;
     }
     if (error.message === "Invalid or expired registration code") {
@@ -146,14 +150,14 @@ module.exports.postAdminsRegister = async (admin) => {
         errors: [error.message],
         locations: ["admins.service.js"]
       });
-      appError.statusCode = 400;
+      appError.statusCode = HTTP_STATUS_BAD_REQUEST;
       throw appError;
     }
     const appError = new AppError({
       errors: [error.message || "Internal server error"],
       locations: ["admins.service.js"]
     });
-    appError.statusCode = 500;
+    appError.statusCode = HTTP_STATUS_INTERNAL_SERVER_ERROR;
     throw appError;
   }
 };
