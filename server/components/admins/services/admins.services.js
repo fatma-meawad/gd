@@ -1,5 +1,6 @@
 const admins = require("../db/admins.db");
 const path = require("path");
+const bcrypt = require('bcrypt');
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
 module.exports.postAdminsLogin = async (credentials) => {
@@ -113,14 +114,24 @@ module.exports.putAdminsPasswordReset = async (adminId, newPassword) => {
   }
 };
 
+
 module.exports.postAdminsRegister = async (admin) => {
   try {
-    const result = await admins.postAdminsRegisterDb(admin);
+    const password_hash = await bcrypt.hash(admin.password, 10);
+
+    const adminToCreate = {
+      ...admin,
+      password_hash  // Now matches DB layer expectation
+    };
+
+    const result = await admins.postAdminsRegisterDb(adminToCreate);
+    
     return {
       data: result.data,
-      messages: ["Registration successful"],
-      locations: ["admins.service.js"]
+      messages: result.messages,
+      locations: [...result.locations, 'admins.service.js']
     };
+
   } catch (error) {
     if (error.message === "Email already registered") {
       const appError = new AppError({
