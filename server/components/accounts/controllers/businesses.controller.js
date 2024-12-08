@@ -2,6 +2,15 @@ const asyncHandler = require("express-async-handler");
 const businessesService = require("../services/businesses.services");
 const AppError = require("../../../utils/error");
 
+// Constants
+const STATUS_BAD_REQUEST = 400;
+const STATUS_NOT_FOUND = 404;
+const STATUS_OK = 200;
+const STATUS_INTERNAL_SERVER_ERROR = 500;
+const ERROR_LOCATIONS_CONTROLLER = ["businesses.controller.js"];
+const ERROR_NO_BUSINESSES_FOUND = "No businesses found";
+const ERROR_INTERNAL_SERVER = "Internal server error";
+
 /**
  * POST /businesses
  * Handles creation of a new business
@@ -71,24 +80,24 @@ exports.postBusinesses = asyncHandler(async (req, res) => {
  * Retrieves a list of businesses with pagination support
  */
 exports.getBusinesses = asyncHandler(async (req, res) => {
-  const { limit = 50, offset = 0 } = req.query; // 50 was a value specified in project requirements
+  const { limit = 50, offset = 0 } = req.query;
 
   const parsedLimit = parseInt(limit);
   const parsedOffset = parseInt(offset);
 
   if (isNaN(parsedLimit) || parsedLimit <= 0) {
-    return res.status(400).json({
+    return res.status(STATUS_BAD_REQUEST).json({
       status: "error",
       errors: ["Limit must be a positive integer"],
-      locations: ["businesses.controller.js"],
+      locations: ERROR_LOCATIONS_CONTROLLER,
     });
   }
 
   if (isNaN(parsedOffset) || parsedOffset < 0) {
-    return res.status(400).json({
+    return res.status(STATUS_BAD_REQUEST).json({
       status: "error",
       errors: ["Offset must be a non-negative integer"],
-      locations: ["businesses.controller.js"],
+      locations: ERROR_LOCATIONS_CONTROLLER,
     });
   }
 
@@ -100,19 +109,19 @@ exports.getBusinesses = asyncHandler(async (req, res) => {
 
     // Check for empty results and send a 404 response
     if (!result.businesses || result.businesses.length === 0) {
-      return res.status(404).json({
+      return res.status(STATUS_NOT_FOUND).json({
         status: "error",
-        errors: ["No businesses found"],
-        locations: ["businesses.controller.js"],
+        errors: [ERROR_NO_BUSINESSES_FOUND],
+        locations: ERROR_LOCATIONS_CONTROLLER,
       });
     }
 
-    res.status(200).json(result);
+    return res.status(STATUS_OK).json(result);
   } catch (error) {
-    res.status(500).json({
+    return res.status(STATUS_INTERNAL_SERVER_ERROR).json({
       status: "error",
-      errors: ["Internal server error"],
-      locations: ["businesses.controller.js"],
+      errors: [ERROR_INTERNAL_SERVER],
+      locations: ERROR_LOCATIONS_CONTROLLER,
     });
   }
 });
