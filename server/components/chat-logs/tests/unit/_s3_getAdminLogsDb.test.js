@@ -1,23 +1,19 @@
 // getAdminlogsDb.test.js
 const { getAdminlogsDb } = require("../../db/adminlogs.db");
+const db = require("../../config/dbconfig");
+
+jest.mock("../../config/dbconfig", () => ({
+  query: jest.fn(),
+}));
 
 describe("Unit Tests for getAdminlogsDb Function", () => {
-  // Mock database connection and query
-  const mockPool = {
-    query: jest.fn(),
-  };
-
-  jest.mock("../../config/dbconfig.js", () => ({
-    pool: mockPool,
-  }));
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test("Should return all logs when no filters are provided", async () => {
     // Mocked database response
-    mockPool.query.mockResolvedValue({
+    db.query.mockResolvedValue({
       rows: [
         {
           id: 1,
@@ -39,13 +35,13 @@ describe("Unit Tests for getAdminlogsDb Function", () => {
     });
 
     const logs = await getAdminlogsDb({});
-    expect(logs.data).toHaveLength(2);
-    expect(mockPool.query).toHaveBeenCalledTimes(1);
+    expect(logs).toHaveLength(2);
+    expect(db.query).toHaveBeenCalledTimes(1);
   });
 
-  test("Should return logs filtered by admin_id", async () => {
-    const options = { admin_id: 101 };
-    mockPool.query.mockResolvedValue({
+  test("Should return logs filtered by adminId", async () => {
+    const options = { adminId: 101 };
+    db.query.mockResolvedValue({
       rows: [
         {
           id: 1,
@@ -59,9 +55,9 @@ describe("Unit Tests for getAdminlogsDb Function", () => {
     });
 
     const logs = await getAdminlogsDb(options);
-    expect(logs.data).toHaveLength(1);
-    expect(logs.data[0].admin_id).toBe(101);
-    expect(mockPool.query).toHaveBeenCalledWith(
+    expect(logs).toHaveLength(1);
+    expect(logs[0].admin_id).toBe(101);
+    expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining("WHERE admin_id = $1"),
       [101]
     );
@@ -69,7 +65,7 @@ describe("Unit Tests for getAdminlogsDb Function", () => {
 
   test("Should return logs filtered by keyword", async () => {
     const options = { keyword: "Edited" };
-    mockPool.query.mockResolvedValue({
+    db.query.mockResolvedValue({
       rows: [
         {
           id: 1,
@@ -83,17 +79,17 @@ describe("Unit Tests for getAdminlogsDb Function", () => {
     });
 
     const logs = await getAdminlogsDb(options);
-    expect(logs.data).toHaveLength(1);
-    expect(logs.data[0].details).toContain("Edited");
-    expect(mockPool.query).toHaveBeenCalledWith(
+    expect(logs).toHaveLength(1);
+    expect(logs[0].details).toContain("Edited");
+    expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining("WHERE details ILIKE $1"),
       ["%Edited%"]
     );
   });
 
   test("Should return logs within a date range", async () => {
-    const options = { date_range: "2023-11-10:2023-11-10" };
-    mockPool.query.mockResolvedValue({
+    const options = { dateRange: "2023-11-10:2023-11-10" };
+    db.query.mockResolvedValue({
       rows: [
         {
           id: 1,
@@ -115,16 +111,16 @@ describe("Unit Tests for getAdminlogsDb Function", () => {
     });
 
     const logs = await getAdminlogsDb(options);
-    expect(logs.data).toHaveLength(2);
-    expect(mockPool.query).toHaveBeenCalledWith(
+    expect(logs).toHaveLength(2);
+    expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining("WHERE action_time BETWEEN $1 AND $2"),
       ["2023-11-10", "2023-11-10"]
     );
   });
 
   test("Should return logs sorted by date in ascending order", async () => {
-    const options = { sort_by: "date", order: "asc" };
-    mockPool.query.mockResolvedValue({
+    const options = { sortBy: "date", order: "asc" };
+    db.query.mockResolvedValue({
       rows: [
         {
           id: 1,
@@ -148,25 +144,25 @@ describe("Unit Tests for getAdminlogsDb Function", () => {
     const logs = await getAdminlogsDb(options);
     expect(logs[0].action_time).toBe("2023-11-10T10:30:00Z");
     expect(logs[1].action_time).toBe("2023-11-11T11:00:00Z");
-    expect(mockPool.query).toHaveBeenCalledWith(
+    expect(db.query).toHaveBeenCalledWith(
       expect.stringContaining("ORDER BY action_time asc"),
       []
     );
   });
 
   test("Should return an empty array when no logs are found", async () => {
-    const options = { admin_id: 9999 };
-    mockPool.query.mockResolvedValue({ rows: [] });
+    const options = { adminId: 9999 };
+    db.query.mockResolvedValue({ rows: [] });
 
     const logs = await getAdminlogsDb(options);
-    expect(logs.data).toHaveLength(0);
-    expect(mockPool.query).toHaveBeenCalledTimes(1);
+    expect(logs).toHaveLength(0);
+    expect(db.query).toHaveBeenCalledTimes(1);
   });
 
   test("Should handle database errors gracefully", async () => {
-    mockPool.query.mockRejectedValue(new Error("Database error"));
+    db.query.mockRejectedValue(new Error("Database error"));
 
     await expect(getAdminlogsDb({})).rejects.toThrow("Database error");
-    expect(mockPool.query).toHaveBeenCalledTimes(1);
+    expect(db.query).toHaveBeenCalledTimes(1);
   });
 });
