@@ -351,5 +351,32 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body.data).not.toHaveProperty("login_attempts");
       expect(response.body.data).not.toHaveProperty("phone");
     });
+    
+    test("Test case: /s1/admins/register verify schema", async () => {
+      const response = await request(app)
+        .post(baseUrl + "/s1/admins/register")
+        .set("Accept", "application/json")
+        .send({
+          full_name: "John Smith",
+          email: "john.smith@example.com",
+          phone: "+1234567890",
+          password: "SecureP@ss123",
+          activation_code: "ABCD1234",
+        });
+    
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty("data");
+      
+      // Schema validation
+      expect(response.body.data).toMatchObject({
+        id: expect.any(Number),
+        email: expect.any(String),
+        full_name: expect.any(String)
+      });
+    
+      // Ensure no extra fields
+      expect(Object.keys(response.body.data)).toHaveLength(3);
+      expect(Object.keys(response.body.data).sort()).toEqual(['id', 'email', 'full_name'].sort());
+    });    
   });
 });
