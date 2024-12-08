@@ -9,12 +9,11 @@ describe("postProductsDb", () => {
         id: 123,
         product_name: "RGB keyboard",
         category_id: 12345,
-        // category_name: "Keyboards",
         short_description: "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
         detailed_description: "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
-        // product_photos: [
-        //     "https://example.com/photo1.jpg",
-        //     "https://example.com/photo2.jpg"],
+        product_photos: [
+            "https://example.com/photo1.jpg",
+            "https://example.com/photo2.jpg"],
         product_url: "https://youtu.be/0LE0trd740Q"
         };
 
@@ -22,12 +21,11 @@ describe("postProductsDb", () => {
         id: 123,
         product_name: "RGB keyboard",
         category_id: "12345",
-        // category_name: "Keyboards",
         short_description: "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
         detailed_description: "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
-        // product_photos: [
-        //     "https://example.com/photo1.jpg",
-        //     "https://example.com/photo2.jpg"],
+        product_photos: [
+            "https://example.com/photo1.jpg",
+            "https://example.com/photo2.jpg"],
         product_url: "https://youtu.be/0LE0trd740Q"
         };
 
