@@ -23,7 +23,7 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john.smith@example.com",
         phone: "+1234567890",
-        password: "SecureP@ss123",
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
         address: "123 Admin Street",
         profile_photo: "https://example.com/photo.jpg",
@@ -68,7 +68,7 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "existing@example.com",
         phone: "+1234567890",
-        password: "SecureP@ss123",
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
@@ -93,7 +93,7 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password: "SecureP@ss123",
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
@@ -124,8 +124,8 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password: "SecureP@ss123",
-        activation_code: "ABCD1234",
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        activation_code: "ABCD1234"
       };
 
       // Queries: BEGIN, SELECT email, SELECT ActivationCode, INSERT admin, UPDATE code, COMMIT
@@ -157,7 +157,7 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password: "SecureP@ss123",
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
@@ -209,7 +209,7 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password: "SecureP@ss123",
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
         // Optional fields not provided: address, profile_photo, bio
       };
@@ -242,7 +242,7 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password: "SecureP@ss123",
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
@@ -276,21 +276,18 @@ describe('AdminsDatabase', () => {
       expect(result.data.updated_at).toBeDefined();
     });
 
-    test("should store password as hashed value", async () => {
+    test('should store pre-hashed password correctly', async () => {
       const mockAdmin = {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password: "SecureP@ss123",
-        activation_code: "ABCD1234",
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",  // Changed from hashedPassword to password_hash
+        activation_code: "ABCD1234"
       };
 
-      // Queries: BEGIN, SELECT email, SELECT ActivationCode, INSERT admin, UPDATE code, COMMIT
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ // SELECT email
-          rows: []
-        })
+        .mockResolvedValueOnce({ rows: [] }) // SELECT email
         .mockResolvedValueOnce({ // SELECT ActivationCode
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
@@ -311,10 +308,9 @@ describe('AdminsDatabase', () => {
 
       await postAdminsRegisterDb(mockAdmin);
 
-      // INSERT is at call[3], check its parameters
-      const queryCall = mockPool.query.mock.calls[3];
-      expect(queryCall[1]).not.toContain(mockAdmin.password); // password should not be plain
-      expect(queryCall[1][3]).toMatch(/^\$2[aby]\$\d{1,2}\$[./A-Za-z0-9]{53}$/); // hashed password
+      const insertParams = mockPool.query.mock.calls[3][1];
+      expect(insertParams[3]).toBe(mockAdmin.password_hash);
+      expect(insertParams[3]).toMatch(/^\$2[aby]\$\d{1,2}\$[./A-Za-z0-9]{53}$/); // hashed password
     });
 
     test("should set default status as active", async () => {
@@ -322,7 +318,7 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password: "SecureP@ss123",
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
