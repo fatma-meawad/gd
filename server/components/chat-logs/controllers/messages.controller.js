@@ -24,7 +24,7 @@ exports.postMessages = asyncHandler(async (req, res) => {
     throw new AppError({
       statuscode: StatusCodes.INTERNAL_SERVER_ERROR,
       message: "Message could not be saved",
-      locations: ["messages.controller.js"],
+      locations: [messages.postMessages],
       errors: [error],
     });
   }

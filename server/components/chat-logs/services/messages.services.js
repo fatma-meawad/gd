@@ -19,8 +19,6 @@ module.exports.postMessages = async (
   } catch (error) {
     throw new AppError({
       statuscode: StatusCodes.INTERNAL_SERVER_ERROR,
-      messages: "Message could not be saved",
-      location: ["messages.services.js"],
       error: [error],
     });
   }
