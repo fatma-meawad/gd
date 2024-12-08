@@ -1,4 +1,5 @@
-const pool = require("../config/dbconfig");
+const db = require("../config/dbconfig.js");
+const UNIQUE_VIOLATION = "23505";
 
 module.exports.postAdminsLoginDb = async (credentials) => {
   /**
@@ -104,14 +105,106 @@ module.exports.postAdminsPasswordResetDb = async (options) => {
 };
 
 module.exports.postAdminsRegisterDb = async (admin) => {
-  /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
-  1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
-  2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
-  3- you can access the schema.json (imported above) and use objects in it/modify or create them.
-*/
-  return {
-    data: {},
-    messages: ["postAdminsRegisterDb not implemented yet"],
-    locations: ["admins.database.js"],
-  };
+  const {
+    full_name,
+    email,
+    phone,
+    password_hash,
+    activation_code,
+    address = null,
+    profile_photo = null,
+    bio = null,
+  } = admin;
+
+  try {
+    // Start transaction
+    await db.query("BEGIN");
+
+    // 1. Check if email already exists
+    const emailCheck = await db.query(
+      "SELECT email FROM AdminAccount WHERE email = $1",
+      [email]
+    );
+
+    if (emailCheck.rows.length > 0) {
+      await db.query("ROLLBACK");
+      throw new Error("Email already registered");
+    }
+
+    // 2. Validate activation code
+    const codeRes = await db.query(
+      `SELECT * FROM ActivationCode 
+       WHERE code = $1 
+       AND is_used = false 
+       AND expiry_date > CURRENT_TIMESTAMP
+       FOR UPDATE`,
+      [activation_code]
+    );
+
+    if (codeRes.rows.length === 0) {
+      await db.query("ROLLBACK");
+      throw new Error("Invalid or expired registration code");
+    }
+
+    // 3. Insert admin
+    let insertAdminRes;
+    try {
+      insertAdminRes = await db.query(
+        `INSERT INTO AdminAccount (
+            full_name, email, phone, password_hash,
+            address, profile_photo, bio,
+            status, login_attempts
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+          RETURNING 
+            id, 
+            full_name, 
+            email`,
+        [
+          full_name,
+          email,
+          phone,
+          password_hash,
+          address,
+          profile_photo,
+          bio,
+          "active",
+          0, // Initial login attempts
+        ]
+      );
+    } catch (err) {
+      if (
+        err.code === UNIQUE_VIOLATION &&
+        err.constraint === "adminaccount_email_key"
+      ) {
+        await db.query("ROLLBACK");
+        throw new Error("Email already registered");
+      }
+      throw err;
+    }
+
+    const newAdmin = insertAdminRes.rows[0];
+
+    await db.query(
+      `UPDATE ActivationCode
+       SET is_used = $1, used_by = $2
+       WHERE code = $3`,
+      [true, newAdmin.id, activation_code]
+    );
+
+    await db.query("COMMIT");
+
+    return {
+      data: newAdmin,
+      messages: ["Admin registered successfully"],
+      locations: ["admins.database.js"],
+    };
+  } catch (error) {
+    try {
+      await db.query("ROLLBACK");
+    } catch (rollbackError) {
+      throw new Error("Transaction rollback failed during error handling");
+    }
+    throw error;
+  }
 };

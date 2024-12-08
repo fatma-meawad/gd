@@ -1,6 +1,13 @@
 const admins = require("../db/admins.db");
 const path = require("path");
+const bcrypt = require("bcrypt");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
+
+const HTTP_STATUS_CONFLICT = 409;
+const HTTP_STATUS_BAD_REQUEST = 400;
+const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
+const SALT_ROUNDS = 10;
+const LOCATION = "admins.service.js";
 
 module.exports.postAdminsLogin = async (credentials) => {
   // Implement your business logic here...
@@ -113,34 +120,44 @@ module.exports.putAdminsPasswordReset = async (adminId, newPassword) => {
   }
 };
 
-module.exports.postAdminsPasswordReset = async (email) => {
-  // Implement your business logic here...
-
-  try {
-    let result = await admins.postAdminsPasswordResetDb(email);
-    //delete this when you actually implement something.
-    result.messages.push(
-      "postAdminsPasswordReset services not implemented yet"
-    );
-    result.locations.push("admins.services.js");
-
-    return result;
-  } catch (error) {
-    throw new AppError(error);
-  }
-};
-
 module.exports.postAdminsRegister = async (admin) => {
-  // Implement your business logic here...
-
   try {
-    let result = await admins.postAdminsRegisterDb(admin);
-    //delete this when you actually implement something.
-    result.messages.push("postAdminsRegister services not implemented yet");
-    result.locations.push("admins.services.js");
+    const password_hash = await bcrypt.hash(admin.password, SALT_ROUNDS);
 
-    return result;
+    const adminToCreate = {
+      ...admin,
+      password_hash,
+    };
+
+    const result = await admins.postAdminsRegisterDb(adminToCreate);
+
+    return {
+      data: result.data,
+      messages: result.messages,
+      locations: [...result.locations, LOCATION],
+    };
   } catch (error) {
-    throw new AppError(error);
+    if (error.message === "Email already registered") {
+      const appError = new AppError({
+        errors: [error.message],
+        locations: [LOCATION],
+      });
+      appError.statusCode = HTTP_STATUS_CONFLICT;
+      throw appError;
+    }
+    if (error.message === "Invalid or expired registration code") {
+      const appError = new AppError({
+        errors: [error.message],
+        locations: [LOCATION],
+      });
+      appError.statusCode = HTTP_STATUS_BAD_REQUEST;
+      throw appError;
+    }
+    const appError = new AppError({
+      errors: [error.message || "Internal server error"],
+      locations: [LOCATION],
+    });
+    appError.statusCode = HTTP_STATUS_INTERNAL_SERVER_ERROR;
+    throw appError;
   }
 };
