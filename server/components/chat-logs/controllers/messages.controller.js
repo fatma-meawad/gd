@@ -13,7 +13,7 @@ exports.postMessages = asyncHandler(async (req, res) => {
   const { sender_id, recipient_id, thread, content } = req.body;
 
   if(!req.headers.auth){
-    return res.status(401).json({
+    return res.status(StatusCodes.UNAUTHORIZED).json({
       message: '"auth" header is invalid',
       status: "401",
       errors: ["401 unauthorized"],
