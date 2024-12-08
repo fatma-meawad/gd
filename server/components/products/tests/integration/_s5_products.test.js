@@ -71,7 +71,7 @@ describe("Test suite for /s5/products", () => {
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
     });
-//New test cases for scenarios: correctProductData, wrongCatIdFormat, missingProductName.
+    //New test cases for scenarios: correctProductData, wrongCatIdFormat, missingProductName.
     test("Test case: /s5/products with Request Example: correctProductData", async () => {
       const response = await request(app)
         .post(baseUrl + "/s5/products")
@@ -81,20 +81,22 @@ describe("Test suite for /s5/products", () => {
         .send({
           product_name: "RGB keyboard",
           category_id: 12345,
-          short_description: "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
-          detailed_description: "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
+          short_description:
+            "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
+          detailed_description:
+            "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
           product_photos: [
             "https://example.com/photo1.jpg",
-            "https://example.com/photo2.jpg"
+            "https://example.com/photo2.jpg",
           ],
-          product_url: "https://youtu.be/0LE0trd740Q"
+          product_url: "https://youtu.be/0LE0trd740Q",
         })
         .set("Content-Type", "application/json");
 
-        expect(response.status).toBe(200);
-        expect(response.headers["content-type"]).toMatch(/json/);
-        expect(response.body).toEqual(expect.any(Object));
-        expect(response.body).toHaveProperty("result");
+      expect(response.status).toBe(200);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("result");
     });
 
     test("Test case: /s5/products with Request Example: wrongCatIdFormat", async () => {
@@ -105,21 +107,23 @@ describe("Test suite for /s5/products", () => {
         .send({
           product_name: "RGB keyboard",
           category_id: "12345n",
-          short_description: "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
-          detailed_description: "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
+          short_description:
+            "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
+          detailed_description:
+            "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
           product_photos: [
             "https://example.com/photo1.jpg",
-            "https://example.com/photo2.jpg"
+            "https://example.com/photo2.jpg",
           ],
-          product_url: "https://youtu.be/0LE0trd740Q"
+          product_url: "https://youtu.be/0LE0trd740Q",
         })
         .set("Content-Type", "application/json");
 
-        expect(response.status).toBe(400);
-        expect(response.headers["content-type"]).toMatch(/json/);
-        expect(response.body).toEqual(expect.any(Object));
-        expect(response.body).toEqual(expect.any(Object));
-        expect(response.body).toHaveProperty("errors");
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
     });
 
     test("Test case: /s5/products with Request Example: missingProductName", async () => {
@@ -130,21 +134,23 @@ describe("Test suite for /s5/products", () => {
         .send({
           // product_name: "RGB keyboard",
           category_id: 12345,
-          short_description: "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
-          detailed_description: "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
+          short_description:
+            "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
+          detailed_description:
+            "Upgrade your typing experience with this wireless RGB keyboard, combining style and functionality. With customizable RGB lighting, an ergonomic design, and quiet, responsive keys, it ensures a smooth typing experience whether you're working or gaming. Benefit from stable wireless connectivity, extended battery life, and a sleek, vibrant design that enhances any workspace",
           product_photos: [
             "https://example.com/photo1.jpg",
-            "https://example.com/photo2.jpg"
+            "https://example.com/photo2.jpg",
           ],
-          product_url: "https://youtu.be/0LE0trd740Q"
+          product_url: "https://youtu.be/0LE0trd740Q",
         })
         .set("Content-Type", "application/json");
 
-        expect(response.status).toBe(400);
-        expect(response.headers["content-type"]).toMatch(/json/);
-        expect(response.body).toEqual(expect.any(Object));
-        expect(response.body).toEqual(expect.any(Object));
-        expect(response.body).toHaveProperty("errors");
+      expect(response.status).toBe(400);
+      expect(response.headers["content-type"]).toMatch(/json/);
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toEqual(expect.any(Object));
+      expect(response.body).toHaveProperty("errors");
     });
   });
 });

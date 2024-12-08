@@ -1,9 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const products = require("../services/products.services");
 const AppError = require("../../../utils/error");
-const { StatusCodes } = require("http-status-codes")
+const { StatusCodes } = require("http-status-codes");
 const { CONTROLLER_FILE, STATUS_CODES } = require("./utils");
-
 
 exports.getProducts = asyncHandler(async (req, res) => {
   let limit;
@@ -51,75 +50,79 @@ exports.getProducts = asyncHandler(async (req, res) => {
 
 exports.postProducts = asyncHandler(async (req, res) => {
   const headers = req.headers;
-  
+
   if (!headers.auth) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-          status: "error",
-          message: "Authentication header is missing",
-          errors: ["401 Unauthorized"],
-          locations: ["products.controller.js"],
-      });
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      status: "error",
+      message: "Authentication header is missing",
+      errors: ["401 Unauthorized"],
+      locations: ["products.controller.js"],
+    });
   }
 
-  const { 
-      product_name: productName, 
-      category_id: categoryId, 
-      // category_name: categoryName, 
-      short_description: shortDescription, 
-      detailed_description: detailedDescription, 
-      product_photos: productPhotos, 
-      product_url: productUrl 
+  const {
+    product_name: productName,
+    category_id: categoryId,
+    // category_name: categoryName,
+    short_description: shortDescription,
+    detailed_description: detailedDescription,
+    product_photos: productPhotos,
+    product_url: productUrl,
   } = req.body;
 
   if (!productName || !categoryId || !shortDescription) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-          status: "error",
-          message: "Missing required fields",
-          errors: ["Invalid input"],
-          locations: ["products.controller.js"],
-      });
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      status: "error",
+      message: "Missing required fields",
+      errors: ["Invalid input"],
+      locations: ["products.controller.js"],
+    });
   }
 
   if (
-      typeof productName !== "string" || 
-      typeof categoryId !== "number" || 
-      typeof shortDescription !== "string"
+    typeof productName !== "string" ||
+    typeof categoryId !== "number" ||
+    typeof shortDescription !== "string"
   ) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-          status: "error",
-          message: "Invalid data types",
-          errors: ["Invalid input"],
-          locations: ["products.controller.js"],
-      });
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      status: "error",
+      message: "Invalid data types",
+      errors: ["Invalid input"],
+      locations: ["products.controller.js"],
+    });
   }
 
   const options = {
-      productName,
-      categoryId,
-      // categoryName,
-      shortDescription,
-      detailedDescription,
-      productPhotos,
-      productUrl
+    productName,
+    categoryId,
+    // categoryName,
+    shortDescription,
+    detailedDescription,
+    productPhotos,
+    productUrl,
   };
 
   try {
-      const result = await products.postProducts(
-          options.productName,
-          options.categoryId,
-          // options.categoryName,
-          options.shortDescription,
-          options.detailedDescription,
-          options.productPhotos,
-          options.productUrl
-      );
-      
-      return res.status(StatusCodes.OK).json({result});
+    const result = await products.postProducts(
+      options.productName,
+      options.categoryId,
+      // options.categoryName,
+      options.shortDescription,
+      options.detailedDescription,
+      options.productPhotos,
+      options.productUrl
+    );
+
+    return res.status(StatusCodes.OK).json({ result });
   } catch (error) {
-      throw new AppError("Error creating product", StatusCodes.INTERNAL_SERVER_ERROR, {
-          originalError: error,
-          locations: ["products.controller.js"],
-      });
+    throw new AppError(
+      "Error creating product",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      {
+        originalError: error,
+        locations: ["products.controller.js"],
+      }
+    );
   }
 });
 
