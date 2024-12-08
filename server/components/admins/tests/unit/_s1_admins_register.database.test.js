@@ -9,6 +9,8 @@ jest.mock('../../config/dbconfig.js', () => ({
   end: jest.fn()
 }));
 
+const MILLISECONDS_IN_A_DAY = 86400000;
+
 describe('AdminsDatabase', () => {
   beforeEach(() => {
     mockPool.query.mockReset();
@@ -33,7 +35,7 @@ describe('AdminsDatabase', () => {
           rows: []
         })
         .mockResolvedValueOnce({ // SELECT ActivationCode
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
+          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
         })
         .mockResolvedValueOnce({ // INSERT Admin
           rows: [{
@@ -97,7 +99,7 @@ describe('AdminsDatabase', () => {
           rows: []
         })
         .mockResolvedValueOnce({ // SELECT ActivationCode
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
+          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
         })
         .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
@@ -127,7 +129,7 @@ describe('AdminsDatabase', () => {
           rows: []
         })
         .mockResolvedValueOnce({ // SELECT ActivationCode
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
+          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
         })
         .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [{ is_used: true }] })
@@ -158,7 +160,7 @@ describe('AdminsDatabase', () => {
           rows: []
         })
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
+          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
         })
         .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
@@ -208,7 +210,7 @@ describe('AdminsDatabase', () => {
           rows: []
         })
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
+          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
         })
         .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
@@ -238,7 +240,7 @@ describe('AdminsDatabase', () => {
           rows: []
         })
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
+          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
         })
         .mockResolvedValueOnce({
           rows: [{
@@ -274,7 +276,7 @@ describe('AdminsDatabase', () => {
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ rows: [] }) // SELECT email
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
+          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
         })
         .mockResolvedValueOnce({
           rows: [{
@@ -313,7 +315,7 @@ describe('AdminsDatabase', () => {
           rows: []
         })
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
+          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
         })
         .mockResolvedValueOnce({
           rows: [{
