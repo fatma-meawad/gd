@@ -4,6 +4,9 @@ const ROOT_DIR = process.cwd();
 const app = require(ROOT_DIR + "/app");
 const baseUrl = process.env.BASE_API_TEST_URL;
 const db = require("../../config/dbconfig");
+const HTTP_STATUS_CREATED = 201;
+const HTTP_STATUS_CONFLICT = 409;
+const HTTP_STATUS_BAD_REQUEST = 400;
 
 beforeAll(async () => {
   try {
@@ -79,7 +82,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(HTTP_STATUS_CREATED);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("data");
@@ -105,7 +108,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(HTTP_STATUS_BAD_REQUEST);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
@@ -130,7 +133,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(HTTP_STATUS_BAD_REQUEST);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
@@ -155,7 +158,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(HTTP_STATUS_BAD_REQUEST);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
@@ -177,7 +180,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(HTTP_STATUS_BAD_REQUEST);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
@@ -202,7 +205,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(HTTP_STATUS_BAD_REQUEST);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
@@ -227,7 +230,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(HTTP_STATUS_BAD_REQUEST);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
@@ -253,7 +256,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(HTTP_STATUS_BAD_REQUEST);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
@@ -279,7 +282,7 @@ describe("Test suite for /s1/admins/register", () => {
           activation_code: "ABCD1234"
         });
 
-      expect(response.status).toBe(409);
+      expect(response.status).toBe(HTTP_STATUS_CONFLICT);
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors).toContain("Email already registered");
     });
@@ -298,7 +301,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(HTTP_STATUS_BAD_REQUEST);
       expect(response.body).toHaveProperty("errors");
       expect(response.body.errors).toContain(
         "Invalid or expired registration code"
@@ -319,7 +322,7 @@ describe("Test suite for /s1/admins/register", () => {
         })
         .set("Content-Type", "application/json");
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(HTTP_STATUS_CREATED);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("data");
@@ -345,7 +348,7 @@ describe("Test suite for /s1/admins/register", () => {
           activation_code: "ABCD1234",
         });
     
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(HTTP_STATUS_CREATED);
       expect(response.body).toHaveProperty("data");
       
       expect(response.body.data).toMatchObject({
