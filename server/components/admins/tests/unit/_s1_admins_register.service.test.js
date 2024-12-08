@@ -2,10 +2,8 @@ const { postAdminsRegister } = require('../../services/admins.services');
 const adminsDb = require('../../db/admins.db');
 const bcrypt = require('bcrypt');
 
-// Mock the database layer
 jest.mock('../../db/admins.db');
 
-// Mock bcrypt
 jest.mock('bcrypt');
 
 describe('AdminsService', () => {
