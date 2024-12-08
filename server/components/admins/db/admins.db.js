@@ -158,12 +158,7 @@ module.exports.postAdminsRegisterDb = async (admin) => {
           RETURNING 
             id, 
             full_name, 
-            email, 
-            phone, 
-            status,
-            login_attempts, 
-            created_at, 
-            updated_at`,
+            email`,
         [
           full_name,
           email,
