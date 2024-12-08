@@ -200,7 +200,7 @@ module.exports.postAdminsRegisterDb = async (admin) => {
     try {
       await db.query("ROLLBACK");
     } catch (rollbackError) {
-      console.error("Rollback failed:", rollbackError);
+      throw new Error("Transaction rollback failed during error handling");
     }
     throw error;
   }
