@@ -1,4 +1,5 @@
 const db = require("../config/dbconfig.js");
+const UNIQUE_VIOLATION = '23505';
 
 module.exports.postAdminsLoginDb = async (credentials) => {
   /**
@@ -121,7 +122,7 @@ module.exports.postAdminsRegisterDb = async (admin) => {
 
     // 1. Check if email already exists
     const emailCheck = await db.query(
-      'SELECT email FROM AdminAccount WHERE email = $1',
+      "SELECT email FROM AdminAccount WHERE email = $1",
       [email]
     );
 
@@ -167,12 +168,12 @@ module.exports.postAdminsRegisterDb = async (admin) => {
           address,
           profile_photo,
           bio,
-          'active',  
-          0          // Initial login attempts
+          "active",
+          0, // Initial login attempts
         ]
       );
     } catch (err) {
-      if (err.code === '23505' && err.constraint === 'adminaccount_email_key') {
+      if (err.code === UNIQUE_VIOLATION && err.constraint === "adminaccount_email_key") {
         await db.query("ROLLBACK");
         throw new Error("Email already registered");
       }
@@ -195,7 +196,6 @@ module.exports.postAdminsRegisterDb = async (admin) => {
       messages: ["Admin registered successfully"],
       locations: ["admins.database.js"],
     };
-
   } catch (error) {
     try {
       await db.query("ROLLBACK");
