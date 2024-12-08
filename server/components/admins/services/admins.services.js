@@ -1,13 +1,13 @@
 const admins = require("../db/admins.db");
 const path = require("path");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
 
 const HTTP_STATUS_CONFLICT = 409;
 const HTTP_STATUS_BAD_REQUEST = 400;
 const HTTP_STATUS_INTERNAL_SERVER_ERROR = 500;
 const SALT_ROUNDS = 10;
-const LOCATION = 'admins.service.js';
+const LOCATION = "admins.service.js";
 
 module.exports.postAdminsLogin = async (credentials) => {
   // Implement your business logic here...
@@ -120,29 +120,27 @@ module.exports.putAdminsPasswordReset = async (adminId, newPassword) => {
   }
 };
 
-
 module.exports.postAdminsRegister = async (admin) => {
   try {
     const password_hash = await bcrypt.hash(admin.password, SALT_ROUNDS);
 
     const adminToCreate = {
       ...admin,
-      password_hash
+      password_hash,
     };
 
     const result = await admins.postAdminsRegisterDb(adminToCreate);
-    
+
     return {
       data: result.data,
       messages: result.messages,
-      locations: [...result.locations, LOCATION]
+      locations: [...result.locations, LOCATION],
     };
-
   } catch (error) {
     if (error.message === "Email already registered") {
       const appError = new AppError({
         errors: [error.message],
-        locations: [LOCATION]
+        locations: [LOCATION],
       });
       appError.statusCode = HTTP_STATUS_CONFLICT;
       throw appError;
@@ -150,14 +148,14 @@ module.exports.postAdminsRegister = async (admin) => {
     if (error.message === "Invalid or expired registration code") {
       const appError = new AppError({
         errors: [error.message],
-        locations: [LOCATION]
+        locations: [LOCATION],
       });
       appError.statusCode = HTTP_STATUS_BAD_REQUEST;
       throw appError;
     }
     const appError = new AppError({
       errors: [error.message || "Internal server error"],
-      locations: [LOCATION]
+      locations: [LOCATION],
     });
     appError.statusCode = HTTP_STATUS_INTERNAL_SERVER_ERROR;
     throw appError;

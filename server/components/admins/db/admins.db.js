@@ -1,5 +1,5 @@
 const db = require("../config/dbconfig.js");
-const UNIQUE_VIOLATION = '23505';
+const UNIQUE_VIOLATION = "23505";
 
 module.exports.postAdminsLoginDb = async (credentials) => {
   /**
@@ -173,7 +173,10 @@ module.exports.postAdminsRegisterDb = async (admin) => {
         ]
       );
     } catch (err) {
-      if (err.code === UNIQUE_VIOLATION && err.constraint === "adminaccount_email_key") {
+      if (
+        err.code === UNIQUE_VIOLATION &&
+        err.constraint === "adminaccount_email_key"
+      ) {
         await db.query("ROLLBACK");
         throw new Error("Email already registered");
       }

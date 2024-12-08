@@ -1,64 +1,75 @@
-const { postAdminsRegisterDb } = require('../../db/admins.db');
+const { postAdminsRegisterDb } = require("../../db/admins.db");
 
 const mockPool = {
-  query: jest.fn()
+  query: jest.fn(),
 };
 
-jest.mock('../../config/dbconfig.js', () => ({
+jest.mock("../../config/dbconfig.js", () => ({
   query: (text, params) => mockPool.query(text, params),
-  end: jest.fn()
+  end: jest.fn(),
 }));
 
 const MILLISECONDS_IN_A_DAY = 86400000;
 
-describe('AdminsDatabase', () => {
+describe("AdminsDatabase", () => {
   beforeEach(() => {
     mockPool.query.mockReset();
   });
 
-  describe('postAdminsRegisterDb', () => {
-    test('should successfully register a new admin with valid data', async () => {
+  describe("postAdminsRegisterDb", () => {
+    test("should successfully register a new admin with valid data", async () => {
       const mockAdmin = {
         full_name: "John Smith",
         email: "john.smith@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        password_hash:
+          "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
         address: "123 Admin Street",
         profile_photo: "https://example.com/photo.jpg",
-        bio: "Test bio"
+        bio: "Test bio",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ // SELECT email
-          rows: []
+        .mockResolvedValueOnce({
+          // SELECT email
+          rows: [],
         })
-        .mockResolvedValueOnce({ // SELECT ActivationCode
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
+        .mockResolvedValueOnce({
+          // SELECT ActivationCode
+          rows: [
+            {
+              is_used: false,
+              expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY),
+            },
+          ],
         })
-        .mockResolvedValueOnce({ // INSERT Admin
-          rows: [{
-            id: 1,
-            full_name: mockAdmin.full_name,
-            email: mockAdmin.email,
-            phone: mockAdmin.phone,
-            status: 'active',
-            login_attempts: 0,
-            created_at: new Date(),
-            updated_at: new Date()
-          }]
+        .mockResolvedValueOnce({
+          // INSERT Admin
+          rows: [
+            {
+              id: 1,
+              full_name: mockAdmin.full_name,
+              email: mockAdmin.email,
+              phone: mockAdmin.phone,
+              status: "active",
+              login_attempts: 0,
+              created_at: new Date(),
+              updated_at: new Date(),
+            },
+          ],
         })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
         .mockResolvedValueOnce({ rows: [] }); // COMMIT
 
       const result = await postAdminsRegisterDb(mockAdmin);
 
-      expect(result.data).toHaveProperty('id');
-      expect(result.data).toHaveProperty('email', mockAdmin.email);
-      expect(result.data).toHaveProperty('full_name', mockAdmin.full_name);
-      expect(result.messages).toContain('Admin registered successfully');
-      expect(result.locations).toContain('admins.database.js');
+      expect(result.data).toHaveProperty("id");
+      expect(result.data).toHaveProperty("email", mockAdmin.email);
+      expect(result.data).toHaveProperty("full_name", mockAdmin.full_name);
+      expect(result.messages).toContain("Admin registered successfully");
+      expect(result.locations).toContain("admins.database.js");
     });
 
     test("should fail when email already exists", async () => {
@@ -66,14 +77,16 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "existing@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        password_hash:
+          "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ // SELECT email
-          rows: [{ email: mockAdmin.email }]
+        .mockResolvedValueOnce({
+          // SELECT email
+          rows: [{ email: mockAdmin.email }],
         })
         .mockResolvedValueOnce({ rows: [] }); // ROLLBACK
 
@@ -89,17 +102,25 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        password_hash:
+          "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ // SELECT email
-          rows: []
+        .mockResolvedValueOnce({
+          // SELECT email
+          rows: [],
         })
-        .mockResolvedValueOnce({ // SELECT ActivationCode
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
+        .mockResolvedValueOnce({
+          // SELECT ActivationCode
+          rows: [
+            {
+              is_used: false,
+              expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY),
+            },
+          ],
         })
         .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
@@ -108,7 +129,9 @@ describe('AdminsDatabase', () => {
       await postAdminsRegisterDb(mockAdmin);
 
       // SELECT ActivationCode is at call[2]
-      expect(mockPool.query.mock.calls[2][0]).toContain("SELECT * FROM ActivationCode");
+      expect(mockPool.query.mock.calls[2][0]).toContain(
+        "SELECT * FROM ActivationCode"
+      );
       expect(mockPool.query.mock.calls[2][1]).toEqual([
         mockAdmin.activation_code,
       ]);
@@ -119,17 +142,25 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
-        activation_code: "ABCD1234"
+        password_hash:
+          "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        activation_code: "ABCD1234",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ // SELECT email
-          rows: []
+        .mockResolvedValueOnce({
+          // SELECT email
+          rows: [],
         })
-        .mockResolvedValueOnce({ // SELECT ActivationCode
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
+        .mockResolvedValueOnce({
+          // SELECT ActivationCode
+          rows: [
+            {
+              is_used: false,
+              expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY),
+            },
+          ],
         })
         .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [{ is_used: true }] })
@@ -137,7 +168,9 @@ describe('AdminsDatabase', () => {
 
       await postAdminsRegisterDb(mockAdmin);
 
-      expect(mockPool.query.mock.calls[4][0]).toContain("UPDATE ActivationCode");
+      expect(mockPool.query.mock.calls[4][0]).toContain(
+        "UPDATE ActivationCode"
+      );
       expect(mockPool.query.mock.calls[4][1]).toEqual([
         true,
         1,
@@ -150,17 +183,24 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        password_hash:
+          "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ // SELECT email
-          rows: []
+        .mockResolvedValueOnce({
+          // SELECT email
+          rows: [],
         })
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
+          rows: [
+            {
+              is_used: false,
+              expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY),
+            },
+          ],
         })
         .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
@@ -183,13 +223,16 @@ describe('AdminsDatabase', () => {
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] })
-        .mockResolvedValueOnce({ // SELECT email
-          rows: []
+        .mockResolvedValueOnce({
+          // SELECT email
+          rows: [],
         })
         .mockRejectedValueOnce(new Error("Database error")) // SELECT ActivationCode fails
         .mockResolvedValueOnce({ rows: [] }); // ROLLBACK
 
-      await expect(postAdminsRegisterDb(mockAdmin)).rejects.toThrow("Database error");
+      await expect(postAdminsRegisterDb(mockAdmin)).rejects.toThrow(
+        "Database error"
+      );
 
       // ROLLBACK is at call[3]
       expect(mockPool.query).toHaveBeenLastCalledWith("ROLLBACK", undefined);
@@ -200,17 +243,24 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        password_hash:
+          "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ // SELECT email
-          rows: []
+        .mockResolvedValueOnce({
+          // SELECT email
+          rows: [],
         })
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
+          rows: [
+            {
+              is_used: false,
+              expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY),
+            },
+          ],
         })
         .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
@@ -230,29 +280,38 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        password_hash:
+          "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ // SELECT email
-          rows: []
+        .mockResolvedValueOnce({
+          // SELECT email
+          rows: [],
         })
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
+          rows: [
+            {
+              is_used: false,
+              expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY),
+            },
+          ],
         })
         .mockResolvedValueOnce({
-          rows: [{
-            id: 1,
-            full_name: mockAdmin.full_name,
-            email: mockAdmin.email,
-            phone: mockAdmin.phone,
-            status: 'active',
-            login_attempts: 0,
-            created_at: new Date(),
-            updated_at: new Date()
-          }]
+          rows: [
+            {
+              id: 1,
+              full_name: mockAdmin.full_name,
+              email: mockAdmin.email,
+              phone: mockAdmin.phone,
+              status: "active",
+              login_attempts: 0,
+              created_at: new Date(),
+              updated_at: new Date(),
+            },
+          ],
         })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
         .mockResolvedValueOnce({ rows: [] }); // COMMIT
@@ -263,32 +322,40 @@ describe('AdminsDatabase', () => {
       expect(result.data.updated_at).toBeDefined();
     });
 
-    test('should store pre-hashed password correctly', async () => {
+    test("should store pre-hashed password correctly", async () => {
       const mockAdmin = {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
-        activation_code: "ABCD1234"
+        password_hash:
+          "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        activation_code: "ABCD1234",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ rows: [] }) // SELECT email
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
+          rows: [
+            {
+              is_used: false,
+              expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY),
+            },
+          ],
         })
         .mockResolvedValueOnce({
-          rows: [{
-            id: 1,
-            full_name: mockAdmin.full_name,
-            email: mockAdmin.email,
-            phone: mockAdmin.phone,
-            status: 'active',
-            login_attempts: 0,
-            created_at: new Date(),
-            updated_at: new Date()
-          }]
+          rows: [
+            {
+              id: 1,
+              full_name: mockAdmin.full_name,
+              email: mockAdmin.email,
+              phone: mockAdmin.phone,
+              status: "active",
+              login_attempts: 0,
+              created_at: new Date(),
+              updated_at: new Date(),
+            },
+          ],
         })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
         .mockResolvedValueOnce({ rows: [] }); // COMMIT
@@ -305,29 +372,38 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
+        password_hash:
+          "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
-        .mockResolvedValueOnce({ // SELECT email
-          rows: []
+        .mockResolvedValueOnce({
+          // SELECT email
+          rows: [],
         })
         .mockResolvedValueOnce({
-          rows: [{ is_used: false, expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY) }]
+          rows: [
+            {
+              is_used: false,
+              expiry_date: new Date(Date.now() + MILLISECONDS_IN_A_DAY),
+            },
+          ],
         })
         .mockResolvedValueOnce({
-          rows: [{
-            id: 1,
-            full_name: mockAdmin.full_name,
-            email: mockAdmin.email,
-            phone: mockAdmin.phone,
-            status: "active",
-            login_attempts: 0,
-            created_at: new Date(),
-            updated_at: new Date()
-          }]
+          rows: [
+            {
+              id: 1,
+              full_name: mockAdmin.full_name,
+              email: mockAdmin.email,
+              phone: mockAdmin.phone,
+              status: "active",
+              login_attempts: 0,
+              created_at: new Date(),
+              updated_at: new Date(),
+            },
+          ],
         })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
         .mockResolvedValueOnce({ rows: [] }); // COMMIT

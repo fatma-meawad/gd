@@ -13,7 +13,7 @@ beforeAll(async () => {
     await db.query("DELETE FROM ActivationCode");
     await db.query("DELETE FROM AdminAccount");
   } catch (error) {
-    console.error('Test setup error:', error);
+    console.error("Test setup error:", error);
     throw error;
   }
 });
@@ -24,7 +24,7 @@ afterAll(async () => {
     await db.query("DELETE FROM AdminAccount");
     await db.end();
   } catch (error) {
-    console.error('Test cleanup error:', error);
+    console.error("Test cleanup error:", error);
     throw error;
   }
 });
@@ -42,7 +42,7 @@ describe("Test suite for /s1/admins/register", () => {
           ('WXYZ5678', 'activation', false, CURRENT_TIMESTAMP + INTERVAL '1 day')
       `);
     } catch (error) {
-      console.error('Test reset error:', error);
+      console.error("Test reset error:", error);
       throw error;
     }
   });
@@ -57,10 +57,10 @@ describe("Test suite for /s1/admins/register", () => {
           email: email,
           phone: "+1234567890",
           password: "SecureP@ss123",
-          activation_code: "WXYZ5678"
+          activation_code: "WXYZ5678",
         });
     } catch (error) {
-      console.error('Error creating test admin:', error);
+      console.error("Error creating test admin:", error);
     }
   };
 
@@ -268,7 +268,6 @@ describe("Test suite for /s1/admins/register", () => {
     });
 
     test("Test case: /s1/admins/register with duplicate email", async () => {
-
       await createTestAdmin();
 
       const response = await request(app)
@@ -279,7 +278,7 @@ describe("Test suite for /s1/admins/register", () => {
           email: "existing@example.com",
           phone: "+1234567891",
           password: "SecureP@ss123",
-          activation_code: "ABCD1234"
+          activation_code: "ABCD1234",
         });
 
       expect(response.status).toBe(HTTP_STATUS_CONFLICT);
@@ -347,18 +346,20 @@ describe("Test suite for /s1/admins/register", () => {
           password: "SecureP@ss123",
           activation_code: "ABCD1234",
         });
-    
+
       expect(response.status).toBe(HTTP_STATUS_CREATED);
       expect(response.body).toHaveProperty("data");
-      
+
       expect(response.body.data).toMatchObject({
         id: expect.any(Number),
         email: expect.any(String),
-        full_name: expect.any(String)
+        full_name: expect.any(String),
       });
-    
+
       expect(Object.keys(response.body.data)).toHaveLength(3);
-      expect(Object.keys(response.body.data).sort()).toEqual(['id', 'email', 'full_name'].sort());
-    });    
+      expect(Object.keys(response.body.data).sort()).toEqual(
+        ["id", "email", "full_name"].sort()
+      );
+    });
   });
 });

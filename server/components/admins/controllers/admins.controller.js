@@ -241,7 +241,7 @@ exports.postAdminsRegister = asyncHandler(async (req, res, next) => {
       password: req.body.password,
       address: req.body.address,
       profile_photo: req.body.profile_photo,
-      bio: req.body.bio
+      bio: req.body.bio,
     };
 
     const result = await admins.postAdminsRegister(admin);
