@@ -121,7 +121,7 @@ module.exports.postAdminsRegister = async (admin) => {
 
     const adminToCreate = {
       ...admin,
-      password_hash  // Now matches DB layer expectation
+      password_hash
     };
 
     const result = await admins.postAdminsRegisterDb(adminToCreate);
