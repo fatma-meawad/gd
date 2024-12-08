@@ -1,13 +1,16 @@
-function getProducts() {
+/**
+ * Fetches and returns a list of products.
+ * Not implementable at the moment. :(
+ *
+ * @param {number | undefined} category_id - The ID of the category to filter products by.
+ * @param {number | undefined} limit - The maximum number of products to return.
+ * @param {string | undefined} cursor - The cursor for pagination.
+ * @returns {Promise<Array>} A promise that resolves to an array of products.
+ */
+function getProducts(category_id, limit, cursor) {
   // Implementation to fetch and return a list of products
-}
-
-function setProductPrice(product_id, price) {
-  // Implementation to set the price of a specific product
-}
-
-function setProductTags(product_id, tags) {
-  // Implementation to set tags for a specific product
+  // I am aware that the contract does not contemplate the filter by category_id.
+  // But it might have been useful if on the detail page of a category it would have shown a list of products belonging to that category.
 }
 
 function addProduct(productDetails) {
@@ -51,8 +54,6 @@ function getProductsFiltered(category_id, business_account_id) {
 // Export all functions for use in other components
 module.exports = {
   getProducts,
-  setProductPrice,
-  setProductTags,
   addProduct,
   getProductDetails,
   updateProductStock,
