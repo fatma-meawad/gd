@@ -1,12 +1,9 @@
-// server/components/admins/tests/unit/admins.database.test.js
-
 const { postAdminsRegisterDb } = require('../../db/admins.db');
 
 const mockPool = {
   query: jest.fn()
 };
 
-// Mock dbconfig.js before requiring admins.db.js
 jest.mock('../../config/dbconfig.js', () => ({
   query: (text, params) => mockPool.query(text, params),
   end: jest.fn()
@@ -30,7 +27,6 @@ describe('AdminsDatabase', () => {
         bio: "Test bio"
       };
 
-      // Queries: BEGIN, SELECT email, SELECT ActivationCode, INSERT admin, UPDATE code, COMMIT
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ // SELECT email
@@ -72,7 +68,6 @@ describe('AdminsDatabase', () => {
         activation_code: "ABCD1234",
       };
 
-      // Queries: BEGIN, SELECT email (exists), ROLLBACK
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ // SELECT email
@@ -84,7 +79,6 @@ describe('AdminsDatabase', () => {
         "Email already registered"
       );
 
-      // Ensure ROLLBACK is called after email exists
       expect(mockPool.query).toHaveBeenLastCalledWith("ROLLBACK", undefined);
     });
 
@@ -97,7 +91,6 @@ describe('AdminsDatabase', () => {
         activation_code: "ABCD1234",
       };
 
-      // Queries: BEGIN, SELECT email, SELECT ActivationCode, INSERT admin, UPDATE code, COMMIT
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ // SELECT email
@@ -106,7 +99,7 @@ describe('AdminsDatabase', () => {
         .mockResolvedValueOnce({ // SELECT ActivationCode
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
-        .mockResolvedValueOnce({ rows: [{ id: 1 }] }) // INSERT Admin
+        .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
         .mockResolvedValueOnce({ rows: [] }); // COMMIT
 
@@ -128,7 +121,6 @@ describe('AdminsDatabase', () => {
         activation_code: "ABCD1234"
       };
 
-      // Queries: BEGIN, SELECT email, SELECT ActivationCode, INSERT admin, UPDATE code, COMMIT
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ // SELECT email
@@ -137,13 +129,12 @@ describe('AdminsDatabase', () => {
         .mockResolvedValueOnce({ // SELECT ActivationCode
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
-        .mockResolvedValueOnce({ rows: [{ id: 1 }] }) // INSERT Admin
-        .mockResolvedValueOnce({ rows: [{ is_used: true }] }) // UPDATE ActivationCode
+        .mockResolvedValueOnce({ rows: [{ id: 1 }] })
+        .mockResolvedValueOnce({ rows: [{ is_used: true }] })
         .mockResolvedValueOnce({ rows: [] }); // COMMIT
 
       await postAdminsRegisterDb(mockAdmin);
 
-      // UPDATE ActivationCode is at call[4]
       expect(mockPool.query.mock.calls[4][0]).toContain("UPDATE ActivationCode");
       expect(mockPool.query.mock.calls[4][1]).toEqual([
         true,
@@ -161,16 +152,15 @@ describe('AdminsDatabase', () => {
         activation_code: "ABCD1234",
       };
 
-      // Queries: BEGIN, SELECT email, SELECT ActivationCode, INSERT admin, UPDATE code, COMMIT
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ // SELECT email
           rows: []
         })
-        .mockResolvedValueOnce({ // SELECT ActivationCode
+        .mockResolvedValueOnce({
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
-        .mockResolvedValueOnce({ rows: [{ id: 1 }] }) // INSERT Admin
+        .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
         .mockResolvedValueOnce({ rows: [] }); // COMMIT
 
@@ -189,9 +179,8 @@ describe('AdminsDatabase', () => {
         activation_code: "ABCD1234",
       };
 
-      // Queries: BEGIN, SELECT email, SELECT ActivationCode (fails), ROLLBACK
       mockPool.query
-        .mockResolvedValueOnce({ rows: [] }) // BEGIN
+        .mockResolvedValueOnce({ rows: [] })
         .mockResolvedValueOnce({ // SELECT email
           rows: []
         })
@@ -211,19 +200,17 @@ describe('AdminsDatabase', () => {
         phone: "+1234567890",
         password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234",
-        // Optional fields not provided: address, profile_photo, bio
       };
 
-      // Queries: BEGIN, SELECT email, SELECT ActivationCode, INSERT admin, UPDATE code, COMMIT
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ // SELECT email
           rows: []
         })
-        .mockResolvedValueOnce({ // SELECT ActivationCode
+        .mockResolvedValueOnce({
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
-        .mockResolvedValueOnce({ rows: [{ id: 1 }] }) // INSERT Admin
+        .mockResolvedValueOnce({ rows: [{ id: 1 }] })
         .mockResolvedValueOnce({ rows: [] }) // UPDATE ActivationCode
         .mockResolvedValueOnce({ rows: [] }); // COMMIT
 
@@ -231,7 +218,6 @@ describe('AdminsDatabase', () => {
 
       // INSERT is at call[3]
       const insertQueryParams = mockPool.query.mock.calls[3][1];
-      // Since address, profile_photo, and bio are optional and not provided, they should be null
       expect(insertQueryParams).toContain(null);
       expect(insertQueryParams).toContain(null);
       expect(insertQueryParams).toContain(null);
@@ -246,16 +232,15 @@ describe('AdminsDatabase', () => {
         activation_code: "ABCD1234",
       };
 
-      // Queries: BEGIN, SELECT email, SELECT ActivationCode, INSERT admin, UPDATE code, COMMIT
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ // SELECT email
           rows: []
         })
-        .mockResolvedValueOnce({ // SELECT ActivationCode
+        .mockResolvedValueOnce({
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
-        .mockResolvedValueOnce({ // INSERT Admin
+        .mockResolvedValueOnce({
           rows: [{
             id: 1,
             full_name: mockAdmin.full_name,
@@ -281,17 +266,17 @@ describe('AdminsDatabase', () => {
         full_name: "John Smith",
         email: "john@example.com",
         phone: "+1234567890",
-        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",  // Changed from hashedPassword to password_hash
+        password_hash: "$2y$10$m0/PUVEysVPKIFnf3oKQvu2iisdQ7hMXF4zwphtzviU3n/zwZua4m",
         activation_code: "ABCD1234"
       };
 
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ rows: [] }) // SELECT email
-        .mockResolvedValueOnce({ // SELECT ActivationCode
+        .mockResolvedValueOnce({
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
-        .mockResolvedValueOnce({ // INSERT Admin
+        .mockResolvedValueOnce({
           rows: [{
             id: 1,
             full_name: mockAdmin.full_name,
@@ -310,7 +295,7 @@ describe('AdminsDatabase', () => {
 
       const insertParams = mockPool.query.mock.calls[3][1];
       expect(insertParams[3]).toBe(mockAdmin.password_hash);
-      expect(insertParams[3]).toMatch(/^\$2[aby]\$\d{1,2}\$[./A-Za-z0-9]{53}$/); // hashed password
+      expect(insertParams[3]).toMatch(/^\$2[aby]\$\d{1,2}\$[./A-Za-z0-9]{53}$/);
     });
 
     test("should set default status as active", async () => {
@@ -322,16 +307,15 @@ describe('AdminsDatabase', () => {
         activation_code: "ABCD1234",
       };
 
-      // Queries: BEGIN, SELECT email, SELECT ActivationCode, INSERT admin, UPDATE code, COMMIT
       mockPool.query
         .mockResolvedValueOnce({ rows: [] }) // BEGIN
         .mockResolvedValueOnce({ // SELECT email
           rows: []
         })
-        .mockResolvedValueOnce({ // SELECT ActivationCode
+        .mockResolvedValueOnce({
           rows: [{ is_used: false, expiry_date: new Date(Date.now() + 86400000) }]
         })
-        .mockResolvedValueOnce({ // INSERT Admin
+        .mockResolvedValueOnce({
           rows: [{
             id: 1,
             full_name: mockAdmin.full_name,
