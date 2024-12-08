@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler");
 const admins = require("../services/admins.services");
 const AppError = require("../../../utils/error");
 
+const HTTP_STATUS_CREATED = 201;
+
 exports.postAdminsLogin = asyncHandler(async (req, res) => {
   const credentials = {
     email: req.body.email,
@@ -243,7 +245,7 @@ exports.postAdminsRegister = asyncHandler(async (req, res, next) => {
     };
 
     const result = await admins.postAdminsRegister(admin);
-    res.status(201).json(result);
+    res.status(HTTP_STATUS_CREATED).json(result);
   } catch (error) {
     // Forward the error to the error handling middleware
     next(error);
