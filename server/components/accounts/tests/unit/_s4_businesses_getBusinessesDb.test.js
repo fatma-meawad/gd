@@ -1,9 +1,12 @@
+require("dotenv-flow").config();
 const { getBusinessesDb } = require("../../db/businesses.db");
-const mockBusinesses = require("./mock/businesses.json");
+
+// Mock different cases
+const mockBusinesses = require("../mock/businesses.json");
 
 describe("getBusinessesDb", () => {
   // Mock the require to ensure we're using the test JSON
-  jest.mock("./mock/businesses.json", () => mockBusinesses);
+  jest.mock("../mock/businesses.json", () => mockBusinesses);
 
   // Test case 1: Default behavior - return all businesses when limit is not specified
   it("should return all businesses when no limit is specified", async () => {
