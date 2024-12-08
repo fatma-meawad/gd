@@ -108,7 +108,7 @@ module.exports.postAdminsRegisterDb = async (admin) => {
     full_name,
     email,
     phone,
-    password_hash,  // Match service layer name
+    password_hash,
     activation_code,
     address = null,
     profile_photo = null,
@@ -163,11 +163,11 @@ module.exports.postAdminsRegisterDb = async (admin) => {
           full_name,
           email,
           phone,
-          password_hash,  // Use password_hash directly
+          password_hash,
           address,
           profile_photo,
           bio,
-          'active',  // Default status
+          'active',  
           0          // Initial login attempts
         ]
       );
@@ -181,7 +181,6 @@ module.exports.postAdminsRegisterDb = async (admin) => {
 
     const newAdmin = insertAdminRes.rows[0];
 
-    // 4. Update activation code
     await db.query(
       `UPDATE ActivationCode
        SET is_used = $1, used_by = $2
@@ -189,7 +188,6 @@ module.exports.postAdminsRegisterDb = async (admin) => {
       [true, newAdmin.id, activation_code]
     );
 
-    // 5. Commit transaction
     await db.query("COMMIT");
 
     return {
