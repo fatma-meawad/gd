@@ -1,3 +1,5 @@
+const db = require("../config/dbconfig.js");
+
 module.exports.postAdminsLoginDb = async (credentials) => {
   /**
     Database query logic for admin login:
@@ -101,17 +103,12 @@ module.exports.postAdminsPasswordResetDb = async (options) => {
   };
 };
 
-// server/components/admins/db/admins.db.js
-
-const db = require("../config/dbconfig.js");
-const bcrypt = require("bcrypt");
-
 module.exports.postAdminsRegisterDb = async (admin) => {
   const {
     full_name,
     email,
     phone,
-    password,
+    password_hash,  // Match service layer name
     activation_code,
     address = null,
     profile_photo = null,
@@ -148,54 +145,56 @@ module.exports.postAdminsRegisterDb = async (admin) => {
       throw new Error("Invalid or expired registration code");
     }
 
-    // 3. Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // 4. Insert admin
+    // 3. Insert admin
     let insertAdminRes;
     try {
       insertAdminRes = await db.query(
         `INSERT INTO AdminAccount (
-            full_name, email, phone, password_hash, 
-            address, profile_photo, bio, 
+            full_name, email, phone, password_hash,
+            address, profile_photo, bio,
             status, login_attempts
           )
           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-          RETURNING id, full_name, email, phone, status, 
-                    login_attempts, created_at, updated_at`,
+          RETURNING 
+            id, 
+            full_name, 
+            email, 
+            phone, 
+            status,
+            login_attempts, 
+            created_at, 
+            updated_at`,
         [
-          full_name, 
-          email, 
-          phone, 
-          hashedPassword, 
-          address, 
-          profile_photo, 
+          full_name,
+          email,
+          phone,
+          password_hash,  // Use password_hash directly
+          address,
+          profile_photo,
           bio,
-          'active',  // explicit status
-          0          // explicit login_attempts
+          'active',  // Default status
+          0          // Initial login attempts
         ]
       );
     } catch (err) {
-      // Handle unique constraint violation for email
       if (err.code === '23505' && err.constraint === 'adminaccount_email_key') {
         await db.query("ROLLBACK");
         throw new Error("Email already registered");
       }
-      await db.query("ROLLBACK");
       throw err;
     }
 
     const newAdmin = insertAdminRes.rows[0];
 
-    // 5. Update activation code
+    // 4. Update activation code
     await db.query(
-      `UPDATE ActivationCode 
-       SET is_used = $1, used_by = $2 
+      `UPDATE ActivationCode
+       SET is_used = $1, used_by = $2
        WHERE code = $3`,
       [true, newAdmin.id, activation_code]
     );
 
-    // 6. Commit transaction
+    // 5. Commit transaction
     await db.query("COMMIT");
 
     return {
@@ -205,11 +204,9 @@ module.exports.postAdminsRegisterDb = async (admin) => {
     };
 
   } catch (error) {
-    // Ensure ROLLBACK is called if not already done
     try {
       await db.query("ROLLBACK");
     } catch (rollbackError) {
-      // Log rollback error if necessary
       console.error("Rollback failed:", rollbackError);
     }
     throw error;
