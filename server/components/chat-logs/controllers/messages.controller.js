@@ -12,13 +12,12 @@ const { StatusCodes } = require("http-status-codes");
 exports.postMessages = asyncHandler(async (req, res) => {
   const { sender_id, recipient_id, thread, content } = req.body;
 
-  const headers = req.headers;
-  if (!headers.auth) {
-    throw new AppError({
-      message: '"auth" header is missing',
-      statuscode: StatusCodes.UNAUTHORIZED,
-      errors: '"auth" header is missing',
-      locations: messages.controller.js,
+  if(!req.headers.auth){
+    return res.status(401).json({
+      message: '"auth" header is invalid',
+      status: "401",
+      errors: ["401 unauthorized"],
+      locations: ["messages.controller.js"],
     });
   }
 
@@ -30,12 +29,12 @@ exports.postMessages = asyncHandler(async (req, res) => {
       content
     );
     return res.status(StatusCodes.OK).json(result);
-  } catch (error) {
+  } catch (error) {     
     throw new AppError({
       statuscode: StatusCodes.INTERNAL_SERVER_ERROR,
-      messages: "Message could not be saved",
-      location: messages.controller.js,
-      error: error,
+      message: "Message could not be saved",
+      locations: ["messages.controller.js"],
+      errors: [error],
     });
   }
 });

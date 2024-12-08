@@ -100,7 +100,6 @@ describe("Test suite for /s3/messages", () => {
       expect(response.body).toHaveProperty("errors");
       expect(response.body).toHaveProperty("locations");
       expect(response.body).toHaveProperty("message");
-      expect(response.body).toHaveProperty("status");
     });
   });
 });

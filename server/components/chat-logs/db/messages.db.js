@@ -17,7 +17,7 @@ module.exports.postMessagesDb = async (
 
   try {
     const query = `
-      INSERT INTO Message (senderId, recipientId, thread, content)
+      INSERT INTO Message (sender_id, recipient_id, thread, content)
       VALUES ($1, $2, $3, $4)
       RETURNING *;
     `;
