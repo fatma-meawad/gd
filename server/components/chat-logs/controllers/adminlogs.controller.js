@@ -23,7 +23,13 @@ exports.getAdminlogs = asyncHandler(async (req, res) => {
   // If no logs found, return 404
   if (!logs || logs.length === 0) {
     return res.status(HTTP_STATUS_NOT_FOUND).json({
-      errors: ["No logs found for the specified criteria."],
+      errors: [
+        {
+          status: "not_found",
+          errors: ["No logs found for the specified criteria."],
+          locations: ["adminlogsService.getAdminlogs"],
+        },
+      ],
     });
   }
 

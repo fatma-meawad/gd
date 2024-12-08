@@ -1057,7 +1057,6 @@ paths:
         - name: auth
           in: header
           description: Authorization token; for this assessment, we only check if it exists.
-          required: true
           schema:
             type: string
             minLength: 1
@@ -1107,7 +1106,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ErrorObject'
               example:
                 errors:
                   - 'Unauthorized: missing `auth` header.'

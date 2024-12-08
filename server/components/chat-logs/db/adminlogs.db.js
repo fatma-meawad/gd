@@ -5,8 +5,8 @@ module.exports.getAdminlogsDb = async (options) => {
   const conditions = [];
   const params = [];
 
-  if (options.admin_id !== undefined) {
-    params.push(options.admin_id);
+  if (options.adminId !== undefined) {
+    params.push(options.adminId);
     conditions.push(`admin_id = $${params.length}`);
   }
 
@@ -15,8 +15,8 @@ module.exports.getAdminlogsDb = async (options) => {
     conditions.push(`details ILIKE $${params.length}`);
   }
 
-  if (options.date_range) {
-    const [startDate, endDate] = options.date_range.split(":");
+  if (options.dateRange) {
+    const [startDate, endDate] = options.dateRange.split(":");
     params.push(startDate, endDate);
     conditions.push(`action_time BETWEEN $${params.length - 1} AND $${params.length}`);
   }
@@ -25,13 +25,13 @@ module.exports.getAdminlogsDb = async (options) => {
     query += ` WHERE ` + conditions.join(" AND ");
   }
 
-  if (options.sort_by) {
+  if (options.sortBy) {
     let sortColumn;
-    if (options.sort_by === "date") {
+    if (options.sortBy === "date") {
       sortColumn = "action_time";
-    } else if (options.sort_by === "keyword") {
+    } else if (options.sortBy === "keyword") {
       sortColumn = "details";
-    } else if (options.sort_by === "admin_id") {
+    } else if (options.sortBy === "admin_id") {
       sortColumn = "admin_id";
     }
 
@@ -43,14 +43,11 @@ module.exports.getAdminlogsDb = async (options) => {
 
   const result = await db.query(query, params);
 
-
-
   // Format action_time to respect maxLength: 20
   const formattedRows = result.rows.map(row => ({
     ...row,
     action_time: new Date(row.action_time).toISOString().slice(0, 19) + 'Z', // Ensure 'Z' is appended for UTC
   }));
 
-  console.log(formattedRows)
   return formattedRows;
 };

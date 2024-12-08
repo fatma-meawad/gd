@@ -36,7 +36,7 @@ describe("Integration Tests for /s3/adminlogs", () => {
 
       expect(response.status).toBe(401);
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toContain("Unauthorized");
+      expect(response.body.errors[0]).toContain("Authorization header is missing or invalid");
     });
 
     // Negative Test Case: Invalid admin_id (non-integer)
@@ -154,7 +154,7 @@ describe("Integration Tests for /s3/adminlogs", () => {
 
       expect(response.status).toBe(404);
       expect(response.body).toHaveProperty("errors");
-      expect(response.body.errors[0]).toContain("No logs found");
+      expect(response.body.errors[0].errors[0]).toContain("No logs found");
     });
 
     // Positive Test Case: Valid request with minimal parameters
