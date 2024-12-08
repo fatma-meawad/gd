@@ -27,3 +27,9 @@ CREATE TABLE Log (
     action_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Timestamp of the action
     details TEXT                       -- Additional information about the action
 );
+
+-- Some sample data:
+INSERT INTO Log (action_type, admin_id, message_id, action_time, details) VALUES
+('edit', 101, 201, '2023-11-10T10:30:00Z', 'Edited message content.'),
+('create', 102, 202, '2023-11-10T11:00:00Z', 'Created new message.'),
+('delete', 101, 203, '2023-11-11T09:15:00Z', 'Deleted a message.');
