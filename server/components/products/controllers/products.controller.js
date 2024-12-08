@@ -3,7 +3,7 @@ const products = require("../services/products.services");
 const AppError = require("../../../utils/error");
 const { StatusCodes } = require("http-status-codes");
 const { CONTROLLER_FILE, STATUS_CODES } = require("./utils");
-
+const locationHere = "products.controller.js";
 exports.getProducts = asyncHandler(async (req, res) => {
   let limit;
   let cursor;
@@ -56,7 +56,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
       status: "error",
       message: "Authentication header is missing",
       errors: ["401 Unauthorized"],
-      locations: ["products.controller.js"],
+      locations: [locationHere],
     });
   }
 
@@ -75,7 +75,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
       status: "error",
       message: "Missing required fields",
       errors: ["Invalid input"],
-      locations: ["products.controller.js"],
+      locations: [locationHere],
     });
   }
 
@@ -88,7 +88,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
       status: "error",
       message: "Invalid data types",
       errors: ["Invalid input"],
-      locations: ["products.controller.js"],
+      locations: [locationHere],
     });
   }
 
@@ -120,7 +120,7 @@ exports.postProducts = asyncHandler(async (req, res) => {
       StatusCodes.INTERNAL_SERVER_ERROR,
       {
         originalError: error,
-        locations: ["products.controller.js"],
+        locations: [locationHere],
       }
     );
   }
