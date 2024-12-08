@@ -90,7 +90,6 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("data");
       expect(response.body).toHaveProperty("messages");
-      // Adding checks for required attributes in data
       expect(response.body.data).toHaveProperty("id");
       expect(response.body.data).toHaveProperty("email");
       expect(response.body.data).toHaveProperty("full_name");
@@ -116,7 +115,6 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      // Adding exact error message check
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "format.openapi.validation",
         message: 'must match format "email"',
@@ -142,7 +140,6 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      // Adding exact error message check
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "minLength.openapi.validation",
         message: "must NOT have fewer than 8 characters",
@@ -168,7 +165,6 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      // Adding exact error message check
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "pattern.openapi.validation",
         message: 'must match pattern "^[A-Z0-9]{8}$"',
@@ -191,7 +187,6 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      // Adding exact error message check
       expect(response.body.errors[0]).toMatchObject({
         errorCode: "required.openapi.validation",
         message: "must have required property 'phone'",
@@ -275,12 +270,10 @@ describe("Test suite for /s1/admins/register", () => {
       });
     });
 
-    // Business Logic Tests (These should fail in Phase 1)
     test("Test case: /s1/admins/register with duplicate email", async () => {
-      // First create an admin
+
       await createTestAdmin();
 
-      // Then try to create another admin with the same email
       const response = await request(app)
         .post(baseUrl + "/s1/admins/register")
         .set("Accept", "application/json")
@@ -351,7 +344,7 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.body.data).not.toHaveProperty("login_attempts");
       expect(response.body.data).not.toHaveProperty("phone");
     });
-    
+
     test("Test case: /s1/admins/register verify schema", async () => {
       const response = await request(app)
         .post(baseUrl + "/s1/admins/register")
