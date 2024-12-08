@@ -18,9 +18,7 @@ describe("postMessagesDb", () => {
 
   // Test Case 2: Invalid input - missing required fields
   it("should throw an error for missing required fields", async () => {
-    await expect(postMessagesDb({})).rejects.toThrow(
-      "Missing required fields"
-    );
+    await expect(postMessagesDb({})).rejects.toThrow("Missing required fields");
   });
 
   // Test Case 3: Invalid input - incorrect data types

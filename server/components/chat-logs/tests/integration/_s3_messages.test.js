@@ -121,13 +121,13 @@ describe("Test suite for get /s3/messages/:receiver_id", () => {
   });
 
   test("Test case: /s3/messages/:receiver_id with invalid receiver_id", async () => {
-    const receiverId = "invalid_id"; 
+    const receiverId = "invalid_id";
 
     const response = await request(app)
       .get(`${baseUrl}/s3/messages/${receiverId}`)
       .set("Accept", "application/json");
 
-    expect(response.status).toBe(400); 
+    expect(response.status).toBe(400);
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body).toEqual(expect.any(Object));
     expect(response.body).toHaveProperty("messages");
@@ -135,7 +135,9 @@ describe("Test suite for get /s3/messages/:receiver_id", () => {
     expect(response.status).toBe(404);
     expect(response.headers["content-type"]).toMatch(/json/);
     expect(response.body).toHaveProperty("error");
-    expect(response.body.error).toBe("No messages found with the specified recipient.");
+    expect(response.body.error).toBe(
+      "No messages found with the specified recipient."
+    );
   });
 
   test("Test case: /s3/messages/:receiver_id with no messages for that receiver_id", async () => {
@@ -178,5 +180,4 @@ describe("Test suite for get /s3/messages/:receiver_id", () => {
     expect(response.body).toHaveProperty("messages");
     expect(response.body.messages).toBe("Receiver ID is required");
   });
-
 });
