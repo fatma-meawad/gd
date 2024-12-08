@@ -132,7 +132,10 @@ exports.getAdminsPasswordReset = asyncHandler(async (req, res) => {
   if (!token) {
     return res.status(400).json({
       status: "error",
-      errors: ["Token is required.", "Empty value found for query parameter 'token'"],
+      errors: [
+        "Token is required.",
+        "Empty value found for query parameter 'token'",
+      ],
     });
   }
   /**  request:
@@ -146,7 +149,6 @@ exports.getAdminsPasswordReset = asyncHandler(async (req, res) => {
       2- use the response schema if any.
   */
   let result = await admins.getAdminsPasswordReset(token);
-
 
   // Temporary response
   result.messages.push("getAdminsPasswordReset controller not implemented yet");
