@@ -95,11 +95,8 @@ describe("Test suite for /s3/messages", () => {
         });
 
       expect(response.status).toBe(401);
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      expect(response.body).toHaveProperty("locations");
-      expect(response.body).toHaveProperty("message");
+      expect(response.body.errors[0]).toContain("Authorization header is missing or invalid");
     });
   });
 });

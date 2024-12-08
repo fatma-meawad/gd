@@ -12,15 +12,6 @@ const { StatusCodes } = require("http-status-codes");
 exports.postMessages = asyncHandler(async (req, res) => {
   const { sender_id, recipient_id, thread, content } = req.body;
 
-  if(!req.headers.auth){
-    return res.status(StatusCodes.UNAUTHORIZED).json({
-      message: '"auth" header is invalid',
-      status: "401",
-      errors: ["401 unauthorized"],
-      locations: ["messages.controller.js"],
-    });
-  }
-
   try { 
     const result = await messages.postMessages(
       sender_id,

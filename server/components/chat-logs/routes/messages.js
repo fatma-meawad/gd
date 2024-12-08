@@ -2,8 +2,9 @@ const express = require("express");
 const router = new express.Router();
 const controller = require("../controllers/messages.controller");
 const { handleError } = require("../../../middleware/errorhandler");
+const authVerifier = require("../../../middleware/authVerifier");
 
-router.post("/", controller.postMessages);
+router.post("/", authVerifier, controller.postMessages);
 
 router.get("/:thread", controller.getMessagesByThread);
 
