@@ -5,10 +5,8 @@ const app = require(ROOT_DIR + "/app");
 const baseUrl = process.env.BASE_API_TEST_URL;
 const db = require("../../config/dbconfig");
 
-// Add test data setup
 beforeAll(async () => {
   try {
-    // Clean up any existing test data in correct order
     await db.query("DELETE FROM ActivationCode");
     await db.query("DELETE FROM AdminAccount");
   } catch (error) {
@@ -17,7 +15,6 @@ beforeAll(async () => {
   }
 });
 
-// Cleanup after tests
 afterAll(async () => {
   try {
     await db.query("DELETE FROM ActivationCode");
@@ -32,11 +29,9 @@ afterAll(async () => {
 describe("Test suite for /s1/admins/register", () => {
   beforeEach(async () => {
     try {
-      // Clean existing data
       await db.query("DELETE FROM ActivationCode");
       await db.query("DELETE FROM AdminAccount");
 
-      // Insert test activation codes for this test
       await db.query(`
         INSERT INTO ActivationCode (code, type, is_used, expiry_date)
         VALUES
@@ -49,7 +44,6 @@ describe("Test suite for /s1/admins/register", () => {
     }
   });
 
-  // Helper function to create a test admin
   const createTestAdmin = async (email = "existing@example.com") => {
     try {
       await request(app)
@@ -329,17 +323,11 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("data");
-      
-      // Check only the fields that should be returned
       expect(response.body.data).toHaveProperty("id");
       expect(response.body.data).toHaveProperty("full_name");
       expect(response.body.data).toHaveProperty("email");
-      
-      // Optional: verify specific values
       expect(response.body.data.full_name).toBe("John Smith");
       expect(response.body.data.email).toBe("john.smith@example.com");
-      
-      // Make sure other fields are not present
       expect(response.body.data).not.toHaveProperty("status");
       expect(response.body.data).not.toHaveProperty("login_attempts");
       expect(response.body.data).not.toHaveProperty("phone");
@@ -360,14 +348,12 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty("data");
       
-      // Schema validation
       expect(response.body.data).toMatchObject({
         id: expect.any(Number),
         email: expect.any(String),
         full_name: expect.any(String)
       });
     
-      // Ensure no extra fields
       expect(Object.keys(response.body.data)).toHaveLength(3);
       expect(Object.keys(response.body.data).sort()).toEqual(['id', 'email', 'full_name'].sort());
     });    
