@@ -336,8 +336,20 @@ describe("Test suite for /s1/admins/register", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("data");
-      expect(response.body.data.status).toBe("active");
-      expect(response.body.data.login_attempts).toBe(0);
+      
+      // Check only the fields that should be returned
+      expect(response.body.data).toHaveProperty("id");
+      expect(response.body.data).toHaveProperty("full_name");
+      expect(response.body.data).toHaveProperty("email");
+      
+      // Optional: verify specific values
+      expect(response.body.data.full_name).toBe("John Smith");
+      expect(response.body.data.email).toBe("john.smith@example.com");
+      
+      // Make sure other fields are not present
+      expect(response.body.data).not.toHaveProperty("status");
+      expect(response.body.data).not.toHaveProperty("login_attempts");
+      expect(response.body.data).not.toHaveProperty("phone");
     });
   });
 });
