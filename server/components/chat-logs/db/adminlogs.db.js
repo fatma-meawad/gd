@@ -1,41 +1,55 @@
+const db = require("../config/dbconfig");
+const MAX_ISO_DATE_LENGTH = 19;
+
 module.exports.getAdminlogsDb = async (options) => {
-  // Hard-coded logs data
-  const logs = [
-    {
-      id: 1,
-      action_type: "edit",
-      admin_id: 101,
-      message_id: 201,
-      action_time: "2023-11-10T10:30:00Z",
-      details: "Edited message content.",
-    },
-    {
-      id: 2,
-      action_type: "create",
-      admin_id: 102,
-      message_id: 202,
-      action_time: "2023-11-10T11:00:00Z",
-      details: "Created new message.",
-    },
-    {
-      id: 3,
-      action_type: "delete",
-      admin_id: 101,
-      message_id: 203,
-      action_time: "2023-11-11T09:15:00Z",
-      details: "Deleted a message.",
-    },
-  ];
+  let query = `SELECT id, action_type, admin_id, message_id, action_time, details FROM Log`;
+  const conditions = [];
+  const params = [];
 
-  // In a real implementation, you would perform a database query here using 'options'
+  if (options.adminId !== undefined) {
+    params.push(options.adminId);
+    conditions.push(`admin_id = $${params.length}`);
+  }
 
-  return logs;
-};
+  if (options.keyword) {
+    params.push(`%${options.keyword}%`);
+    conditions.push(`details ILIKE $${params.length}`);
+  }
 
-module.exports.postAdminlogsDb = async (logData) => {
-  // Simulate insertion by returning a hard-coded response
-  return {
-    log_id: 0, // Simulated new log ID
-    success: true,
-  };
+  if (options.dateRange) {
+    const [startDate, endDate] = options.dateRange.split(":");
+    params.push(startDate, endDate);
+    conditions.push(`action_time BETWEEN $${params.length - 1} AND $${params.length}`);
+  }
+
+  if (conditions.length > 0) {
+    query += ` WHERE ` + conditions.join(" AND ");
+  }
+
+  if (options.sortBy) {
+    let sortColumn;
+    if (options.sortBy === "date") {
+      sortColumn = "action_time";
+    } else if (options.sortBy === "keyword") {
+      sortColumn = "details";
+    } else if (options.sortBy === "admin_id") {
+      sortColumn = "admin_id";
+    }
+
+    const sortOrder = options.order === "desc" ? "desc" : "asc";
+    query += ` ORDER BY ${sortColumn} ${sortOrder}`;
+  }
+
+  query += ` LIMIT 1000`;
+
+  const result = await db.query(query, params);
+
+  // Format action_time to respect maxLength: 20
+  const formattedRows = result.rows.map(row => ({
+    ...row,
+    // eslint-disable-next-line camelcase -- action_time is required for OpenAPI compliance
+    action_time: new Date(row.action_time).toISOString().slice(0, MAX_ISO_DATE_LENGTH) + 'Z',
+  }));
+
+  return formattedRows;
 };

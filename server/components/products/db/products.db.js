@@ -42,58 +42,87 @@ module.exports.getProductsDb = async (
 };
 
 module.exports.postProductsDb = async (product) => {
-  /** Imagine that in this funciton, you will perform the database query and get its output in result: result = await pool.query();
-  1- Modify options to be specific parameters or one of your objects: think about what you need to recieve from services to do the query successfully
-  2- Thinks about the entities you need to access here. Are they created? are they well defined? Can you make sure entities in init.sql are updated. 
-  3- you can access the schema.json (imported above) and use objects in it/modify or create them.
-*/
-  // const {
-  //   id,
-  //   product_name,
-  //   category_id,
-  //   category_name,
-  //   short_description,
-  //   detailed_description,
-  //   product_photos = [], // Default to empty array if missing
-  //   product_url = ""
-  // } = product;
+  const {
+    product_name: productName,
+    category_id: categoryId,
+    short_description: shortDescription,
+    detailed_description: detailedDescription,
+    product_photos: productPhotos,
+    product_url: productUrl,
+  } = product;
 
-  //Check for missing fields (To pass Test Case 2: Invalid input - missing required field/-s)
-  // const requiredFields = ['category_id', 'product_name', 'short_description'];
-  // const missingFields = requiredFields.filter(field => !product[field]);
+  const requiredFields = ["category_id", "product_name", "short_description"];
+  const missingFields = requiredFields.filter((field) => !product[field]);
+  if (missingFields.length > 0) {
+    throw new Error(`Missing required fields: ${missingFields.join(", ")}`);
+  }
+  const productNameLength = 3;
+  const shortDescriptionLength = 20;
+  if (
+    typeof productName !== "string" ||
+    productName.length < productNameLength ||
+    typeof categoryId !== "number" ||
+    !Number.isInteger(categoryId) ||
+    typeof shortDescription !== "string" ||
+    shortDescription.length < shortDescriptionLength ||
+    (productUrl && typeof productUrl !== "string") ||
+    (productPhotos && !Array.isArray(productPhotos))
+  ) {
+    throw new Error("Invalid data types entered");
+  }
 
-  // if (missingFields.length > 0) {
-  //   throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
-  // }
+  try {
+    await pool.query("BEGIN");
+    const productQuery = `
+      INSERT INTO product (product_name, category_id, short_description, detailed_description, product_url) 
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id, product_name, category_id, short_description, detailed_description, product_url
+    `;
+    const productValues = [
+      productName,
+      categoryId,
+      shortDescription,
+      detailedDescription,
+      productUrl,
+    ];
 
-  //Validate data types (To pass Test Case 3: Invalid input - incorrect data types/-s)
-  // if (
-  //   typeof category_id !== 'number' ||
-  //   typeof product_name !== 'string' ||
-  //   typeof short_description !== 'string'
-  //   )
-  // {throw new Error('Invalid data types entered');}
+    const productResult = await pool.query(productQuery, productValues);
+    const newProduct = productResult.rows[0];
 
-  // const newProduct = {
-  //   id,
-  //   product_name,
-  //   category_id,
-  //   category_name,
-  //   short_description,
-  //   detailed_description,
-  //   product_photos,
-  //   product_url,
-  // };
+    if (productPhotos && productPhotos.length > 0) {
+      const photoQuery = `
+        INSERT INTO ProductPhotos (product_id, photo_url) 
+        VALUES ($1, $2)
+      `;
+      for (const photoUrl of productPhotos) {
+        if (typeof photoUrl !== "string") {
+          throw new Error("Invalid photo URL format");
+        }
+        await pool.query(photoQuery, [newProduct.id, photoUrl]);
+      }
+    }
 
-  //Simulate saving the product by pushing it into the mock array
-  // mockProducts.push(newProduct);
+    await pool.query("COMMIT");
 
-  return {
-    // data: newProduct,
-    //**Swagger shows error 500 if the below returns are not present. But postProductsDb unit tests only pass without them.**
-    messages: ["postMessagesDb not implemented yet"],
-    locations: ["messages.database.js"],
-  };
+    return {
+      status: "success",
+      data: newProduct,
+      messages: ["Product created successfully with associated photos"],
+      locations: ["products.database.js"],
+    };
+  } catch (error) {
+    await pool.query("ROLLBACK");
+    const structuredError = {
+      status: "error",
+      messages: ["Database error while creating product"],
+      details: {
+        originalError: error.message,
+        stack: error.stack,
+        locations: ["products.db.js"],
+      },
+    };
+    throw structuredError;
+  }
 };
 
 module.exports.postProductsByProductIdTagsDb = async (options) => {

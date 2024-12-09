@@ -1056,7 +1056,6 @@ paths:
         - name: auth
           in: header
           description: Authorization token; for this assessment, we only check if it exists.
-          required: true
           schema:
             type: string
             minLength: 1
@@ -1106,7 +1105,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ErrorObject'
               example:
                 errors:
                   - 'Unauthorized: missing `auth` header.'
@@ -1503,6 +1502,19 @@ paths:
       description: >-
         As an admin, I would like to add a new product, so that I could manage a
         product catalogue.
+      parameters:
+        - in: header
+          name: auth
+          description: Authorisation token
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validFormat:
+              summary: Valid authorisation token.
+              value: xyz
       requestBody:
         required: true
         content:
