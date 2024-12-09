@@ -1,27 +1,26 @@
+require("dotenv-flow").config();
 const messages = require("../db/messages.db");
-const path = require("path");
-const AppError = require(path.join(__dirname, "../../../utils/error"));
+const AppError = require("../../../utils/error");
+const { StatusCodes } = require("http-status-codes");
 
 module.exports.postMessages = async (
-  sender_id,
-  recipient_id,
+  senderId,
+  recipientId,
   thread,
-  content,
-  time
-) => {
-  // Implement your business logic here...
-
+  content
+) => { 
   try {
-    let result = await messages.postMessagesDb(
-      sender_id,
-      recipient_id,
+    return await messages.postMessagesDb(
+      senderId,
+      recipientId,
       thread,
-      content,
-      time
+      content
     );
-    return result;
   } catch (error) {
-    throw new AppError(error);
+    throw new AppError({
+      statuscode: StatusCodes.INTERNAL_SERVER_ERROR,
+      error: [error],
+    });
   }
 };
 

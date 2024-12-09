@@ -1,47 +1,33 @@
 const asyncHandler = require("express-async-handler");
 const messages = require("../services/messages.services");
 const AppError = require("../../../utils/error");
+const { StatusCodes } = require("http-status-codes");
+
+/**
+ * Post messages to the system
+ * @param {Object} req - Request object containing sender, recipient, thread, and content
+ * @param {Object} res - Response object to send back the result
+ */
 
 exports.postMessages = asyncHandler(async (req, res) => {
-  const options = {
-    sender_id: req.body.sender_id,
-    recipient_id: req.body.recipient_id,
-    thread: req.body.thread,
-    content: req.body.content,
-  };
+  const { sender_id, recipient_id, thread, content } = req.body;
 
-  if (
-    !req.headers.auth ||
-    req.headers.auth.trim() === "" ||
-    req.headers.auth == "123"
-  ) {
-    return res.status(401).json({
-      message: '"auth" header is invalid',
-      status: "401",
-      errors: ["401 unauthorized"],
-      locations: ["messages.controller.js"],
+  try { 
+    const result = await messages.postMessages(
+      sender_id,
+      recipient_id,
+      thread,
+      content
+    );
+    return res.status(StatusCodes.OK).json(result);
+  } catch (error) {     
+    throw new AppError({
+      statuscode: StatusCodes.INTERNAL_SERVER_ERROR,
+      message: "Message could not be saved",
+      locations: [messages.postMessages],
+      errors: [error],
     });
   }
-
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
-
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-  let result = await messages.postMessages(
-    options.sender_id,
-    options.recipient_id,
-    options.thread,
-    options.content
-  );
-
-  // // Temporary response
-  res.status(200).send(result);
 });
 
 exports.getMessagesByThread = asyncHandler(async (req, res) => {

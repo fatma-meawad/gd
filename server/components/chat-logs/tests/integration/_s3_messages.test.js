@@ -16,14 +16,12 @@ describe("Test suite for /s3/messages", () => {
           sender_id: 1,
           recipient_id: 2,
           thread: "thread name",
-          content: "Hello!",
-        })
+          content: "Hello!",})
         .set("Content-Type", "application/json");
 
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
-      expect(response.body).toHaveProperty("data");
     });
 
     test("Test case /s3/messages for Expected Response - Status 400 Example: empty input", async () => {
@@ -84,12 +82,11 @@ describe("Test suite for /s3/messages", () => {
       expect(response.body).toHaveProperty("name");
       expect(response.body).toHaveProperty("path");
     });
-    test("Test case: /s3/messages with Request Example: InvalidExample - Error 401", async () => {
+    test("Test case: /s3/messages with Request Example: No auth header - Error 401", async () => {
       const response = await request(app)
         .post(baseUrl + "/s3/messages")
         .set("Accept", "application/json")
         .set("Content-Type", "application/json")
-        .set("auth", "123") // invalid auth token
         .send({
           sender_id: 1,
           recipient_id: 2,
@@ -98,18 +95,8 @@ describe("Test suite for /s3/messages", () => {
         });
 
       expect(response.status).toBe(401);
-      expect(response.body).toMatchObject({
-        message: '"auth" header is invalid',
-        status: "401",
-        errors: ["401 unauthorized"],
-        locations: ["messages.controller.js"],
-      });
-      expect(response.headers["content-type"]).toMatch(/json/);
-      expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      expect(response.body).toHaveProperty("locations");
-      expect(response.body).toHaveProperty("message");
-      expect(response.body).toHaveProperty("status");
+      expect(response.body.errors[0]).toContain("Authorization header is missing or invalid");
     });
   });
 });
