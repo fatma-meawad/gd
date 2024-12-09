@@ -1,8 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const products = require("../services/products.services");
 const AppError = require("../../../utils/error");
+const { StatusCodes } = require("http-status-codes");
 const { CONTROLLER_FILE, STATUS_CODES } = require("./utils");
-
+const locationHere = "products.controller.js";
 exports.getProducts = asyncHandler(async (req, res) => {
   let limit;
   let cursor;
@@ -48,53 +49,81 @@ exports.getProducts = asyncHandler(async (req, res) => {
 });
 
 exports.postProducts = asyncHandler(async (req, res) => {
-  const options = {
-    product_name: req.product_name,
-    category_id: req.category_id,
-    category_name: req.category_name,
-    short_description: req.short_description,
-    detailed_description: req.detailed_description,
-    product_photos: req.product_photos,
-    product_url: req.product_url,
-  };
-
-  /**  request:
-      1- check if the parameters extracted from req are correct. The params, the query and the body.
-      2- the openapi validator should match the types with the contract, so make sure they match
-      3- Modify the data being sent to services (object.values(options)) and don't send all options if not needed.
-  */
-
-  /**  response:
-      1- the default success status is 200, if you have something else planned, use it to match the validator
-      2- use the response schema if any.
-  */
-
   const headers = req.headers;
+
   if (!headers.auth) {
-    const result = {
-      message: "Authentification header is missing",
-      status: "401",
-      errors: ["401 unauthorized"],
-      locations: [CONTROLLER_FILE],
-    };
-    res.status(401).send(result);
+    return res.status(StatusCodes.UNAUTHORIZED).json({
+      status: "error",
+      message: "Authentication header is missing",
+      errors: ["401 Unauthorized"],
+      locations: [locationHere],
+    });
   }
 
-  // let result = await products.postProducts(
-  //   options.product_name,
-  //   options.category_id,
-  //   options.category_name,
-  //   options.short_description,
-  //   options.detailed_description,
-  //   options.product_photos,
-  //   options.product_url
-  // options//
-  // );
+  const {
+    product_name: productName,
+    category_id: categoryId,
+    // category_name: categoryName,
+    short_description: shortDescription,
+    detailed_description: detailedDescription,
+    product_photos: productPhotos,
+    product_url: productUrl,
+  } = req.body;
 
-  // // Temporary response
-  result.messages.push("postProducts controller not implemented yet");
-  result.locations.push(CONTROLLER_FILE);
-  res.status(200).send(result);
+  if (!productName || !categoryId || !shortDescription) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      status: "error",
+      message: "Missing required fields",
+      errors: ["Invalid input"],
+      locations: [locationHere],
+    });
+  }
+
+  if (
+    typeof productName !== "string" ||
+    typeof categoryId !== "number" ||
+    typeof shortDescription !== "string"
+  ) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      status: "error",
+      message: "Invalid data types",
+      errors: ["Invalid input"],
+      locations: [locationHere],
+    });
+  }
+
+  const options = {
+    productName,
+    categoryId,
+    // categoryName,
+    shortDescription,
+    detailedDescription,
+    productPhotos,
+    productUrl,
+  };
+
+  try {
+    const result = await products.postProducts(
+      options.productName,
+      options.categoryId,
+      // options.categoryName,
+      options.shortDescription,
+      options.detailedDescription,
+      options.productPhotos,
+      options.productUrl
+    );
+
+    return res.status(StatusCodes.OK).json({ result });
+  } catch (error) {
+    throw new AppError(
+      "Error creating product",
+      StatusCodes.INTERNAL_SERVER_ERROR,
+      {
+        originalError: error,
+        locations: [locationHere],
+      }
+    );
+  }
 });
 
 exports.postProductsByProductIdTags = asyncHandler(async (req, res) => {

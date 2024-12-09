@@ -13,7 +13,7 @@ function getProducts(category_id, limit, cursor) {
   // But it might have been useful if on the detail page of a category it would have shown a list of products belonging to that category.
 }
 
-function addProduct(productDetails) {
+function addProduct(_productDetails) {
   // Implementation to create a new product
 }
 

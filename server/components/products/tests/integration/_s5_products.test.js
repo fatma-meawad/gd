@@ -44,7 +44,6 @@ describe("Test suite for /s5/products", () => {
     });
   });
 
-  ////////////////////////////////////////////////////////////////////////////////////////////////
   describe("Test suite for post /s5/products", () => {
     test("Test case: /s5/products with Request Example: ValidExample", async () => {
       const response = await request(app)
@@ -58,7 +57,6 @@ describe("Test suite for /s5/products", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-      //TODO: assert the exact error messages to assert why the request failed.
     });
     test("Test case: /s5/products with Request Example: InvalidExample", async () => {
       const response = await request(app)
@@ -72,19 +70,17 @@ describe("Test suite for /s5/products", () => {
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
-
-      //TODO: assert the exact error messages to assert why the request failed.
     });
-    //New test cases for scenatios: correctProductData, wrongCatIdFormat, missingProductName.
+    //New test cases for scenarios: correctProductData, wrongCatIdFormat, missingProductName.
     test("Test case: /s5/products with Request Example: correctProductData", async () => {
       const response = await request(app)
         .post(baseUrl + "/s5/products")
         .set("Accept", "application/json")
+        .set("auth", "xyz")
         .query({})
         .send({
           product_name: "RGB keyboard",
           category_id: 12345,
-          category_name: "Keyboards",
           short_description:
             "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
           detailed_description:
@@ -100,9 +96,7 @@ describe("Test suite for /s5/products", () => {
       expect(response.status).toBe(200);
       expect(response.headers["content-type"]).toMatch(/json/);
       expect(response.body).toEqual(expect.any(Object));
-      // expect(response.body).toHaveProperty("data"); //Uncomment at phase 2*************It is being flagged at tests.
-      expect(response.body).toHaveProperty("locations"); //Delete at phase 2**************
-      expect(response.body).toHaveProperty("messages");
+      expect(response.body).toHaveProperty("result");
     });
 
     test("Test case: /s5/products with Request Example: wrongCatIdFormat", async () => {
@@ -113,7 +107,6 @@ describe("Test suite for /s5/products", () => {
         .send({
           product_name: "RGB keyboard",
           category_id: "12345n",
-          category_name: "Keyboards",
           short_description:
             "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
           detailed_description:
@@ -141,7 +134,6 @@ describe("Test suite for /s5/products", () => {
         .send({
           // product_name: "RGB keyboard",
           category_id: 12345,
-          category_name: "Keyboards",
           short_description:
             "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
           detailed_description:
@@ -160,7 +152,5 @@ describe("Test suite for /s5/products", () => {
       expect(response.body).toEqual(expect.any(Object));
       expect(response.body).toHaveProperty("errors");
     });
-
-    //TODO: The following cover your respones in openapi. If your examples cover a test case, you can delete it.
   });
 });

@@ -1,6 +1,8 @@
 const products = require("../db/products.db");
 const path = require("path");
 const AppError = require(path.join(__dirname, "../../../utils/error"));
+const { StatusCodes } = require("http-status-codes");
+const locationHere = "products.services.js";
 
 module.exports.getProducts = async (limit, cursor) => {
   try {
@@ -11,22 +13,50 @@ module.exports.getProducts = async (limit, cursor) => {
   }
 };
 
-module.exports.postProducts = async (name, category_id, short_description) => {
-  // Implement your business logic here...
-
+module.exports.postProducts = async (
+  productName,
+  categoryId,
+  shortDescription,
+  detailedDescription,
+  productPhotos,
+  productUrl
+) => {
   try {
-    let result = await products.postProductsDb(
-      name,
-      category_id,
-      short_description
-    );
-    //delete this when you actually implement something.
-    result.messages.push("postProducts services not implemented yet");
-    result.locations.push("products.services.js");
+    // Convert camelCase keys to snake_case for the database
+    const product = Object.keys({
+      productName,
+      categoryId,
+      shortDescription,
+      detailedDescription,
+      productPhotos,
+      productUrl,
+    }).reduce((acc, key) => {
+      const snakeKey = key.replace(
+        /[A-Z]/g,
+        (letter) => `_${letter.toLowerCase()}`
+      );
+      acc[snakeKey] = {
+        productName,
+        categoryId,
+        shortDescription,
+        detailedDescription,
+        productPhotos,
+        productUrl,
+      }[key];
+      return acc;
+    }, {});
 
-    return result;
+    const result = await products.postProductsDb(product);
+    const resultMessage = "Product created successfully in the database";
+
+    result.messages.push(resultMessage);
+    result.locations.push(locationHere);
+
+    return { result };
   } catch (error) {
-    throw new AppError(error);
+    throw new AppError(error.message, StatusCodes.INTERNAL_SERVER_ERROR, {
+      locations: [locationHere],
+    });
   }
 };
 

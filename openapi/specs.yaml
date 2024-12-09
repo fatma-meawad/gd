@@ -1503,6 +1503,19 @@ paths:
       description: >-
         As an admin, I would like to add a new product, so that I could manage a
         product catalogue.
+      parameters:
+        - in: header
+          name: auth
+          description: Authorisation token
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100000
+            pattern: '^.*$'
+          examples:
+            validFormat:
+              summary: Valid authorisation token.
+              value: xyz
       requestBody:
         required: true
         content:

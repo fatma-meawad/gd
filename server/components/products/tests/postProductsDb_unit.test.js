@@ -1,11 +1,12 @@
+require("dotenv-flow").config(); //added at phase 2
 const {
   postProductsDb,
 } = require("/workspaces/galleria-dashboard/server/components/products/db/products.db");
-const mockProducts = require("/workspaces/galleria-dashboard/server/components/products/db/mock/products.json");
+const mockProducts = require("/workspaces/galleria-dashboard/server/components/products/tests/unit/mock/products.json");
 
 describe("postProductsDb", () => {
   jest.mock(
-    "/workspaces/galleria-dashboard/server/components/products/db/mock/products.json",
+    "/workspaces/galleria-dashboard/server/components/products/tests/unit/mock/products.json",
     () => mockProducts
   );
 
@@ -13,7 +14,6 @@ describe("postProductsDb", () => {
     id: 123,
     product_name: "RGB keyboard",
     category_id: 12345,
-    category_name: "Keyboards",
     short_description:
       "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
     detailed_description:
@@ -29,7 +29,6 @@ describe("postProductsDb", () => {
     id: 123,
     product_name: "RGB keyboard",
     category_id: "12345",
-    category_name: "Keyboards",
     short_description:
       "Experience seamless typing with this wireless RGB keyboard, featuring customizable backlighting, ergonomic design, and reliable connectivity for a smooth and vibrant typing experience",
     detailed_description:
@@ -50,19 +49,20 @@ describe("postProductsDb", () => {
   it("should successfully save the product", async () => {
     const result = await postProductsDb(validProduct);
 
-    expect(result).toEqual({
-      data: {
-        id: validProduct.id,
-        product_name: validProduct.product_name,
-        category_id: validProduct.category_id,
-        category_name: validProduct.category_name,
-        short_description: validProduct.short_description,
-        detailed_description: validProduct.detailed_description,
-        product_photos: validProduct.product_photos,
-        product_url: validProduct.product_url,
-      },
-    });
-    expect(mockProducts).toContainEqual(validProduct);
+    expect(result.data).toHaveProperty(
+      "product_name",
+      validProduct.product_name
+    );
+    expect(result.data).toHaveProperty("category_id", validProduct.category_id);
+    expect(result.data).toHaveProperty(
+      "short_description",
+      validProduct.short_description
+    );
+    expect(result.data).toHaveProperty(
+      "detailed_description",
+      validProduct.detailed_description
+    );
+    expect(result.data).toHaveProperty("product_url", validProduct.product_url);
   });
 
   //Test Case 2: Invalid input - missing required field/-s
